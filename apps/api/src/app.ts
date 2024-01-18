@@ -5,11 +5,12 @@ import express, {
   Request,
   Response,
   NextFunction,
-  Router,
 } from 'express';
 import cors from 'cors';
 import { PORT } from './config';
 import { SampleRouter } from './routers/sample.router';
+import { DiscoveryRouter } from './routers/discovery.router';
+import { CreateEventRouter } from './routers/createEvent.router';
 
 export default class App {
   private app: Express;
@@ -58,8 +59,13 @@ export default class App {
     });
 
     this.app.use('/samples', sampleRouter.getRouter());
+    //IQBAL OPEN TASK//
+    const discoveryRouter = new DiscoveryRouter();
+    const createEventRouter = new CreateEventRouter();
+    this.app.use('/event/discovery', discoveryRouter.getRouter());
+    this.app.use('/event/createEvent', createEventRouter.getRouter());
   }
-
+  //IQBAL CLOSED TASK//
   public start(): void {
     this.app.listen(PORT, () => {
       console.log(`  ➜  [API] Local:   http://localhost:${PORT}/`);
