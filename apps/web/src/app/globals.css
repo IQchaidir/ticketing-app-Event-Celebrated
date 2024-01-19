@@ -312,3 +312,52 @@ body {
   color: #2196f3; /* Ganti dengan warna biru yang diinginkan saat diklik */
   border-bottom: 2px solid #2196f3; /* Ganti dengan warna biru yang diinginkan saat diklik */
 }
+
+/* modal style */
+.modal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  max-width: 80%; /* Maksimum lebar 80% */
+  width: 300px; /* Lebar minimum */
+}
+
+.modal.open {
+  display: block;
+}
+
+.modal-content {
+  /* Isi dari modal */
+  /* ... (kode CSS lainnya) */
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  font-size: 20px;
+  background: none;
+  border: none;
+}
+
+@media (max-width: 767px) {
+  /* Gaya tambahan untuk tampilan mobile (lebar maksimum 767px) */
+  .modal {
+    width: 90%; /* Lebar untuk tampilan mobile */
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1020px) {
+  /* Gaya tambahan untuk lebar layar antara 768px dan 915px */
+  .modal {
+    width: 70%; /* Lebar untuk ukuran layar antara 768px dan 915px */
+  }
+}

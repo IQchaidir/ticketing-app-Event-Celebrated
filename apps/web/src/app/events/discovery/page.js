@@ -1,13 +1,15 @@
 'use client';
 import Card from '@/components/Card';
+import FilterButton from '@/components/FilterButton';
+import FilterModal from '@/components/FilterModal';
 import FilterPill from '@/components/FilterPills';
 import { useEffect, useState } from 'react';
 
 const SearchPage = () => {
   //state untuk melacak search
   const [searchQuery, setSearchQuery] = useState('');
-  //filter button mobile
 
+  // State untuk menentukan apakah modal ditampilkan atau tidak
   const [selectedButton, setSelectedButton] = useState(null);
   // State untuk melacak online
   const [onlineEventFilter, setOnlineEventFilter] = useState(false);
@@ -87,19 +89,37 @@ const SearchPage = () => {
 
   // Fungsi untuk menangani perubahan status checkbox Category
   const handleCategoryChange = (category) => {
-    setSelectedCategory((prevCategory) =>
-      prevCategory === category ? '' : category,
-    );
-
-    // Hapus filter pills yang tidak sesuai dengan filter yang dipilih
+    // Hapus semua filter pills category sebelumnya
     setActiveFilters((prevFilters) =>
-      prevFilters.filter((activeFilter) => activeFilter !== category),
+      prevFilters.filter(
+        (activeFilter) => !activeFilter.startsWith('Category:'),
+      ),
     );
 
     // Tambahkan filter pill ke dalam activeFilters jika checkbox dipilih
     if (selectedCategory !== category) {
-      setActiveFilters((prevFilters) => [...prevFilters, category]);
+      setSelectedCategory(category);
+      setActiveFilters((prevFilters) => [
+        ...prevFilters,
+        `Category: ${category}`,
+      ]);
+    } else {
+      // Jika category sama dengan prevCategory, set prevCategory menjadi string kosong
+      setSelectedCategory('');
     }
+  };
+
+  //fungsi untuk membuka modal
+  const handleOpenModal = () => {
+    setSelectedButton('filter');
+  };
+
+  const applyFilters = (modalFilters) => {
+    // Terapkan nilai filter dari FilterModal ke state filter di SearchPage
+    setOnlineEventFilter(modalFilters.onlineEventFilter);
+    setDateFilters(modalFilters.dateFilters);
+    setPriceFilters(modalFilters.priceFilters);
+    setSelectedCategory(modalFilters.selectedCategory);
   };
 
   //
@@ -119,9 +139,9 @@ const SearchPage = () => {
       case 'free':
         setPriceFilters((prevFilters) => ({ ...prevFilters, [filter]: false }));
         break;
-      case 'music':
-      case 'seminar':
-      case 'etc':
+      case 'Category: music':
+      case 'Category: seminar':
+      case 'Category: etc':
         setSelectedCategory('');
         break;
       case 'Online':
@@ -215,8 +235,15 @@ const SearchPage = () => {
           />
         </form>
 
-        {/* mobile */}
-        <div className="flex flex-row lg:hidden gap-5 pb-5 w-full  "></div>
+        {/* filter mobile */}
+        <div className="flex flex-row lg:hidden gap-5 pb-5 w-full  ">
+          <FilterButton onClick={handleOpenModal} />
+        </div>
+        <FilterModal
+          isOpen={selectedButton === 'filter'}
+          onClose={() => setSelectedButton(null)}
+          applyFilters={applyFilters}
+        />
         <div className="mb-4 flex">
           {activeFilters.map((filter, index) => (
             <FilterPill
@@ -227,6 +254,9 @@ const SearchPage = () => {
           ))}
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3  gap-4 md:gap-8">
+          <div className=" flex justify-center">
+            <Card />
+          </div>
           <div className=" flex justify-center">
             <Card />
           </div>
