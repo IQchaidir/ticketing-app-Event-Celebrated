@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-export const Card = () => {
+const Card = () => {
   return (
     <div
       className="group relative flex min-h-[380px] w-full max-w-[400px] flex-col overflow-hidden rounded-xl
@@ -55,3 +55,5 @@ export const Card = () => {
     </div>
   );
 };
+
+export default Card;
