@@ -12,7 +12,7 @@ export class DiscoveryController {
       page?: string;
     };
 
-    const itemsPerPage = 6;
+    const itemsPerPage = 6; // Ubah jumlah item per halaman sesuai kebutuhan
     const pageNumber = page ? parseInt(page, 10) : 1;
     const skip = (pageNumber - 1) * itemsPerPage;
 
@@ -26,6 +26,7 @@ export class DiscoveryController {
         },
         take: itemsPerPage,
         skip: skip,
+        orderBy: { id: 'asc' }, // Menambahkan orderBy untuk mengurutkan berdasarkan ID
       });
 
       if (events.length === 0) {
