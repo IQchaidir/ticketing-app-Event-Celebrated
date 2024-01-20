@@ -4,7 +4,7 @@ import { Category } from '@prisma/client';
 
 export class DiscoveryController {
   async discoverEvents(req: Request, res: Response) {
-    const { category, is_free, is_online, search, page, start_date, end_date } =
+    const { category, is_free, is_online, search, start_date, end_date, page } =
       req.query as {
         category?: Category;
         is_free?: string;
@@ -15,11 +15,11 @@ export class DiscoveryController {
         page?: string;
       };
 
-    const itemsPerPage = 6; // Ubah jumlah item per halaman sesuai kebutuhan
-    const pageNumber = page ? parseInt(page, 10) : 1;
-    const skip = (pageNumber - 1) * itemsPerPage;
+    const pageSize = 6; // Jumlah item per halaman
 
     try {
+      const pageNumber = parseInt(page || '1');
+
       const events = await prisma.event.findMany({
         where: {
           category: category ? { equals: category } : undefined,
@@ -34,16 +34,14 @@ export class DiscoveryController {
             gte: new Date().toISOString(), // Memastikan end_time lebih besar dari waktu saat ini
           },
         },
-        take: itemsPerPage,
-        skip: skip,
-        orderBy: { date_time: 'asc' }, // Menambahkan orderBy untuk mengurutkan berdasarkan date
+        orderBy: { date_time: 'asc' },
+        skip: (pageNumber - 1) * pageSize,
+        take: pageSize,
       });
 
       if (events.length === 0) {
-        // Tidak ada event yang sesuai dengan filter
         return res.status(404).json({ message: 'Event not found' });
       } else {
-        // Ada event yang sesuai dengan filter, kirimkan sebagai respons
         return res.json(events);
       }
     } catch (error: any) {

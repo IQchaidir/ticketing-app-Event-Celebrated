@@ -7,10 +7,13 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 const SearchPage = () => {
+  const pageSize = 6;
   //state untuk melacak search
   const [searchQuery, setSearchQuery] = useState('');
   //state untuk resp fething
   const [data, setData] = useState([]);
+  // State untuk melacak nomor halaman saat ini
+  const [currentPage, setCurrentPage] = useState(1);
   // State untuk menentukan apakah modal ditampilkan atau tidak
   const [selectedButton, setSelectedButton] = useState(null);
   // State untuk melacak online
@@ -33,6 +36,11 @@ const SearchPage = () => {
 
   // State untuk melacak filter pills yang aktif
   const [activeFilters, setActiveFilters] = useState([]);
+
+  // Fungsi untuk menangani perubahan halaman
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
 
   // Fungsi untuk menangani online
   const handleOnlineEventChange = () => {
@@ -164,6 +172,7 @@ const SearchPage = () => {
           priceFilters.free || (priceFilters.paid ? { is_free: false } : null),
         category: selectedCategory.toString(),
         search: searchQuery,
+        page: currentPage.toString(),
       };
 
       if (dateFilters.today) {
@@ -225,6 +234,7 @@ const SearchPage = () => {
     dateFilters,
     priceFilters,
     selectedCategory,
+    currentPage,
   ]);
 
   const handleClick = (button) => {
@@ -274,6 +284,29 @@ const SearchPage = () => {
           ) : (
             <p>No events found.</p>
           )}
+        </div>
+        {/* Menampilkan tombol pagination */}
+        <div className="mt-4 flex justify-center items-center">
+          {/* Tombol Previous */}
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="px-3 py-1 mx-2 border rounded"
+          >
+            Previous
+          </button>
+
+          {/* Nomor halaman saat ini */}
+          <span className="mx-2">{currentPage}</span>
+
+          {/* Tombol Next */}
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={data.length < pageSize} // Misalkan, jika panjang data kurang dari pageSize, tandanya tidak ada halaman berikutnya
+            className="px-3 py-1 mx-2 border rounded"
+          >
+            Next
+          </button>
         </div>
       </main>
 
