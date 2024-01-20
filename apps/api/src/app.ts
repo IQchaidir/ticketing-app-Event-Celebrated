@@ -11,6 +11,7 @@ import { PORT } from './config';
 import { SampleRouter } from './routers/sample.router';
 import { DiscoveryRouter } from './routers/discovery.router';
 import { CreateEventRouter } from './routers/createEvent.router';
+import { CategoryRouter } from './routers/category.router';
 
 export default class App {
   private app: Express;
@@ -62,8 +63,11 @@ export default class App {
     //IQBAL OPEN TASK//
     const discoveryRouter = new DiscoveryRouter();
     const createEventRouter = new CreateEventRouter();
+    const categoryRouter = new CategoryRouter();
+
     this.app.use('/event/discovery', discoveryRouter.getRouter());
     this.app.use('/event/createEvent', createEventRouter.getRouter());
+    this.app.use('/categories', categoryRouter.getRouter());
   }
   //IQBAL CLOSED TASK//
   public start(): void {

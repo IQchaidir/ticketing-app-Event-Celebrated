@@ -12,6 +12,8 @@ const SearchPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   //state untuk resp fething
   const [data, setData] = useState([]);
+  //state array cateogri
+  const [categories, setCategories] = useState([]);
   // State untuk melacak nomor halaman saat ini
   const [currentPage, setCurrentPage] = useState(1);
   // State untuk menentukan apakah modal ditampilkan atau tidak
@@ -24,7 +26,8 @@ const SearchPage = () => {
     tomorrow: false,
     thisWeekend: false,
   });
-
+  const [isViewMore, setIsViewMore] = useState(false);
+  const MAX_DISPLAY_CATEGORIES = 5;
   // State untuk melacak status checkbox Price
   const [priceFilters, setPriceFilters] = useState({
     paid: false,
@@ -132,26 +135,33 @@ const SearchPage = () => {
     setSelectedCategory(modalFilters.selectedCategory);
   };
 
-  //
+  // Hapus filter
   const removeFilter = (filter) => {
     setActiveFilters((prevFilters) =>
       prevFilters.filter((activeFilter) => activeFilter !== filter),
     );
 
-    // Hapus filter berdasarkan jenisnya (Date, Price, Category)
-    switch (filter) {
+    // Mendapatkan jenis filter dari filter yang dihapus
+    const filterType = filter.split(':')[0];
+
+    // Menghapus filter berdasarkan jenisnya (Date, Price, Category)
+    switch (filterType) {
       case 'today':
       case 'tomorrow':
       case 'thisWeekend':
-        setDateFilters((prevFilters) => ({ ...prevFilters, [filter]: false }));
+        setDateFilters((prevFilters) => ({
+          ...prevFilters,
+          [filterType]: false,
+        }));
         break;
       case 'paid':
       case 'free':
-        setPriceFilters((prevFilters) => ({ ...prevFilters, [filter]: false }));
+        setPriceFilters((prevFilters) => ({
+          ...prevFilters,
+          [filterType]: false,
+        }));
         break;
-      case 'Category: music':
-      case 'Category: seminar':
-      case 'Category: etc':
+      case 'Category':
         setSelectedCategory('');
         break;
       case 'Online':
@@ -161,6 +171,19 @@ const SearchPage = () => {
         break;
     }
   };
+  // Pemanggilan API untuk mendapatkan daftar kategori
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get('http://localhost:8000/categories');
+        setCategories(response.data);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   //pemanggilan API
   useEffect(() => {
@@ -324,7 +347,6 @@ const SearchPage = () => {
             Online Event
           </label>
         </div>
-
         {/* Checkbox Date */}
         <h2 className="text-base font-semibold mb-2">Date</h2>
         <label className="block mb-2 text-base">
@@ -354,7 +376,6 @@ const SearchPage = () => {
           />
           This Weekend
         </label>
-
         {/* Checkbox Price */}
         <h2 className="text-base font-semibold mb-2">Price</h2>
         <label className="block mb-2 text-base">
@@ -375,39 +396,33 @@ const SearchPage = () => {
           />
           Free
         </label>
-
         {/* Filter Category */}
         <div className="mb-4 mt-4">
           <h2 className="text-base font-semibold mb-2">Category</h2>
-          <label className="block mb-2 text-base">
-            <input
-              type="checkbox"
-              className="mr-2"
-              checked={selectedCategory === 'music'}
-              onChange={() => handleCategoryChange('music')}
-            />
-            Music
-          </label>
-          <label className="block mb-2 text-base">
-            <input
-              type="checkbox"
-              className="mr-2"
-              checked={selectedCategory === 'seminar'}
-              onChange={() => handleCategoryChange('seminar')}
-            />
-            Seminar
-          </label>
-          <label className="block mb-2 text-base">
-            <input
-              type="checkbox"
-              className="mr-2"
-              checked={selectedCategory === 'etc'}
-              onChange={() => handleCategoryChange('etc')}
-            />
-            etc
-          </label>
-        </div>
+          {categories
+            .slice(0, isViewMore ? categories.length : MAX_DISPLAY_CATEGORIES)
+            .map((category) => (
+              <label key={category} className="block mb-2 text-base">
+                <input
+                  type="checkbox"
+                  className="mr-2"
+                  checked={selectedCategory === category}
+                  onChange={() => handleCategoryChange(category)}
+                />
+                {category}
+              </label>
+            ))}
 
+          {/* Tombol View More/View Less */}
+          {categories.length > MAX_DISPLAY_CATEGORIES && (
+            <button
+              className="text-blue-500 underline mt-2"
+              onClick={() => setIsViewMore((prev) => !prev)}
+            >
+              {isViewMore ? 'View Less' : 'View More'}
+            </button>
+          )}
+        </div>
         <button className="bg-black text-white p-2 rounded ">
           Apply Filters
         </button>

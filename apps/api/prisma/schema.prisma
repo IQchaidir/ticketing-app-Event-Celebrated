@@ -118,6 +118,23 @@ enum Category {
   music
   seminar
   etc
+  Sports
+  Technology
+  Arts
+  Food
+  Health
+  Business
+  Science
+  Travel
+  Family
+  Hobbies
+  Charity
+  Community
+  Film
+  Fashion
+  Holiday
+  Lifestyle
+  Other
 }
 
 enum CouponType {
