@@ -3,12 +3,14 @@ import Card from '@/components/Card';
 import FilterButton from '@/components/FilterButton';
 import FilterModal from '@/components/FilterModal';
 import FilterPill from '@/components/FilterPills';
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 const SearchPage = () => {
   //state untuk melacak search
   const [searchQuery, setSearchQuery] = useState('');
-
+  //state untuk resp fething
+  const [data, setData] = useState([]);
   // State untuk menentukan apakah modal ditampilkan atau tidak
   const [selectedButton, setSelectedButton] = useState(null);
   // State untuk melacak online
@@ -152,12 +154,14 @@ const SearchPage = () => {
     }
   };
 
+  //pemanggilan API
   useEffect(() => {
     // Pemanggilan API dengan parameter query yang sesuai
     const fetchData = async () => {
       const filters = {
         is_online: onlineEventFilter,
-        is_free: priceFilters.free,
+        is_free:
+          priceFilters.free || (priceFilters.paid ? { is_free: false } : null),
         category: selectedCategory.toString(),
         search: searchQuery,
         // date_time: dateFilters.today
@@ -193,14 +197,22 @@ const SearchPage = () => {
         //       : undefined,
       };
 
-      const queryParams = new URLSearchParams(filters).toString();
+      const activeFilters = Object.keys(filters).reduce((acc, key) => {
+        if (filters[key]) {
+          acc[key] = filters[key];
+        }
+        return acc;
+      }, {});
+
+      const queryParams = new URLSearchParams(activeFilters).toString();
 
       try {
-        const response = await fetch(
+        const response = await axios.get(
           `http://localhost:8000/event/discovery?${queryParams}`,
         );
-        const data = await response.json();
-        console.log(data);
+        const fetchedData = response.data;
+        setData(fetchedData);
+
         // Lakukan sesuatu dengan data hasil pencarian
       } catch (error) {
         console.error('Error fetching search results:', error);
@@ -253,13 +265,16 @@ const SearchPage = () => {
             />
           ))}
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3  gap-4 md:gap-8">
-          <div className=" flex justify-center">
-            <Card />
-          </div>
-          <div className=" flex justify-center">
-            <Card />
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
+          {Array.isArray(data) && data.length > 0 ? (
+            data.map((event) => (
+              <div className="flex justify-center" key={event.id}>
+                <Card event={event} />
+              </div>
+            ))
+          ) : (
+            <p>No events found.</p>
+          )}
         </div>
       </main>
 

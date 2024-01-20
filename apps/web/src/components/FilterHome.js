@@ -65,11 +65,9 @@ export const FilterHome = () => {
             },
           },
         );
-        // Limit the number of displayed events to 12
-        const limitedEvents = response.data.slice(0, 12);
 
-        // Update the events state with the fetched data
-        setEvents(limitedEvents);
+        const fetchedData = response.data;
+        setEvents(fetchedData);
       } catch (error) {
         console.error('Error fetching events:', error);
       }
@@ -127,13 +125,15 @@ export const FilterHome = () => {
         </button>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8">
-        {/* {events.map((event, index) => (
-          <Card key={index} event={event} />
-        ))} */}
-        <Card />
-        <Card />
-        <Card />
-        <Card />
+        {Array.isArray(events) && events.length > 0 ? (
+          events.map((event) => (
+            <div className="flex justify-center" key={event.id}>
+              <Card event={event} />
+            </div>
+          ))
+        ) : (
+          <p>No events found.</p>
+        )}
       </div>
     </>
   );
