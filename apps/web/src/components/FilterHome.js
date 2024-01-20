@@ -10,7 +10,7 @@ export const FilterHome = () => {
   const handleClick = (button) => {
     setSelectedButton(button);
   };
-
+  const itemsPerPage = 8;
   useEffect(() => {
     // Fetch events based on selectedButton using Axios
     const fetchEvents = async () => {
@@ -62,6 +62,7 @@ export const FilterHome = () => {
               ...queryParams,
               _sort: 'id:ASC',
               date_time: { gte: new Date().toISOString() },
+              take: itemsPerPage,
             },
           },
         );

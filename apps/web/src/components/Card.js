@@ -1,6 +1,20 @@
 import Link from 'next/link';
 
 const Card = ({ event }) => {
+  const formatDate = (isoDate) => {
+    const options = {
+      weekday: 'long',
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+    };
+
+    const date = new Date(isoDate);
+    return date.toLocaleDateString('en-US', options);
+  };
+
   return (
     <div className="group relative flex min-h-[380px] w-full max-w-[400px] flex-col overflow-hidden rounded-xl bg-white shadow-md transition-all hover:shadow-lg md:min-h-[438px]">
       <Link
@@ -33,9 +47,7 @@ const Card = ({ event }) => {
         </div>
         <p className="p-medium-16 md:p-medium-20 text-black">{event.title}</p>
         <p className="p-medium-14 md:p-medium-16 text-black">
-          {/* Assuming there's a function formatDateTime to format the date and time */}
-          {/* {formatDateTime(event.date_time).dateTime} */}
-          19 juli 2023
+          {formatDate(event.date_time)}
         </p>
         <p className="p-medium-14 md:p-medium-16 line line-clamp-2 flex-1 text-gray-500">
           {event.location}

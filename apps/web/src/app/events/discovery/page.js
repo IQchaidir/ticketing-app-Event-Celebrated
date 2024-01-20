@@ -164,38 +164,36 @@ const SearchPage = () => {
           priceFilters.free || (priceFilters.paid ? { is_free: false } : null),
         category: selectedCategory.toString(),
         search: searchQuery,
-        // date_time: dateFilters.today
-        //   ? {
-        //       gte: today.toISOString(),
-        //       lt: new Date(today.getTime() + 24 * 60 * 60 * 1000).toISOString(), // Next day
-        //     }
-        //   : dateFilters.tomorrow
-        //     ? {
-        //         gte: new Date(
-        //           today.getTime() + 24 * 60 * 60 * 1000,
-        //         ).toISOString(),
-        //         lt: new Date(
-        //           today.getTime() + 2 * 24 * 60 * 60 * 1000,
-        //         ).toISOString(), // Next day
-        //       }
-        //     : dateFilters.thisWeekend
-        //       ? (() => {
-        //           const daysUntilWeekend = 5 - today.getDay(); // 5 is Saturday
-        //           const todayForWeekend = new Date(today);
-        //           todayForWeekend.setDate(
-        //             todayForWeekend.getDate() + daysUntilWeekend,
-        //           );
-        //           todayForWeekend.setHours(0, 0, 0, 0);
-        //           const nextMonday = new Date(todayForWeekend);
-        //           nextMonday.setDate(todayForWeekend.getDate() + 2); // 2 days for the weekend
-
-        //           return {
-        //             gte: todayForWeekend.toISOString(),
-        //             lt: nextMonday.toISOString(),
-        //           };
-        //         })()
-        //       : undefined,
       };
+
+      if (dateFilters.today) {
+        filters.start_date = new Date().toISOString().split('T')[0];
+        filters.end_date = new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
+          .toISOString()
+          .split('T')[0]; // Next day
+      } else if (dateFilters.tomorrow) {
+        filters.start_date = new Date(
+          new Date().getTime() + 24 * 60 * 60 * 1000,
+        )
+          .toISOString()
+          .split('T')[0];
+        filters.end_date = new Date(
+          new Date().getTime() + 2 * 24 * 60 * 60 * 1000,
+        )
+          .toISOString()
+          .split('T')[0]; // Next day
+      } else if (dateFilters.thisWeekend) {
+        const today = new Date();
+        const daysUntilWeekend = 5 - today.getDay(); // 5 is Saturday
+        const todayForWeekend = new Date(today);
+        todayForWeekend.setDate(todayForWeekend.getDate() + daysUntilWeekend);
+        todayForWeekend.setHours(0, 0, 0, 0);
+        const nextMonday = new Date(todayForWeekend);
+        nextMonday.setDate(todayForWeekend.getDate() + 2); // 2 days for the weekend
+
+        filters.start_date = todayForWeekend.toISOString().split('T')[0];
+        filters.end_date = nextMonday.toISOString().split('T')[0];
+      }
 
       const activeFilters = Object.keys(filters).reduce((acc, key) => {
         if (filters[key]) {
@@ -216,6 +214,7 @@ const SearchPage = () => {
         // Lakukan sesuatu dengan data hasil pencarian
       } catch (error) {
         console.error('Error fetching search results:', error);
+        setData([]);
       }
     };
 

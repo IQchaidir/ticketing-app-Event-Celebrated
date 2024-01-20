@@ -53,7 +53,7 @@ model Event {
   is_online    Boolean?
   category     Category
   created_at   DateTime      @default(now())
-  updated_at   DateTime      @updatedAt
+  // updated_at   DateTime      @updatedAt
   // organizer    User          @relation(fields: [organizer_id], references: [id])
   Coupons      Coupons[]
   transactions Transaction[]
