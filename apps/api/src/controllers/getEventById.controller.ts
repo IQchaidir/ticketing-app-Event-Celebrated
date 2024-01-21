@@ -37,6 +37,7 @@ export class GetEventByIdController {
         seats: event.seats,
         is_free: event.is_free,
         is_online: event.is_online,
+        category: event.category,
       });
     } catch (error) {
       console.error(error);

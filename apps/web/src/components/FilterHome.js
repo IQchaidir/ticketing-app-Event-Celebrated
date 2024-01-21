@@ -4,7 +4,7 @@ import axios from 'axios';
 import Card from './Card';
 
 export const FilterHome = () => {
-  const [selectedButton, setSelectedButton] = useState('All');
+  const [selectedButton, setSelectedButton] = useState('');
   const [events, setEvents] = useState([]);
 
   const handleClick = (button) => {

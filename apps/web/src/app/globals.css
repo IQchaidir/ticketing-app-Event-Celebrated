@@ -309,8 +309,7 @@ body {
 }
 
 .custom-button.clicked {
-  color: #2196f3; /* Ganti dengan warna biru yang diinginkan saat diklik */
-  border-bottom: 2px solid #2196f3; /* Ganti dengan warna biru yang diinginkan saat diklik */
+  border-bottom: 1px solid #000; /* Ganti dengan warna biru yang diinginkan saat diklik */
 }
 
 /* modal style */

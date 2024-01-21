@@ -1,3 +1,4 @@
+import CheckoutButton from '@/components/CheckoutButton';
 import Image from 'next/image';
 
 export async function generateStaticParams() {
@@ -36,42 +37,47 @@ export default async function EventDetails({ params }) {
   // const startDateOnly = new Date(event.end_time).toISOString().split('T')[0];
 
   return (
-    <div className="flex justify-center bg-contain">
+    <div className="flex justify-center bg-contain pt-5">
       <div className="grid grid-cols-1 md:grid-cols-2 2xl:max-w-7xl">
         <Image
-          // src={event.imgUrl}
-          src="/assets/images/hero.png"
+          // src={event.imgUrl} //url gambar
+          src="/assets/images/banner.jpg"
           alt="eventimg"
           width={1000}
           height={1000}
-          className="h-full min-h-[300px] object-cover object-center"
+          className="h-full min-h-[300px]  object-center"
         />
         <div className="flex w-full flex-col gap-8 p-5 md:p-10">
           <div className="flex flex-col gap-6 ">
             <h2 className="h2-bold">{event.title}</h2>
-            {/* <h2 className="h2-bold">TItle Event</h2> */}
 
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div className="flex flex-col gap-3 sm:flex-col sm:items-start">
               <div className="flex gap-3">
                 <p className="p-bold-20 rounded-full bg-green-500/10 px-5 py-2 text-green-700">
-                  {event.isFree ? 'FREE' : `$${event.price}`}
-                  {/* FREE */}
+                  {event.is_free ? 'FREE' : `Rp.${event.price}`}
                 </p>
-                <p className="p-medium-16 rounded-full bg-grey-500/10 px-4 py-2.5 text-grey-500">
+                <p
+                  className={`p-bold-20 rounded-full  ${
+                    event.is_online ? 'bg-green-100' : 'bg-red-100'
+                  } 
+                  px-5 py-2 text-black`}
+                >
+                  {event.is_online ? 'ONLINE' : 'OFFLINE'}
+                </p>
+                <p className="p-bold-20 rounded-full bg-gray-500/10 px-5 py-2 text-gray-500">
                   {event.category}
-                  {/* Music */}
                 </p>
               </div>
 
-              <p className="p-medium-18 ml-2 mt-2 sm:mt-0">
-                by{' '}
+              <p className="p-medium-20 ml-2 pt-0 md:pt-3">
+                by{':'}
                 {/* <span className="text-primary-500">{event.organizer.firstName} {event.organizer.lastName}</span> */}
                 <span className="text-primary-500">Yuk Bisnis</span>
               </p>
             </div>
           </div>
 
-          {/* <CheckoutButton event={event} /> */}
+          <CheckoutButton />
 
           <div className="flex flex-col gap-5">
             <div className="flex gap-2 md:gap-3">
@@ -86,10 +92,6 @@ export default async function EventDetails({ params }) {
                   {formatDate(event.date_time)}
                   {/* tuesday,Jan15 03.00 PM */}
                 </p>
-                {/* <p>
-                  {formatDate(event.end_time)} - {formatDate(event.end_time)}
-                  tuesday,Jan15 03.00 PM
-                </p> */}
               </div>
             </div>
 
@@ -113,7 +115,7 @@ export default async function EventDetails({ params }) {
             <p className="p-bold-20 text-grey-600">What Youll Learn:</p>
             <p className="p-medium-16 lg:p-regular-18">{event.description}</p>
             {/* <p className="p-medium-16 lg:p-regular-18">
-              event yang sangat mantap sekali
+              event yang sangat mantap sekali 
             </p> */}
           </div>
         </div>

@@ -6,18 +6,18 @@ export const Hero = () => {
     <div className="wrapper grid grid-cols-1 gap-5 sm:grid-cols-2 2xl:gap-0">
       <div className="flex flex-col justify-center gap-8">
         <h1 className="h1-bold ">
-          Host,Connect, Celebrate:Your Events,Our Platform!
+          Forge Memorable Moments: Your Event, Our Expertise!
         </h1>
         <p className="p-regular-20 md:p-regular-24">
-          Book and learn helpful tips from 3,168+ mentors in world-class
-          companies with ourglobal community
+          Ignite Learning, Gain Insights: Connect with a Global Community of
+          Mentors for Expert Tips and Wisdom!
         </p>
         <button className="bg-black text-white rounded-xl p-2 w-full sm:w-fit">
-          <Link href="#">Explore Now</Link>
+          <Link href="/events/discovery">Explore Now</Link>
         </button>
       </div>
       <Image
-        src="/assets/images/hero.png"
+        src="/assets/images/hero.jpg"
         alt="heroimg"
         width={1000}
         height={1000}

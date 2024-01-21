@@ -10,7 +10,7 @@ const Header = () => {
       <div className="wrapper flex items-center justify-between">
         <Link href="/" className="w-auto h-auto">
           <Image
-            src="/assets/images/logo.svg"
+            src="/assets/images/company.png"
             alt="logo"
             width={128}
             height={38}
