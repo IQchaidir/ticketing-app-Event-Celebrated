@@ -13,6 +13,7 @@ import { DiscoveryRouter } from './routers/discovery.router';
 import { CreateEventRouter } from './routers/createEvent.router';
 import { CategoryRouter } from './routers/category.router';
 import { GetEventByIdRouter } from './routers/getEventById.router';
+import { TransactionRouter } from './routers/transaction.router';
 
 export default class App {
   private app: Express;
@@ -66,11 +67,13 @@ export default class App {
     const createEventRouter = new CreateEventRouter();
     const categoryRouter = new CategoryRouter();
     const getEventByIdRouter = new GetEventByIdRouter();
+    const transactionRouter = new TransactionRouter();
 
     this.app.use('/event/discovery', discoveryRouter.getRouter());
     this.app.use('/event/createEvent', createEventRouter.getRouter());
     this.app.use('/categories', categoryRouter.getRouter());
     this.app.use('/event', getEventByIdRouter.getRouter());
+    this.app.use('/checkout', transactionRouter.getRouter());
   }
   //IQBAL CLOSED TASK//
   public start(): void {

@@ -26,6 +26,7 @@ const SearchPage = () => {
     tomorrow: false,
     thisWeekend: false,
   });
+  // State untuk viewmore kategori
   const [isViewMore, setIsViewMore] = useState(false);
   const MAX_DISPLAY_CATEGORIES = 5;
   // State untuk melacak status checkbox Price
@@ -33,10 +34,8 @@ const SearchPage = () => {
     paid: false,
     free: false,
   });
-
   // State untuk melacak status checkbox Category
   const [selectedCategory, setSelectedCategory] = useState('');
-
   // State untuk melacak filter pills yang aktif
   const [activeFilters, setActiveFilters] = useState([]);
 
@@ -275,7 +274,7 @@ const SearchPage = () => {
           />
         </form>
 
-        {/* filter mobile */}
+        {/* Mobile Filter */}
         <div className="flex flex-row lg:hidden gap-5 pb-5 w-full  ">
           <FilterButton onClick={handleOpenModal} />
         </div>

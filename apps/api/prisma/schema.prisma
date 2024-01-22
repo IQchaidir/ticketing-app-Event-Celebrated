@@ -30,7 +30,7 @@ model User {
   referral_code  String
   role           Role
   created_at     DateTime        @default(now())
-  updated_at     DateTime        @updatedAt
+  // updated_at     DateTime        @updatedAt
   // events         Event[]
   referrerPoints ReferralPoint[] @relation("ReferrerToReferralPoint")
   // referredPoints ReferralPoint[] @relation("ReferredToReferralPoint")
@@ -61,14 +61,14 @@ model Event {
 }
 
 model ReferralPoint {
-  id              Int      @id @default(autoincrement())
-  referrer_id     Int
+  id           Int      @id @default(autoincrement())
+  referrer_id  Int
   // referred_id     Int
-  points          Int      @default(10000)
-  claim_points    Boolean
-  created_at      DateTime @default(now())
-  expiration_date DateTime
-  referrer        User     @relation("ReferrerToReferralPoint", fields: [referrer_id], references: [id])
+  points       Int      @default(10000)
+  claim_points Boolean
+  created_at   DateTime @default(now())
+  // expiration_date DateTime
+  referrer     User     @relation("ReferrerToReferralPoint", fields: [referrer_id], references: [id])
   // referred        User     @relation("ReferredToReferralPoint", fields: [referred_id], references: [id])
 }
 
@@ -81,22 +81,31 @@ model Coupons {
   is_used         Boolean
   usage_limit     Int
   created_at      DateTime      @default(now())
-  expiration_date DateTime
+  // expiration_date DateTime
   // user            User          @relation(fields: [user_id], references: [id])
   event           Event         @relation(fields: [event_id], references: [id])
   transaction     Transaction[]
 }
 
 model Transaction {
-  id              Int      @id @default(autoincrement())
+  id              Int    @id @default(autoincrement())
   user_id         Int
   event_id        Int
   coupon_event_id Int?
-  points_used     Int      @default(0)
-  created_at      DateTime @default(now())
-  user            User     @relation(fields: [user_id], references: [id])
-  event           Event    @relation(fields: [event_id], references: [id])
-  Coupons         Coupons? @relation(fields: [coupon_event_id], references: [id])
+  points_used     Int    @default(0)
+  totalamount     Int    @default(0) // Tambahkan kolom totalamount
+  status          Status @default(success) // Tambahkan kolom status
+
+  created_at DateTime @default(now())
+  user       User     @relation(fields: [user_id], references: [id])
+  event      Event    @relation(fields: [event_id], references: [id])
+  Coupons    Coupons? @relation(fields: [coupon_event_id], references: [id])
+}
+
+enum Status {
+  delay
+  success
+  failed
 }
 
 model Review {

@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Global CSS IQBAL */
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -360,3 +361,5 @@ body {
     width: 70%; /* Lebar untuk ukuran layar antara 768px dan 915px */
   }
 }
+
+/* GLOBAL CSS IQBAL CLOSED */

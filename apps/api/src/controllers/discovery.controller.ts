@@ -20,7 +20,6 @@ export class DiscoveryController {
     try {
       const localTime = new Date().toLocaleString('en-US', { timeZone: 'UTC' });
       const localTimeISO = new Date(localTime).toISOString();
-
       const pageNumber = parseInt(page || '1');
 
       const events = await prisma.event.findMany({
