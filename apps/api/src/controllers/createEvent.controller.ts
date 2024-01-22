@@ -5,7 +5,7 @@ export class CreateEventController {
   async createEvent(req: Request, res: Response) {
     try {
       const {
-        organizer_id,
+        // organizer_id,
         title,
         price,
         date_time,
@@ -20,7 +20,7 @@ export class CreateEventController {
 
       const event = await prisma.event.create({
         data: {
-          organizer_id,
+          // organizer_id,
           title,
           price,
           date_time,

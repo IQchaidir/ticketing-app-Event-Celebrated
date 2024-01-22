@@ -33,15 +33,15 @@ model User {
   updated_at     DateTime        @updatedAt
   // events         Event[]
   referrerPoints ReferralPoint[] @relation("ReferrerToReferralPoint")
-  referredPoints ReferralPoint[] @relation("ReferredToReferralPoint")
-  couponsEvent   Coupons[]
+  // referredPoints ReferralPoint[] @relation("ReferredToReferralPoint")
+  // couponsEvent   Coupons[]
   transactions   Transaction[]
   reviews        Review[]
 }
 
 model Event {
   id           Int           @id @default(autoincrement())
-  organizer_id Int
+  // organizer_id Int
   title        String
   price        Decimal       @default(0)
   date_time    DateTime
@@ -63,25 +63,26 @@ model Event {
 model ReferralPoint {
   id              Int      @id @default(autoincrement())
   referrer_id     Int
-  referred_id     Int
+  // referred_id     Int
   points          Int      @default(10000)
   claim_points    Boolean
   created_at      DateTime @default(now())
   expiration_date DateTime
   referrer        User     @relation("ReferrerToReferralPoint", fields: [referrer_id], references: [id])
-  referred        User     @relation("ReferredToReferralPoint", fields: [referred_id], references: [id])
+  // referred        User     @relation("ReferredToReferralPoint", fields: [referred_id], references: [id])
 }
 
 model Coupons {
   id              Int           @id @default(autoincrement())
-  user_id         Int
+  // user_id         Int
   event_id        Int
-  coupon_type     CouponType
+  // coupon_type     CouponType
   discount_amount Decimal
   is_used         Boolean
+  usage_limit     Int
   created_at      DateTime      @default(now())
   expiration_date DateTime
-  user            User          @relation(fields: [user_id], references: [id])
+  // user            User          @relation(fields: [user_id], references: [id])
   event           Event         @relation(fields: [event_id], references: [id])
   transaction     Transaction[]
 }
@@ -135,9 +136,4 @@ enum Category {
   Holiday
   Lifestyle
   Other
-}
-
-enum CouponType {
-  EVENT
-  REFERRAL
 }

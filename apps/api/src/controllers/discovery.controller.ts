@@ -18,6 +18,9 @@ export class DiscoveryController {
     const pageSize = 6; // Jumlah item per halaman
 
     try {
+      const localTime = new Date().toLocaleString('en-US', { timeZone: 'UTC' });
+      const localTimeISO = new Date(localTime).toISOString();
+
       const pageNumber = parseInt(page || '1');
 
       const events = await prisma.event.findMany({
@@ -27,11 +30,23 @@ export class DiscoveryController {
           is_online: is_online ? { equals: is_online === 'true' } : undefined,
           title: search ? { contains: search } : undefined,
           date_time: {
-            gte: start_date ? new Date(start_date).toISOString() : undefined,
-            lte: end_date ? new Date(end_date).toISOString() : undefined,
+            gte: start_date
+              ? new Date(
+                  new Date(start_date).toLocaleString('en-US', {
+                    timeZone: 'UTC',
+                  }),
+                ).toISOString()
+              : undefined,
+            lte: end_date
+              ? new Date(
+                  new Date(end_date).toLocaleString('en-US', {
+                    timeZone: 'UTC',
+                  }),
+                ).toISOString()
+              : undefined,
           },
           end_time: {
-            gte: new Date().toISOString(), // Memastikan end_time lebih besar dari waktu saat ini
+            gte: localTimeISO, // Memastikan end_time lebih besar dari waktu saat ini
           },
         },
         orderBy: { date_time: 'asc' },

@@ -127,15 +127,15 @@ const SearchPage = () => {
     setSelectedButton('filter');
   };
 
+  // Terapkan nilai filter dari FilterModal ke state filter di SearchPage
   const applyFilters = (modalFilters) => {
-    // Terapkan nilai filter dari FilterModal ke state filter di SearchPage
     setOnlineEventFilter(modalFilters.onlineEventFilter);
     setDateFilters(modalFilters.dateFilters);
     setPriceFilters(modalFilters.priceFilters);
     setSelectedCategory(modalFilters.selectedCategory);
   };
 
-  // Hapus filter
+  // Hapus filter Pills
   const removeFilter = (filter) => {
     setActiveFilters((prevFilters) =>
       prevFilters.filter((activeFilter) => activeFilter !== filter),
@@ -259,10 +259,6 @@ const SearchPage = () => {
     selectedCategory,
     currentPage,
   ]);
-
-  const handleClick = (button) => {
-    setSelectedButton(button);
-  };
 
   return (
     <div className=" wrapper flex flex-col md:flex-row-reverse min-h-screen">
@@ -423,9 +419,6 @@ const SearchPage = () => {
             </button>
           )}
         </div>
-        <button className="bg-black text-white p-2 rounded ">
-          Apply Filters
-        </button>
       </aside>
     </div>
   );
