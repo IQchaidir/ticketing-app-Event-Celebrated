@@ -1,4 +1,4 @@
-import { DiscoveryController } from '@/controllers/discovery.controller';
+import { DiscoveryController } from '../controllers/discovery.controller';
 import { Router } from 'express';
 
 export class DiscoveryRouter {

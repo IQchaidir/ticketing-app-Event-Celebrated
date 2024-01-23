@@ -5,11 +5,14 @@ import FilterModal from '@/components/FilterModal';
 import FilterPill from '@/components/FilterPills';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { useDebounce } from 'use-debounce';
 
 const SearchPage = () => {
   const pageSize = 6;
   //state untuk melacak search
   const [searchQuery, setSearchQuery] = useState('');
+  //use debounce
+  const [debounceValue] = useDebounce(searchQuery, 500);
   //state untuk resp fething
   const [data, setData] = useState([]);
   //state array cateogri
@@ -193,7 +196,7 @@ const SearchPage = () => {
         is_free:
           priceFilters.free || (priceFilters.paid ? { is_free: false } : null),
         category: selectedCategory.toString(),
-        search: searchQuery,
+        search: debounceValue,
         page: currentPage.toString(),
       };
 
@@ -251,7 +254,7 @@ const SearchPage = () => {
 
     fetchData();
   }, [
-    searchQuery,
+    debounceValue,
     onlineEventFilter,
     dateFilters,
     priceFilters,

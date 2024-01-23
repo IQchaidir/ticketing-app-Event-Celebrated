@@ -1,4 +1,4 @@
-import { CreateEventController } from '@/controllers/createEvent.controller';
+import { CreateEventController } from '../controllers/createEvent.controller';
 import { Router } from 'express';
 
 export class CreateEventRouter {

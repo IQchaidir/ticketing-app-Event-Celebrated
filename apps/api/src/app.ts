@@ -8,15 +8,15 @@ import express, {
 } from 'express';
 import cors from 'cors';
 import { PORT } from './config';
-import { SampleRouter } from './routers/sample.router';
 import { DiscoveryRouter } from './routers/discovery.router';
 import { CreateEventRouter } from './routers/createEvent.router';
 import { CategoryRouter } from './routers/category.router';
 import { GetEventByIdRouter } from './routers/getEventById.router';
 import { TransactionRouter } from './routers/transaction.router';
+import { AuthRouter } from './routers/auth.router';
 
 export default class App {
-  private app: Express;
+  readonly app: Express;
 
   constructor() {
     this.app = express();
@@ -55,25 +55,24 @@ export default class App {
   }
 
   private routes(): void {
-    const sampleRouter = new SampleRouter();
-
     this.app.get('/', (req: Request, res: Response) => {
       res.send(`Hello, Purwadhika Student !`);
     });
 
-    this.app.use('/samples', sampleRouter.getRouter());
     //IQBAL OPEN TASK//
     const discoveryRouter = new DiscoveryRouter();
     const createEventRouter = new CreateEventRouter();
     const categoryRouter = new CategoryRouter();
     const getEventByIdRouter = new GetEventByIdRouter();
     const transactionRouter = new TransactionRouter();
+    const authRouter = new AuthRouter();
 
     this.app.use('/event/discovery', discoveryRouter.getRouter());
     this.app.use('/event/createEvent', createEventRouter.getRouter());
     this.app.use('/categories', categoryRouter.getRouter());
-    this.app.use('/event', getEventByIdRouter.getRouter());
+    this.app.use('/events', getEventByIdRouter.getRouter());
     this.app.use('/checkout', transactionRouter.getRouter());
+    this.app.use('/auth/login', authRouter.getRouter());
   }
   //IQBAL CLOSED TASK//
   public start(): void {

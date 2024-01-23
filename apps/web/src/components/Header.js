@@ -25,7 +25,7 @@ const Header = () => {
 
           <div className="flex w-auto justify-end gap-3">
             <button className="p-2 hover:bg-black hover:text-white rounded-md">
-              <Link href="/sign-in">Log In</Link>
+              <Link href="/auth/login">Log In</Link>
             </button>
             <button className="p-2 hover:bg-black hover:text-white rounded-md">
               <Link href="/sign-in">Sign Up</Link>

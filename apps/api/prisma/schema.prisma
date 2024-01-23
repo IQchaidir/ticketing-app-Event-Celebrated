@@ -10,16 +10,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Sample {
-  id        Int      @id @default(autoincrement())
-  name      String
-  code      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("samples") // if you want to use snake_case format
-}
-
 // Prisma schema for your tables
 
 model User {
@@ -76,7 +66,7 @@ model Coupons {
   id              Int           @id @default(autoincrement())
   // user_id         Int
   event_id        Int
-  // coupon_type     CouponType
+  name            String
   discount_amount Decimal
   is_used         Boolean
   usage_limit     Int
@@ -94,7 +84,7 @@ model Transaction {
   coupon_event_id Int?
   points_used     Int    @default(0)
   totalamount     Int    @default(0) // Tambahkan kolom totalamount
-  status          Status @default(success) // Tambahkan kolom status
+  status          Status @default(waitingForPayment) // Tambahkan kolom status
 
   created_at DateTime @default(now())
   user       User     @relation(fields: [user_id], references: [id])
@@ -103,9 +93,9 @@ model Transaction {
 }
 
 enum Status {
-  delay
+  waitingForPayment
   success
-  failed
+  cancel
 }
 
 model Review {
@@ -127,7 +117,6 @@ enum Role {
 enum Category {
   music
   seminar
-  etc
   Sports
   Technology
   Arts

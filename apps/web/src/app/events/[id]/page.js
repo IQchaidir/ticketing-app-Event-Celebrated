@@ -5,19 +5,23 @@ export async function generateStaticParams() {
   const res = await fetch('http://localhost:8000/event/discovery');
   const data = await res.json();
 
+  if (!res.ok) {
+    throw new Error(`HTTP error! Status: ${res.status}`);
+  }
+
   return data.map((event) => ({
     id: event.id.toString(),
   }));
 }
 
-async function getEvent(id) {
-  const res = await fetch(`http://localhost:8000/event/${id}`);
+async function getEventId(id) {
+  const res = await fetch(`http://localhost:8000/events/${id}`);
   const data = await res.json();
   return data;
 }
 
 export default async function EventDetails({ params }) {
-  const event = await getEvent(params.id);
+  const event = await getEventId(params.id);
 
   const formatDate = (isoDate) => {
     const options = {

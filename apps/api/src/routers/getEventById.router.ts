@@ -1,4 +1,4 @@
-import { GetEventByIdController } from '@/controllers/getEventById.controller';
+import { GetEventByIdController } from '../controllers/getEventById.controller';
 import { Router } from 'express';
 
 export class GetEventByIdRouter {

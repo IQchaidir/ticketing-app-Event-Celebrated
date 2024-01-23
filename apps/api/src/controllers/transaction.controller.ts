@@ -1,10 +1,11 @@
-import prisma from '@/prisma';
-import { Request, Response } from 'express';
+import prisma from '../prisma';
+import { Request, Response, Router } from 'express';
 
 export class TransactionController {
   async checkout(req: Request, res: Response) {
     try {
-      const { userId, couponId, pointUsed } = req.body;
+      const userId = req.dataUser.id;
+      const { couponId, pointUsed } = req.body;
       const { eventId } = req.params;
 
       const event = await prisma.event.findUnique({
@@ -21,7 +22,7 @@ export class TransactionController {
 
       // Lakukan validasi user
       const user = await prisma.user.findUnique({
-        where: { id: parseInt(userId) },
+        where: { id: req.dataUser.id },
       });
 
       if (!user) {
@@ -34,7 +35,7 @@ export class TransactionController {
       if (couponId) {
         const coupon = await prisma.coupons.findUnique({
           where: {
-            id: parseInt(couponId), // Konversi ke tipe data Int
+            id: parseInt(couponId),
           },
         });
 
@@ -56,7 +57,7 @@ export class TransactionController {
       if (pointUsed) {
         try {
           const totalPoints = await prisma.referralPoint.aggregate({
-            where: { referrer_id: parseInt(userId) },
+            where: { referrer_id: userId },
             _sum: { points: true },
           });
 
@@ -72,7 +73,7 @@ export class TransactionController {
             // Lakukan pengurangan poin dari referralPoint
             const referralPointsToUpdate = await prisma.referralPoint.findMany({
               where: {
-                referrer_id: parseInt(userId),
+                referrer_id: userId,
                 claim_points: false,
               },
               orderBy: {
@@ -103,7 +104,7 @@ export class TransactionController {
             // Lakukan pengurangan poin dari referralPoint
             const referralPointsToUpdate = await prisma.referralPoint.findMany({
               where: {
-                referrer_id: parseInt(userId),
+                referrer_id: userId,
                 claim_points: false,
               },
             });
@@ -123,7 +124,7 @@ export class TransactionController {
 
       const transaction = await prisma.transaction.create({
         data: {
-          user_id: parseInt(userId),
+          user_id: userId,
           event_id: parseInt(eventId),
           coupon_event_id: couponId ? parseInt(couponId) : null,
           points_used: pointUsed ? parseInt(pointUsed) : 0,
@@ -141,6 +142,46 @@ export class TransactionController {
     } catch (error: any) {
       console.error(error);
       res.status(500).json({ error: error.message || 'Internal Server Error' });
+    }
+  }
+
+  async dataCheckout(req: Request, res: Response) {
+    try {
+      const eventId = parseInt(req.params.eventId);
+      const userIdFromToken = req.dataUser;
+
+      // Mengambil harga dari tabel Event
+      const event = await prisma.event.findUnique({
+        where: { id: eventId },
+        select: { price: true },
+      });
+
+      // Mengambil daftar kupon terkait dari tabel Coupon
+      const coupons = await prisma.coupons.findMany({
+        where: { event_id: eventId },
+      });
+
+      // Mengambil poin terkait dari tabel ReferralPoint
+
+      const totalPointsResult = await prisma.referralPoint.aggregate({
+        where: {
+          referrer_id: userIdFromToken,
+        },
+        _sum: { points: true },
+      });
+
+      const totalPoints = totalPointsResult?._sum?.points || 0;
+
+      const result = {
+        eventPrice: event?.price || 0,
+        eventCoupons: coupons,
+        userPoints: totalPoints || 0,
+      };
+
+      res.status(200).json(result);
+    } catch (error: any) {
+      console.error('Error fetching checkout information:', error.message);
+      throw error;
     }
   }
 }
