@@ -14,6 +14,7 @@ import { CategoryRouter } from './routers/category.router';
 import { GetEventByIdRouter } from './routers/getEventById.router';
 import { TransactionRouter } from './routers/transaction.router';
 import { AuthRouter } from './routers/auth.router';
+import { GetUserRouter } from './routers/GetUserController.router';
 
 export default class App {
   readonly app: Express;
@@ -66,6 +67,7 @@ export default class App {
     const getEventByIdRouter = new GetEventByIdRouter();
     const transactionRouter = new TransactionRouter();
     const authRouter = new AuthRouter();
+    const getUserRouter = new GetUserRouter();
 
     this.app.use('/event/discovery', discoveryRouter.getRouter());
     this.app.use('/event/createEvent', createEventRouter.getRouter());
@@ -73,6 +75,7 @@ export default class App {
     this.app.use('/events', getEventByIdRouter.getRouter());
     this.app.use('/checkout', transactionRouter.getRouter());
     this.app.use('/auth/login', authRouter.getRouter());
+    this.app.use('/user', getUserRouter.getRouter());
   }
   //IQBAL CLOSED TASK//
   public start(): void {

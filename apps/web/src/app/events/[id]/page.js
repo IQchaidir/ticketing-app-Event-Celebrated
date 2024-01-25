@@ -1,11 +1,12 @@
 import CheckoutButton from '@/components/CheckoutButton';
+import axios from 'axios';
 import Image from 'next/image';
 
 export async function generateStaticParams() {
-  const res = await fetch('http://localhost:8000/event/discovery');
-  const data = await res.json();
+  const res = await axios.get('http://localhost:8000/event/discovery');
+  const data = res.data;
 
-  if (!res.ok) {
+  if (res.status !== 200) {
     throw new Error(`HTTP error! Status: ${res.status}`);
   }
 
@@ -15,8 +16,8 @@ export async function generateStaticParams() {
 }
 
 async function getEventId(id) {
-  const res = await fetch(`http://localhost:8000/events/${id}`);
-  const data = await res.json();
+  const res = await axios.get(`http://localhost:8000/events/${id}`);
+  const data = res.data;
   return data;
 }
 

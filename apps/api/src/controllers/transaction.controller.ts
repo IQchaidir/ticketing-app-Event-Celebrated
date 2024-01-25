@@ -4,7 +4,7 @@ import { Request, Response, Router } from 'express';
 export class TransactionController {
   async checkout(req: Request, res: Response) {
     try {
-      const userId = req.dataUser.id;
+      const userId = req.dataUser;
       const { couponId, pointUsed } = req.body;
       const { eventId } = req.params;
 
@@ -22,7 +22,7 @@ export class TransactionController {
 
       // Lakukan validasi user
       const user = await prisma.user.findUnique({
-        where: { id: req.dataUser.id },
+        where: { id: req.dataUser },
       });
 
       if (!user) {

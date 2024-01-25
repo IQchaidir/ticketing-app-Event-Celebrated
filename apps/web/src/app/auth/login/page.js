@@ -25,9 +25,6 @@ const Login = () => {
         // Login gagal
         console.log('Login failed:', response.data);
       }
-
-      //   // Navigasi ke halaman utama setelah login berhasil
-      //   router.push('/');
     } catch (error) {
       console.error(
         'Login failed:',

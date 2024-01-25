@@ -1,24 +1,29 @@
+import { GetUserController } from '@/controllers/getUser.controller';
 import { ExtractUserIdFromTokenMiddleware } from '@/middleware/jwt';
-import { CreateEventController } from '../controllers/createEvent.controller';
 import { Router } from 'express';
 
-export class CreateEventRouter {
+export class GetUserRouter {
   private router: Router;
-  private createEventController: CreateEventController;
+  private getUserController: GetUserController;
   private extractUserIdMiddleware: ExtractUserIdFromTokenMiddleware;
 
   constructor() {
-    this.createEventController = new CreateEventController();
+    this.getUserController = new GetUserController();
     this.extractUserIdMiddleware = new ExtractUserIdFromTokenMiddleware();
     this.router = Router();
     this.initializeRoutes();
   }
 
   private initializeRoutes(): void {
-    this.router.post(
-      '/',
+    this.router.get(
+      '/email',
       this.extractUserIdMiddleware.extractUserIdFromToken,
-      this.createEventController.createEvent,
+      this.getUserController.getUserEmail,
+    );
+    this.router.get(
+      '/role',
+      this.extractUserIdMiddleware.extractUserIdFromToken,
+      this.getUserController.getUserRole,
     );
   }
 

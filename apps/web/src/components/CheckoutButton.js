@@ -1,25 +1,27 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import axios from 'axios';
 
 const CheckoutButton = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [eventPrice, setEventPrice] = useState(null);
   const [coupon, setCoupons] = useState([]);
   const [points, setPoints] = useState(0);
+  const [isPointsUsed, setIsPointsUsed] = useState(false); // State baru
   const [totalPrice, setTotalPrice] = useState(0);
   const [checkoutClicked, setCheckoutClicked] = useState(false);
   const params = useParams();
   const router = useRouter();
 
-  const eventId = params.id; // Mengambil nilai dari parameter URL "id"
+  const eventId = params.id;
+
   useEffect(() => {
-    // Ambil informasi checkout dari backend
     const fetchCheckoutInfo = async () => {
       try {
-        // Fetch informasi checkout dari backend (ganti URL sesuai dengan backend Anda)
         const token = localStorage.getItem('token');
 
+        // Fetch informasi checkout dari backend
         const res = await fetch(`http://localhost:8000/checkout/${eventId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -32,11 +34,11 @@ const CheckoutButton = () => {
 
         const data = await res.json();
 
-        // Update state dengan informasi yang diterima dari backend
+        // Update state dengan informasi dari backend
         setEventPrice(data.eventPrice);
         setCoupons(data.eventCoupons);
         setPoints(data.userPoints);
-        setTotalPrice(data.eventPrice); // Total awal dihitung tanpa potongan dari coupon atau poin
+        setTotalPrice(data.eventPrice);
       } catch (error) {
         console.error('Error fetching checkout information:', error.message);
       }
@@ -45,23 +47,69 @@ const CheckoutButton = () => {
     if (checkoutClicked) {
       fetchCheckoutInfo();
     }
-  }, [checkoutClicked]);
+  }, [checkoutClicked, eventId]);
 
   const handleCheckout = () => {
     const token = localStorage.getItem('token');
 
     if (token) {
-      // Jika ada token, buka modal checkout
       setIsModalOpen(true);
       setCheckoutClicked(true);
     } else {
-      // Jika tidak ada token, arahkan pengguna untuk login
       router.push('/auth/login');
     }
   };
 
+  const getCouponId = () => {
+    const selectedCoupon = coupon.find((coupon) => coupon.isChecked);
+    return selectedCoupon ? selectedCoupon.id : null;
+  };
+
+  // Perubahan untuk menangani perubahan status poin
+  const handlePointChange = () => {
+    setIsPointsUsed((prevIsPointsUsed) => !prevIsPointsUsed);
+
+    if (setIsPointsUsed.isChecked) {
+      // Jika dicentang, kurangi totalPrice dengan discountAmount
+      setTotalPrice((prevTotalPrice) => parseFloat(prevTotalPrice) + points);
+    } else {
+      // Jika tidak dicentang, tambahkan totalPrice dengan discountAmount
+      setTotalPrice((prevTotalPrice) => parseFloat(prevTotalPrice) - points);
+    }
+    setIsPointsUsed.isChecked = !setIsPointsUsed.isChecked;
+  };
+
+  const handleConfirm = async () => {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      router.push('/auth/login');
+      return;
+    }
+
+    try {
+      // Menggunakan axios untuk mengirim data transaksi ke backend
+      const response = await axios.post(
+        `http://localhost:8000/checkout/${eventId}`,
+        {
+          couponId: getCouponId(),
+          pointUsed: isPointsUsed ? points : 0,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      // Jika transaksi berhasil, kembali ke halaman utama
+      router.push('/');
+    } catch (error) {
+      console.error('Error during transaction:', error.message);
+    }
+  };
+
   const handleClose = () => {
-    // Tutup modal
     setIsModalOpen(false);
   };
 
@@ -90,19 +138,6 @@ const CheckoutButton = () => {
     }
   };
 
-  const handlePointChange = () => {
-    if (setPoints.isChecked) {
-      // Jika dicentang, kurangi totalPrice dengan discountAmount
-      setTotalPrice((prevTotalPrice) => parseFloat(prevTotalPrice) + points);
-    } else {
-      // Jika tidak dicentang, tambahkan totalPrice dengan discountAmount
-      setTotalPrice((prevTotalPrice) => parseFloat(prevTotalPrice) - points);
-    }
-
-    // Perbarui isChecked pada kupon yang bersangkutan
-    setPoints.isChecked = !setPoints.isChecked;
-  };
-
   const modalOverlayStyle = {
     position: 'fixed',
     top: 0,
@@ -129,8 +164,7 @@ const CheckoutButton = () => {
     top: 8,
     right: 5,
 
-    background: '#ff0000',
-    color: '#fff',
+    color: '#000',
     padding: '8px',
     borderRadius: '4px',
   };
@@ -200,7 +234,7 @@ const CheckoutButton = () => {
               <button
                 className="bg-red-500 text-white p-2 rounded-md"
                 type="button"
-                onClick={() => setIsModalOpen(false)}
+                onClick={handleConfirm}
               >
                 Confirm
               </button>

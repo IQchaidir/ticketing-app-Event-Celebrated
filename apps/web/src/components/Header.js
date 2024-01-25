@@ -1,10 +1,50 @@
+'use client';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navitem } from './Navitem';
 import { Navmobile } from './Navmobile';
+import axios from 'axios';
+import UserDropdown from './userDropDown';
 
 const Header = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      setIsLoggedIn(true);
+      fetchdataUser(token);
+    }
+  }, []);
+
+  const fetchdataUser = async (token) => {
+    try {
+      const response = await axios.get('http://localhost:8000/user/email', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.status === 200) {
+        const userData = response.data;
+        console.log(userData);
+        setUserData(userData);
+      } else {
+        console.error('Error fetching user data');
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setIsLoggedIn(false);
+    setUserData(null);
+  };
+
   return (
     <header className="w-full border-b sticky top-0 bg-white z-50">
       <div className="wrapper flex items-center justify-between">
@@ -24,12 +64,24 @@ const Header = () => {
           </nav>
 
           <div className="flex w-auto justify-end gap-3">
-            <button className="p-2 hover:bg-black hover:text-white rounded-md">
-              <Link href="/auth/login">Log In</Link>
-            </button>
-            <button className="p-2 hover:bg-black hover:text-white rounded-md">
-              <Link href="/sign-in">Sign Up</Link>
-            </button>
+            {isLoggedIn && (
+              <UserDropdown
+                userEmail={userData?.email}
+                onLogout={handleLogout}
+              />
+            )}
+
+            {!isLoggedIn && (
+              <>
+                <button className="p-2 hover:bg-black hover:text-white rounded-md">
+                  <Link href="/auth/login">Log In</Link>
+                </button>
+                <button className="p-2 hover:bg-black hover:text-white rounded-md">
+                  <Link href="/sign-in">Sign Up</Link>
+                </button>
+              </>
+            )}
+
             <Navmobile></Navmobile>
           </div>
         </div>

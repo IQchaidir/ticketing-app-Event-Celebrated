@@ -4,6 +4,7 @@ import FilterButton from '@/components/FilterButton';
 import FilterModal from '@/components/FilterModal';
 import FilterPill from '@/components/FilterPills';
 import axios from 'axios';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 
@@ -187,9 +188,7 @@ const SearchPage = () => {
     fetchCategories();
   }, []);
 
-  //pemanggilan API
   useEffect(() => {
-    // Pemanggilan API dengan parameter query yang sesuai
     const fetchData = async () => {
       const filters = {
         is_online: onlineEventFilter,
@@ -303,7 +302,14 @@ const SearchPage = () => {
               </div>
             ))
           ) : (
-            <p>No events found.</p>
+            <>
+              <Image
+                src="/assets/images/notfound.jpg"
+                alt="notfound"
+                height={1000}
+                width={1000}
+              />
+            </>
           )}
         </div>
         {/* Menampilkan tombol pagination */}
