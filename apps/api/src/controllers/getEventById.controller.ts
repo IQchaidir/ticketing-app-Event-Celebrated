@@ -9,24 +9,17 @@ export class GetEventByIdController {
 
     try {
       let event;
-
-      // Cek apakah parameter id ada
       if (id) {
-        // Jika id ada, gunakan pencarian berdasarkan id
         event = await prisma.event.findUnique({
           where: { id: parseInt(id, 10) },
         });
       } else {
-        // Jika id tidak ada, tangani kasus ini sesuai kebutuhan proyek
-        // Di sini, kita memberikan respons bahwa ID tidak diberikan
         return res.status(400).json({ error: 'Not Found' });
       }
 
       if (!event) {
         return res.status(404).json({ error: 'Event not found' });
       }
-
-      // Mengirimkan data event ke frontend
       res.json({
         title: event.title,
         price: event.price,

@@ -45,7 +45,7 @@ export class DiscoveryController {
               : undefined,
           },
           end_time: {
-            gte: localTimeISO, // Memastikan end_time lebih besar dari waktu saat ini
+            gte: localTimeISO,
           },
         },
         orderBy: { date_time: 'asc' },

@@ -1,208 +1,369 @@
-import React, { useState, useEffect } from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import Select from 'react-select';
+import { fetchCategories } from '@/app/lib/api';
 import axios from 'axios';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { useEffect, useState } from 'react';
+import * as Yup from 'yup';
+import { useRouter } from 'next/navigation';
 
-const FormEvent = () => {
-  const [categories, setCategories] = useState([]);
-  const [regencies, setRegencies] = useState([
-    { id: '1', name: 'Kabupaten X' },
-    { id: '2', name: 'Kabupaten Y' },
-    // ... tambahkan kabupaten lainnya
-  ]);
-  const [isOnline, setIsOnline] = useState(true); // State untuk menentukan apakah event online atau venue
-  const [showLocationForm, setShowLocationForm] = useState(true);
+const createEventForm = () => {
+  const [category, setCategory] = useState([]);
+  const [isOnline, setIsOnline] = useState(false);
+  const [isFree, setIsFree] = useState(false);
+  const [previewImage, setPreviewImage] = useState(null);
+  const [image, setImage] = useState(null);
+  const [errorImage, setErrorImage] = useState(false);
+  const route = useRouter();
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+
+    setImage(e.target.files[0]);
+
+    if (file) {
+      setPreviewImage(URL.createObjectURL(file));
+    }
+  };
 
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/categories');
-        setCategories(response.data);
+        const data = await fetchCategories();
+        setCategory(data);
       } catch (error) {
-        console.error('Error fetching categories:', error);
+        console.error('Error in component:', error);
       }
     };
 
-    fetchCategories();
+    fetchData();
   }, []);
 
+  const handleOnline = () => {
+    return setIsOnline(true);
+  };
+
+  const handleVenue = () => {
+    return setIsOnline(false);
+  };
+
+  const handleFree = () => {
+    return setIsFree(true);
+  };
+
+  const handlePrice = () => {
+    return setIsFree(false);
+  };
+
+  const initialValues = {
+    title: '',
+    organizer: '',
+    category: '',
+    description: '',
+    location: {
+      input: '',
+      select: '',
+    },
+    date_time: '',
+    end_time: '',
+    image: '',
+    price: 0,
+    seats: 0,
+  };
+
   const validationSchema = Yup.object({
-    title: Yup.string().required('Judul wajib diisi'),
-    category: Yup.object()
-      .shape({
-        value: Yup.string(),
-        label: Yup.string(),
-      })
-      .required('Kategori wajib dipilih'),
-    description: Yup.string().required('Deskripsi wajib diisi'),
-    location: Yup.object().shape({
-      address: Yup.string().required('Alamat wajib diisi'),
-      regency: Yup.string().required('Kabupaten/Kota wajib dipilih'),
-    }),
-    // Tambahkan validasi untuk bidang formulir lainnya jika diperlukan
+    // title: Yup.string().required('Judul wajib diisi'),
+    // organizer: Yup.string().required('Penyelenggara wajib diisi'),
+    // category: Yup.string().required('Kategori harus dipilih'),
+    // description: Yup.string().required('Deskripsi wajib diisi'),
+    // location: Yup.object().shape({
+    //   input: Yup.string().required('Location (Input) is required'),
+    //   select: Yup.string().required('Location (Select) is required'),
+    // }),
+    // date_time: Yup.string().required('Start Date is required'),
+    // end_time: Yup.string().required('End Date is required'),
+    // image: Yup.required('image is required)
+    // price: Yup.required("price is required")
+    // seats: Yup.required("seats is required")
   });
 
-  const handleOnlineClick = () => {
-    setIsOnline(true);
-    setShowLocationForm(false);
-  };
+  const onSubmit = async (values, { setSubmitting }) => {
+    if (!image) {
+      setErrorImage(true);
+      setSubmitting(false);
+      return;
+    }
+    setErrorImage(false);
+    const formData = new FormData();
 
-  const handleVenueClick = () => {
-    setIsOnline(false);
-    setShowLocationForm(true);
-  };
+    Object.entries(values).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
 
-  const handleSubmit = (values) => {
-    console.log(values);
-    // Lakukan sesuatu dengan nilai formulir, misalnya kirim ke server
+    formData.append('is_online', isOnline);
+    formData.append('is_free', isFree);
+
+    if (image) {
+      formData.append('image', image);
+    }
+
+    console.log([...formData]);
+
+    route.push('/');
+
+    // try {
+    //   const response = await axios.post(
+    //     'http://localhost:8000/event/createEvent',
+    //     {
+    //       ...values,
+    //       is_online: isOnline,
+    //       is_free: isFree,
+    //     },
+    //     {
+    //       headers: {
+    //         Authorization: `Bearer ${localStorage.getItem('token')}`,
+    //       },
+    //     },
+    //   );
+    //   console.log('Response from server:', response.data);
+    //   alert('Data berhasil disubmit!');
+    // } catch (error) {
+    //   console.error('Error submitting data:', error);
+    // }
   };
 
   return (
     <Formik
-      initialValues={{
-        title: '',
-        category: null,
-        description: '',
-        location: {
-          address: '',
-          regency: '',
-        },
-      }}
+      initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={handleSubmit}
+      onSubmit={onSubmit}
     >
-      <Form className="max-w-md w-full space-y-4">
-        <div>
-          <Field
-            type="text"
-            id="title"
-            name="title"
-            placeholder="Title"
-            className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-          />
-          <ErrorMessage
-            name="title"
-            component="div"
-            className="text-red-500 text-sm"
-          />
-        </div>
-
-        <div>
-          <Field name="category">
-            {({ field, form }) => (
-              <Select
-                options={categories.map((category) => ({
-                  value: category,
-                  label: category,
-                }))}
-                value={categories.find(
-                  (option) => option.value === field.value,
-                )}
-                onChange={(option) => form.setFieldValue(field.name, option)}
-                onBlur={field.onBlur}
-                className="mt-1 w-full"
+      <Form className="w-full px-5 justify-center md:justify-between md:p-0 md:max-w-4xl mx-auto flex flex-row md:flex-col">
+        <div className="flex flex-col space-y-4">
+          <div className="flex flex-col">
+            <Field
+              type="text"
+              id="title"
+              name="title"
+              className="shadow appearance-none border rounded w-full text-gray-700 focus:outline-none focus:shadow-outline h-10 "
+              placeholder="TITLE"
+            />
+            <ErrorMessage
+              name="title"
+              component="p"
+              className="text-red-500 text-xs italic"
+            />
+          </div>
+          <div className="flex flex-col">
+            <Field
+              type="text"
+              id="organizer"
+              name="organizer"
+              className="shadow appearance-none border rounded w-full text-gray-700 focus:outline-none focus:shadow-outline h-10"
+              placeholder="ORGANIZER"
+            />
+            <ErrorMessage
+              name="organizer"
+              component="p"
+              className="text-red-500 text-xs italic"
+            />
+          </div>
+          <div className="flex flex-col">
+            <Field
+              as="select"
+              id="category"
+              name="category"
+              className="shadow appearance-none border rounded w-full text-gray-700 focus:outline-none focus:shadow-outline h-10"
+            >
+              <option value="" disabled>
+                Pilih Kategori
+              </option>
+              {category.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </Field>
+            <ErrorMessage
+              name="category"
+              component="p"
+              className="text-red-500 text-xs italic"
+            />
+          </div>
+          <div className="flex flex-col">
+            <Field
+              as="textarea"
+              id="description"
+              name="description"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-10"
+              placeholder="Enter description"
+            />
+            <ErrorMessage
+              name="description"
+              component="p"
+              className="text-red-500 text-xs italic mt-1"
+            />
+          </div>
+          <div className="flex flex-row space-x-2">
+            <button
+              onClick={handleVenue}
+              className="bg-black text-white p-2 rounded-md "
+              type="button"
+            >
+              VENUE
+            </button>
+            <button
+              onClick={handleOnline}
+              className="bg-black text-white p-2  rounded-md"
+              type="button"
+            >
+              ONLINE
+            </button>
+          </div>
+          {!isOnline && (
+            <div className="flex flex-col md:flex-row justify-between gap-1">
+              <div className="flex flex-col w-1/2">
+                <Field
+                  type="text"
+                  id="location.input"
+                  name="location.input"
+                  className="shadow appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-10"
+                  placeholder="Enter location (input)"
+                />
+                <ErrorMessage
+                  name="location.input"
+                  component="p"
+                  className="text-red-500 text-xs italic mt-1"
+                />
+              </div>
+              <div className="flex flex-col w-1/2">
+                <Field
+                  as="select"
+                  id="location.select"
+                  name="location.select"
+                  className="shadow appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-10"
+                >
+                  <option value="">Select location</option>
+                  <option value="option1">Option 1</option>
+                  <option value="option2">Option 2</option>
+                </Field>
+                <ErrorMessage
+                  name="location.select"
+                  component="p"
+                  className="text-red-500 text-xs italic mt-1"
+                />
+              </div>
+            </div>
+          )}
+          <div className="flex flex-col md:flex-row gap-1">
+            <div className="flex flex-col w-1/2">
+              <label>Start Date:</label>
+              <Field
+                type="datetime-local"
+                id="date_time"
+                name="date_time"
+                className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-10"
               />
+              <ErrorMessage
+                name="date_time"
+                component="p"
+                className="text-red-500 text-xs italic mt-1"
+              />
+            </div>
+
+            <div className="flex flex-col w-1/2">
+              <label>End Date:</label>
+              <Field
+                type="datetime-local"
+                id="end_time"
+                name="end_time"
+                className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-10"
+              />
+              <ErrorMessage
+                name="end_time"
+                component="p"
+                className="text-red-500 text-xs italic mt-1"
+              />
+            </div>
+          </div>
+          <div className="flex flex-col w-full">
+            {!previewImage && (
+              <div className=" h-40 border-dashed border-2 border-b-0 border-gray-300 bg-gray-100" />
             )}
-          </Field>
-          <ErrorMessage
-            name="category"
-            component="div"
-            className="text-red-500 text-sm"
-          />
-        </div>
-
-        <div>
-          <Field
-            as="textarea"
-            id="description"
-            name="description"
-            placeholder="Description..."
-            rows="4"
-            className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-          />
-          <ErrorMessage
-            name="description"
-            component="div"
-            className="text-red-500 text-sm"
-          />
-        </div>
-
-        {/* Tombol Online dan Venue */}
-        <div className="flex space-x-4">
-          <button
-            type="button"
-            className={`w-1/2 p-2 ${
-              isOnline ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-700'
-            } rounded-md`}
-            onClick={handleOnlineClick}
-          >
-            Online
-          </button>
-          <button
-            type="button"
-            className={`w-1/2 p-2 ${
-              !isOnline ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-700'
-            } rounded-md`}
-            onClick={handleVenueClick}
-          >
-            Venue
-          </button>
-        </div>
-        {/* Akhir Tombol Online dan Venue */}
-
-        {/* Form Lokasi */}
-
-        {showLocationForm && (
-          <>
-            <div>
+            {previewImage && (
+              <img src={previewImage} alt="Preview" className=" max-h-40" />
+            )}
+            <label>Image:</label>
+            <input
+              type="file"
+              id="image"
+              name="image"
+              accept="image/*"
+              onChange={(e) => {
+                handleImageChange(e);
+              }}
+              className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-10"
+            />
+            {errorImage && (
+              <p className="text-red-500 text-xs italic mt-1">image required</p>
+            )}
+            {/* <ErrorMessage
+              name="image"
+              component="p"
+              className="text-red-500 text-xs italic mt-1"
+            /> */}
+          </div>
+          <div className="flex flex-row space-x-2">
+            <button
+              onClick={handlePrice}
+              className="bg-black text-white p-2 rounded-md "
+              type="button"
+            >
+              Paid
+            </button>
+            <button
+              onClick={handleFree}
+              className="bg-black text-white p-2  rounded-md"
+              type="button"
+            >
+              Free
+            </button>
+          </div>
+          {!isFree && (
+            <div className="flex flex-col w-full">
+              <label>Price:</label>
               <Field
-                type="text"
-                id="location.address"
-                name="location.address"
-                placeholder="Masukkan alamat..."
-                className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                type="number"
+                id="price"
+                name="price"
+                className="shadow appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-10"
+                placeholder="Input Price"
               />
               <ErrorMessage
-                name="location.address"
-                component="div"
-                className="text-red-500 text-sm"
+                name="price"
+                component="p"
+                className="text-red-500 text-xs italic mt-1"
               />
             </div>
-
-            <div>
-              <Field
-                as="select"
-                id="location.regency"
-                name="location.regency"
-                className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-              >
-                <option value="" label="Pilih Kabupaten/Kota" />
-                {regencies.map((regency) => (
-                  <option
-                    key={regency.id}
-                    value={regency.name}
-                    label={regency.name}
-                  />
-                ))}
-              </Field>
-              <ErrorMessage
-                name="location.regency"
-                component="div"
-                className="text-red-500 text-sm"
-              />
-            </div>
-          </>
-        )}
-
-        {/* Akhir Form Lokasi */}
-
-        <div>
+          )}
+          <div className="flex flex-col w-full">
+            <label>Seats:</label>
+            <Field
+              type="number"
+              id="seats"
+              name="seats"
+              className="shadow appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-10"
+              placeholder="Total Seats"
+            />
+            <ErrorMessage
+              name="seats"
+              component="p"
+              className="text-red-500 text-xs italic mt-1"
+            />
+          </div>
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
+            className="bg-black hover:bg-black-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline h-10"
           >
-            Kirim
+            Submit
           </button>
         </div>
       </Form>
@@ -210,4 +371,4 @@ const FormEvent = () => {
   );
 };
 
-export default FormEvent;
+export default createEventForm;

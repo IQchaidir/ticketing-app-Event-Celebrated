@@ -32,7 +32,7 @@ const CreateEventForm = () => {
   }, []);
 
   return (
-    <section className="md:flex md:flex-col items-center py-5 md:py-10 ">
+    <section className="md:flex md:flex-col items-center ">
       <h3 className="wrapper h3-bold justify-center text-center">
         CREATE EVENT
       </h3>

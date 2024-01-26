@@ -1,10 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
-// type User = {
-//   id: number;
-// };
-
 declare global {
   namespace Express {
     interface Request {

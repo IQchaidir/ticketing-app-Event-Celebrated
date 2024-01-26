@@ -6,8 +6,10 @@ import { Navitem } from './Navitem';
 import { Navmobile } from './Navmobile';
 import axios from 'axios';
 import UserDropdown from './userDropDown';
+import { useRouter } from 'next/navigation';
 
 const Header = () => {
+  const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
 
@@ -43,6 +45,7 @@ const Header = () => {
     localStorage.removeItem('token');
     setIsLoggedIn(false);
     setUserData(null);
+    router.push('/auth/login');
   };
 
   return (

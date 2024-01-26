@@ -8,7 +8,7 @@ const CheckoutButton = () => {
   const [eventPrice, setEventPrice] = useState(null);
   const [coupon, setCoupons] = useState([]);
   const [points, setPoints] = useState(0);
-  const [isPointsUsed, setIsPointsUsed] = useState(false); // State baru
+  const [isPointsUsed, setIsPointsUsed] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
   const [checkoutClicked, setCheckoutClicked] = useState(false);
   const params = useParams();

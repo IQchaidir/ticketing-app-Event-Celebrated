@@ -17,14 +17,6 @@ const Login = () => {
       localStorage.setItem('token', token);
 
       router.push('/');
-
-      if (response.status === 200) {
-        // Login berhasil
-        console.log('Login successful!');
-      } else {
-        // Login gagal
-        console.log('Login failed:', response.data);
-      }
     } catch (error) {
       console.error(
         'Login failed:',

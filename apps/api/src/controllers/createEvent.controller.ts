@@ -16,20 +16,38 @@ export class CreateEventController {
         end_time,
         location,
         description,
-        seats,
         is_free,
         is_online,
         category,
+        seats,
       } = req.body;
+
+      {
+        /*mengolah date time dan end time*/
+      }
+      const endTimeFromFrontend = end_time;
+      const dateTimeFromFrontend = date_time;
+      const endTimeDate = new Date(endTimeFromFrontend);
+      const dateTimeDate = new Date(dateTimeFromFrontend);
+      endTimeDate.setSeconds(0);
+      dateTimeDate.setSeconds(0);
+      const formattedEndTime = endTimeDate.toISOString();
+      const formattedDateTime = dateTimeDate.toISOString();
+
+      {
+        /*mengolah location*/
+      }
+      const locationFromFrontend = location;
+      const formattedLocation = `${locationFromFrontend.input}${locationFromFrontend.select}`;
 
       const event = await prisma.event.create({
         data: {
           organizer_id: organizer!.id,
           title,
           price,
-          date_time,
-          end_time,
-          location,
+          date_time: formattedDateTime,
+          end_time: formattedEndTime,
+          location: formattedLocation,
           description,
           seats,
           is_free,
