@@ -3,7 +3,7 @@ import multer from 'multer';
 import { join } from 'path'; //digunakan untuk merge location
 
 export const uploader = (filePrefix: string, folderName?: string) => {
-  const defaultDir = join(__dirname, '../../public/eventImages'); //mengarahkan ke directory file utama
+  const defaultDir = join(__dirname, '../../public');
 
   const configStorage = multer.diskStorage({
     destination: (
@@ -12,7 +12,7 @@ export const uploader = (filePrefix: string, folderName?: string) => {
       cb: (error: Error | null, destination: string) => void,
     ) => {
       const fileDestination = folderName ? defaultDir + folderName : defaultDir;
-      console.log('FOLDER TUJUAN:', fileDestination); //memeriksa alamat
+      console.log('FOLDER TUJUAN:', fileDestination);
       cb(null, fileDestination);
     },
     filename: (

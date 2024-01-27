@@ -58,13 +58,12 @@ const createEventForm = () => {
     organizer: '',
     category: '',
     description: '',
-    location: {
+    alamat: {
       input: '',
       select: '',
     },
     date_time: '',
     end_time: '',
-    image: '',
     price: 0,
     seats: 0,
   };
@@ -97,37 +96,35 @@ const createEventForm = () => {
     Object.entries(values).forEach(([key, value]) => {
       formData.append(key, value);
     });
+    const locationFromFrontend = values.alamat;
+    const formattedLocation = `${locationFromFrontend.input},${locationFromFrontend.select}`;
 
     formData.append('is_online', isOnline);
     formData.append('is_free', isFree);
+    formData.append('location', formattedLocation);
 
-    if (image) {
-      formData.append('image', image);
-    }
-
+    formData.append('image', image);
     console.log([...formData]);
+    console.log(formattedLocation);
 
-    route.push('/');
+    // route.push('/');
 
-    // try {
-    //   const response = await axios.post(
-    //     'http://localhost:8000/event/createEvent',
-    //     {
-    //       ...values,
-    //       is_online: isOnline,
-    //       is_free: isFree,
-    //     },
-    //     {
-    //       headers: {
-    //         Authorization: `Bearer ${localStorage.getItem('token')}`,
-    //       },
-    //     },
-    //   );
-    //   console.log('Response from server:', response.data);
-    //   alert('Data berhasil disubmit!');
-    // } catch (error) {
-    //   console.error('Error submitting data:', error);
-    // }
+    try {
+      const response = await axios.post(
+        'http://localhost:8000/event/createEvent',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        },
+      );
+      console.log('Response from server:', response.data);
+      alert('Data berhasil disubmit!');
+    } catch (error) {
+      console.error('Error submitting data:', error);
+    }
   };
 
   return (
@@ -223,13 +220,13 @@ const createEventForm = () => {
               <div className="flex flex-col w-1/2">
                 <Field
                   type="text"
-                  id="location.input"
-                  name="location.input"
+                  id="alamat.input"
+                  name="alamat.input"
                   className="shadow appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-10"
                   placeholder="Enter location (input)"
                 />
                 <ErrorMessage
-                  name="location.input"
+                  name="alamat.input"
                   component="p"
                   className="text-red-500 text-xs italic mt-1"
                 />
@@ -237,8 +234,8 @@ const createEventForm = () => {
               <div className="flex flex-col w-1/2">
                 <Field
                   as="select"
-                  id="location.select"
-                  name="location.select"
+                  id="alamat.select"
+                  name="alamat.select"
                   className="shadow appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-10"
                 >
                   <option value="">Select location</option>
@@ -246,7 +243,7 @@ const createEventForm = () => {
                   <option value="option2">Option 2</option>
                 </Field>
                 <ErrorMessage
-                  name="location.select"
+                  name="alamat.select"
                   component="p"
                   className="text-red-500 text-xs italic mt-1"
                 />

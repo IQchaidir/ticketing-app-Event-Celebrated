@@ -5,28 +5,15 @@ export class CreateEventController {
   async createEvent(req: Request, res: Response) {
     try {
       const userIdFromToken = req.dataUser;
-      const organizer = await prisma.user.findUnique({
+      const organizerId = await prisma.user.findUnique({
         where: { id: userIdFromToken },
         select: { id: true },
       });
-      const {
-        title,
-        price,
-        date_time,
-        end_time,
-        location,
-        description,
-        is_free,
-        is_online,
-        category,
-        seats,
-      } = req.body;
-
       {
         /*mengolah date time dan end time*/
       }
-      const endTimeFromFrontend = end_time;
-      const dateTimeFromFrontend = date_time;
+      const endTimeFromFrontend = req.body.end_time;
+      const dateTimeFromFrontend = req.body.date_time;
       const endTimeDate = new Date(endTimeFromFrontend);
       const dateTimeDate = new Date(dateTimeFromFrontend);
       endTimeDate.setSeconds(0);
@@ -37,22 +24,29 @@ export class CreateEventController {
       {
         /*mengolah location*/
       }
-      const locationFromFrontend = location;
-      const formattedLocation = `${locationFromFrontend.input}${locationFromFrontend.select}`;
+
+      {
+        /*mengolah gambar*/
+      }
+      const imageUrl = req.file
+        ? `http://localhost:8000/image/${req.file.filename}`
+        : '';
 
       const event = await prisma.event.create({
         data: {
-          organizer_id: organizer!.id,
-          title,
-          price,
+          organizer_id: organizerId!.id,
+          title: req.body.title,
+          organizer: req.body.organizer,
+          price: parseInt(req.body.price),
           date_time: formattedDateTime,
           end_time: formattedEndTime,
-          location: formattedLocation,
-          description,
-          seats,
-          is_free,
-          is_online,
-          category,
+          location: req.body.location,
+          description: req.body.description,
+          seats: parseInt(req.body.seats),
+          is_free: JSON.parse(req.body.is_free),
+          is_online: JSON.parse(req.body.is_online),
+          category: req.body.category,
+          image: imageUrl,
         },
       });
 

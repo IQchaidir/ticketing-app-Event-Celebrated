@@ -42,7 +42,7 @@ export default async function EventDetails({ params }) {
     <div className="flex justify-center bg-contain pt-5">
       <div className="grid grid-cols-1 md:grid-cols-2 2xl:max-w-7xl">
         <Image
-          // src={event.imgUrl} //url gambar
+          // src={event.image} //url gambar
           src="/assets/images/banner.jpg"
           alt="eventimg"
           width={1000}

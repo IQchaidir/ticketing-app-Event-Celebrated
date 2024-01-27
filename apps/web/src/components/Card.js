@@ -19,7 +19,7 @@ const Card = ({ event }) => {
     <div className="group relative flex min-h-[380px] w-full max-w-[400px] flex-col overflow-hidden rounded-xl bg-white shadow-md transition-all hover:shadow-lg md:min-h-[438px]">
       <Link
         href={`/events/${event.id}`}
-        style={{ backgroundImage: `url(/assets/images/banner.jpg)` }} // url gambar
+        style={{ backgroundImage: `url(${event.image})` }} // url gambar
         className="flex-center flex-grow bg-gray-50 bg-cover bg-center text-gray-500"
       />
       <Link
@@ -55,7 +55,6 @@ const Card = ({ event }) => {
         <div className="flex-between w-full">
           <p className="p-medium-14 md:p-medium-16 text-gray-600">
             {event.organizer}
-            Yukbisnis
           </p>
         </div>
       </Link>

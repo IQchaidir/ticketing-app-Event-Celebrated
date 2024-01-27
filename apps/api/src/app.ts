@@ -15,6 +15,8 @@ import { GetEventByIdRouter } from './routers/getEventById.router';
 import { TransactionRouter } from './routers/transaction.router';
 import { AuthRouter } from './routers/auth.router';
 import { GetUserRouter } from './routers/GetUserController.router';
+import path from 'path';
+import { ImageRouter } from './routers/getImage.router';
 
 export default class App {
   readonly app: Express;
@@ -68,6 +70,7 @@ export default class App {
     const transactionRouter = new TransactionRouter();
     const authRouter = new AuthRouter();
     const getUserRouter = new GetUserRouter();
+    const imageRouter = new ImageRouter();
 
     this.app.use('/event/discovery', discoveryRouter.getRouter());
     this.app.use('/event/createEvent', createEventRouter.getRouter());
@@ -76,6 +79,11 @@ export default class App {
     this.app.use('/checkout', transactionRouter.getRouter());
     this.app.use('/auth/login', authRouter.getRouter());
     this.app.use('/user', getUserRouter.getRouter());
+    this.app.use(
+      '/image',
+      express.static(path.join(__dirname, '../../public/image')),
+      imageRouter.getRouter(),
+    );
   }
   //IQBAL CLOSED TASK//
   public start(): void {

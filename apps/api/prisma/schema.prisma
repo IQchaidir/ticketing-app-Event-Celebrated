@@ -32,6 +32,7 @@ model User {
 model Event {
   id           Int           @id @default(autoincrement())
   organizer_id Int
+  organizer    String
   title        String
   price        Decimal       @default(0)
   date_time    DateTime
@@ -42,9 +43,10 @@ model Event {
   is_free      Boolean?
   is_online    Boolean?
   category     Category
+  image        String
   created_at   DateTime      @default(now())
   updated_at   DateTime?
-  organizer    User          @relation(fields: [organizer_id], references: [id])
+  organizerId  User          @relation(fields: [organizer_id], references: [id])
   Coupons      Coupons[]
   transactions Transaction[]
   reviews      Review[]
@@ -134,4 +136,9 @@ enum Category {
   Holiday
   Lifestyle
   Other
+}
+
+model Image {
+  id  Int    @id @default(autoincrement())
+  url String
 }
