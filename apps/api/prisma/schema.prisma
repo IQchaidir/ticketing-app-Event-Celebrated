@@ -10,7 +10,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Prisma schema for your tables
+
+
 
 model User {
   id             Int             @id @default(autoincrement())
@@ -55,7 +56,6 @@ model Event {
 model ReferralPoint {
   id              Int       @id @default(autoincrement())
   referrer_id     Int
-  referred_id     Int
   points          Int       @default(10000)
   claim_points    Boolean   @default(false)
   created_at      DateTime  @default(now())
@@ -92,6 +92,7 @@ model Transaction {
   user       User     @relation(fields: [user_id], references: [id])
   event      Event    @relation(fields: [event_id], references: [id])
   Coupons    Coupons? @relation(fields: [coupon_event_id], references: [id])
+
 }
 
 enum Status {
@@ -114,7 +115,7 @@ model Review {
 enum Role {
   PARTICIPANT
   ORGANIZER
-}
+
 
 enum Category {
   music
@@ -138,7 +139,4 @@ enum Category {
   Other
 }
 
-model Image {
-  id  Int    @id @default(autoincrement())
-  url String
-}
+

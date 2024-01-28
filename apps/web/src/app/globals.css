@@ -67,6 +67,7 @@
   }
 }
 
+
 * {
   list-style: none;
   padding: 0;
@@ -398,3 +399,14 @@ body {
 }
 
 /* GLOBAL CSS IQBAL CLOSED */
+
+/* body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+} */
+
