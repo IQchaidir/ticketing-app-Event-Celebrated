@@ -1,32 +1,38 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction, response } from 'express';
 import prisma from '@/prisma';
 import { compare, genSalt, hash } from 'bcrypt';
-import { sign } from 'jsonwebtoken';
+import jwt, { sign } from 'jsonwebtoken';
+import { Role } from '@prisma/client';
+import { redisClient } from 'helpers/redis';
 // import { hash } from 'bcrypt';
 
 export class AuthController {
   // Register User
   async registerUser(req: Request, res: Response, next: NextFunction) {
     try {
-      // checking existingUser
       const email = req.body.email;
       const user_name = req.body.user_name;
+      console.log(email, user_name); // testing
 
-      function generateReferralCode(email: string, username: string) {
-        const cleanString = (str: string): string =>
-          str.replace(/[^\w]/g, '').toLowerCase();
+      // referral code use anagram
+      function generateReferralCode(
+        email: string,
+        username: string,
+        length: number,
+      ) {
+        const combinedString = email + username;
 
-        const cleanedEmail = cleanString(email);
-        const cleanedUsername = cleanString(username);
+        // random character
+        const shuffledString = combinedString
+          .split('')
+          .sort(() => Math.random() - 0.5)
+          .join('')
+          .substring(0, length);
 
-        // Combine and sort the characters of email and username
-        const combinedString = cleanedEmail + cleanedUsername;
-        const sortedCombinedString = combinedString.split('').sort().join('');
-
-        return sortedCombinedString;
+        return shuffledString;
       }
 
-      const referralCode = generateReferralCode(email, user_name);
+      const referralCode = generateReferralCode(email, user_name, 8);
 
       const existingUser = await prisma.user.findUnique({
         where: { email: req.body.email },
@@ -34,36 +40,65 @@ export class AuthController {
       if (existingUser) {
         throw new Error('Email is already exist');
       }
-      // if (req.body.referral) {
-      //   const existingReferral = await prisma.user.findFirst({
-      //     where: { referral_code: req.body.referral },
-      //   });
-      //   if (existingReferral) {
-      //     const addPoint = await prisma.referralPoint.create({
-      //       data: {
-      //         referrer_id: existingReferral.id,
-      //         referred_id: newUser.id,
-      //         claim_points: false,
-      //       },
-      //     });
-      //   }
-      // }
-      // add new user if not exist
-      const salt = await genSalt(10);
-      const hashPassword = await hash(req.body.password, salt);
-      // bikin random number (referral code)
 
+      const salt = await genSalt(10);
+      // hashpassword for random password at develop or database
+      const hashPassword = await hash(req.body.password, salt);
+
+      // existing referral
+      if (req.body.referral) {
+        const existingReferral = await prisma.user.findFirst({
+          where: { referral_code: req.body.referral },
+        });
+        if (!existingReferral) {
+          throw new Error('referral is invalid');
+        }
+      }
+
+      // add new user
       const newUser = await prisma.user.create({
         data: {
           user_name: req.body.user_name,
           email: req.body.email,
           password: hashPassword,
           referral_code: referralCode,
-          // role,
-          // created_at,
-          // updated_at,
+          role: req.body.role,
         },
       });
+      const now = new Date();
+      const expirationDate = new Date(now);
+      expirationDate.setDate(now.getDate() + 90);
+
+      if (req.body.referral) {
+        const existingReferral = await prisma.user.findFirst({
+          where: { referral_code: req.body.referral },
+        });
+        if (existingReferral) {
+          await prisma.referralPoint.create({
+            data: {
+              referrer_id: existingReferral.id,
+              referred_id: newUser.id,
+              expiration_date: expirationDate,
+            },
+          });
+        }
+      }
+      if (req.body.referral) {
+        const existingReferred = await prisma.user.findUnique({
+          where: { id: newUser.id },
+        });
+        if (existingReferred) {
+          await prisma.coupons.create({
+            data: {
+              user_id: newUser.id,
+              name: 'coupon referral',
+              usage_limit: 1,
+              expiration_date: expirationDate,
+              discount_amount: 10,
+            },
+          });
+        }
+      }
 
       return res.status(201).send({ success: true, result: newUser });
     } catch (error: any) {
@@ -75,12 +110,10 @@ export class AuthController {
   // Login User
   async loginUser(req: Request, res: Response) {
     try {
-      const user = await prisma.user.findUnique({
+      const user = await prisma.user.findUniqueOrThrow({
         where: { email: req.body.email },
       });
-      if (!user) {
-        throw new Error('Invalid Email or Password');
-      }
+
       // generate Token
       const jwtToken = sign(
         { id: user.id, role: user.role, email: user.email },
@@ -93,37 +126,57 @@ export class AuthController {
       if (!isValidPassword) {
         throw new Error('Invalid password');
       }
+
+      // set token ketika login ke redis
+      await redisClient.set(`check:${user.email}`, `${jwtToken}`);
       return res.status(200).send({
+        id: user.id,
         user_name: user.user_name,
         email: user.email,
         token: jwtToken,
       });
-
-      // const { email, password } = req.body;
-      // const userRegister = await prisma.user.findUnique({
-      //   where: { email },
-      // });
-      // if (!userRegister) {
-      //   throw new Error('Email is already');
-      // }
-      // if (!userRegister) {
-      // }
     } catch (error: any) {
       console.log(error);
-      return res.status(500).send(error);
+      return res.status(500).send({
+        status: false,
+        message: error.message,
+      });
     }
   }
-  async changePassword(req: Request, res: Response) {
-    // try {
-    //   //1. check password lama
-    //   const checkUser = await prisma.user.findUnique({
-    //     where: { email: req.data },
-    //   });
-    // } catch (error) {
-    //   return res.status(200).send({
-    //     success: true,
-    //     result: updatePassword,
-    //   });
-    // }
+
+  async logoutUser(req: Request, res: Response, next: NextFunction) {
+    try {
+      await redisClient.del(`check:${req.body.email}`);
+      return res.status(200).send({
+        status: true,
+        message: 'logout Success',
+      });
+    } catch (error: any) {
+      res.status(500).send({
+        status: false,
+        message: error.message,
+      });
+    }
+  }
+
+  async resetPassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      const dataUser = req.dataUser;
+      const existingUser = await prisma.user.findFirstOrThrow({
+        where: { email: dataUser.email },
+      });
+      const salt = await genSalt(10);
+      const hashPassword = await hash(req.body.password, salt);
+      await prisma.user.update({
+        where: { email: existingUser.email },
+        data: { password: hashPassword },
+      });
+      return res.send({
+        status: true,
+        message: 'success',
+      });
+    } catch (error) {
+      next(error);
+    }
   }
 }

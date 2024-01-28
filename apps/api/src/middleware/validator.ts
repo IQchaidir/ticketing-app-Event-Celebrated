@@ -3,7 +3,7 @@ import { body, validationResult } from 'express-validator';
 
 export const registerValidation = [
   // username status
-  body('username').notEmpty().withMessage('Username Required'),
+  body('user_name').notEmpty().withMessage('Username Required'),
 
   // email status
   body('email').notEmpty().withMessage('Email Required'),

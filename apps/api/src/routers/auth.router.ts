@@ -1,6 +1,7 @@
 import { AuthController } from '@/controllers/auth.controller';
-import { registerValidation } from '@/middleware/validator';
+import { registerValidation } from '../middleware/validator';
 import { Router } from 'express';
+import { verifyToken } from '@/middleware/verifyJWT';
 
 export class AuthRouter {
   private router: Router;
@@ -14,12 +15,14 @@ export class AuthRouter {
   }
 
   private initializeRoutes(): void {
-    this.router.post('/register', this.authController.registerUser);
     this.router.post(
-      '/login',
+      '/register',
       registerValidation,
-      this.authController.loginUser,
+      this.authController.registerUser,
     );
+    this.router.post('/login', this.authController.loginUser);
+    this.router.post('/reset', verifyToken, this.authController.resetPassword);
+    this.router.post('/logout', verifyToken, this.authController.logoutUser);
   }
 
   getRouter(): Router {

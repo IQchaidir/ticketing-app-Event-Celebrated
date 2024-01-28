@@ -3,35 +3,58 @@
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { Formik, Form, ErrorMessage, Field, useFormik } from 'formik';
+import * as Yup from 'yup';
 
 export default function LoginPage() {
+  const [user_name, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [referral_code, setreferral] = useState('');
+  const [role, setRole] = useState('');
 
   const router = useRouter();
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://localhost:8000/auth/login', {
+      const response = await axios.post('http://localhost:8000/auth/register', {
+        user_name: user_name,
         email: email,
         password: password,
+        referral_code: referral_code,
+        role: role,
       });
       const { token } = response.data;
       localStorage.setItem('token', token);
 
       router.push('/');
       if (response.status === 200) {
-        console.log('login Success');
+        console.log('register Success');
       }
     } catch (error) {
       console.error('error facting', error);
     }
   };
 
+  const registerSchema = Yup.object().shape({
+    email: Yup.string()
+      .email('Invalid email address format')
+      .required('Email is required'),
+    password: Yup.string()
+      .min(6, 'Password must be 6 characters')
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/,
+        'Password should contain at least 1 uppercase letter, 1 lowercase letter, and 1 number',
+      )
+      .required('Password is Required'),
+  });
+
   return (
     <div class="flex justify-center h-screen w-screen items-center">
       <div class="w-full md:w-1/2 flex flex-col items-center ">
         {/* <!-- text login --> */}
-        <h1 class="text-center text-2xl font-bold text-gray-600 mb-6">LOGIN</h1>
+        <h1 class="text-center text-2xl font-bold text-gray-600 mb-6">
+          Register
+        </h1>
         {/* <!-- email input --> */}
         <div class="w-3/4 mb-6">
           <input

@@ -9,8 +9,9 @@ import express, {
 } from 'express';
 import cors from 'cors';
 import { PORT } from './config';
-
+import { redisClient } from 'helpers/redis';
 import { AuthRouter } from './routers/auth.router';
+import { EventRouter } from './routers/event.router';
 
 export default class App {
   readonly app: Express;
@@ -54,15 +55,16 @@ export default class App {
 
   private routes(): void {
     const authRouter = new AuthRouter();
+    const eventRouter = new EventRouter();
 
-    this.app.get('/', (req: Request, res: Response) => {
-      res.send(`Hello, Purwadhika Student !`);
-    });
-
+    // Abil Code Open
+    this.app.use('/event', eventRouter.getRouter());
     this.app.use('/auth', authRouter.getRouter());
   }
+  // Abil code Close
 
-  public start(): void {
+  public async start(): Promise<void> {
+    await redisClient.connect();
     this.app.listen(PORT, () => {
       console.log(`  ➜  [API] Local:   http://localhost:${PORT}/`);
     });
