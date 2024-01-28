@@ -20,18 +20,7 @@ export class GetEventByIdController {
       if (!event) {
         return res.status(404).json({ error: 'Event not found' });
       }
-      res.json({
-        title: event.title,
-        price: event.price,
-        date_time: event.date_time.toISOString(),
-        end_time: event.end_time.toISOString(),
-        location: event.location,
-        description: event.description,
-        seats: event.seats,
-        is_free: event.is_free,
-        is_online: event.is_online,
-        category: event.category,
-      });
+      res.json(event);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'Internal Server Error' });

@@ -17,6 +17,8 @@ import { AuthRouter } from './routers/auth.router';
 import { GetUserRouter } from './routers/GetUserController.router';
 import path from 'path';
 import { ImageRouter } from './routers/getImage.router';
+import { TicketRouter } from './routers/ticket.router';
+import { OrganizerRouter } from './routers/organizer.router';
 
 export default class App {
   readonly app: Express;
@@ -59,7 +61,7 @@ export default class App {
 
   private routes(): void {
     this.app.get('/', (req: Request, res: Response) => {
-      res.send(`Hello, Purwadhika Student !`);
+      return res.status(200).send(`<h1>Hello, Purwadhika Student !</h1>`);
     });
 
     //IQBAL OPEN TASK//
@@ -70,6 +72,8 @@ export default class App {
     const transactionRouter = new TransactionRouter();
     const authRouter = new AuthRouter();
     const getUserRouter = new GetUserRouter();
+    const ticketRouter = new TicketRouter();
+    const organizerRouter = new OrganizerRouter();
     const imageRouter = new ImageRouter();
 
     this.app.use('/event/discovery', discoveryRouter.getRouter());
@@ -78,6 +82,8 @@ export default class App {
     this.app.use('/events', getEventByIdRouter.getRouter());
     this.app.use('/checkout', transactionRouter.getRouter());
     this.app.use('/auth/login', authRouter.getRouter());
+    this.app.use('/ticket', ticketRouter.getRouter());
+    this.app.use('/organizer', organizerRouter.getRouter());
     this.app.use('/user', getUserRouter.getRouter());
     this.app.use(
       '/image',

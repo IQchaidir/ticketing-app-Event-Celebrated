@@ -1,6 +1,6 @@
 import express, { Router } from 'express';
 
-import { ImageController } from '@/controllers/image.Controller';
+import { ImageController } from '../controllers/image.Controller';
 
 export class ImageRouter {
   private router: Router;

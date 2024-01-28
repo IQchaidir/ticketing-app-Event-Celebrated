@@ -1,5 +1,5 @@
-import { GetUserController } from '@/controllers/getUser.controller';
-import { ExtractUserIdFromTokenMiddleware } from '@/middleware/jwt';
+import { GetUserController } from '../controllers/getUser.controller';
+import { ExtractUserIdFromTokenMiddleware } from '../middleware/jwt';
 import { Router } from 'express';
 
 export class GetUserRouter {

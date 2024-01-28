@@ -56,7 +56,7 @@ export class DiscoveryController {
       if (events.length === 0) {
         return res.status(404).json({ message: 'Event not found' });
       } else {
-        return res.json(events);
+        return res.status(200).json(events);
       }
     } catch (error: any) {
       console.error(error);

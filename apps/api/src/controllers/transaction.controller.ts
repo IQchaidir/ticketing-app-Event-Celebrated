@@ -153,7 +153,7 @@ export class TransactionController {
       // Mengambil harga dari tabel Event
       const event = await prisma.event.findUnique({
         where: { id: eventId },
-        select: { price: true },
+        select: { price: true, title: true },
       });
 
       // Mengambil daftar kupon terkait dari tabel Coupon
@@ -176,6 +176,7 @@ export class TransactionController {
         eventPrice: event?.price || 0,
         eventCoupons: coupons,
         userPoints: totalPoints || 0,
+        titleEvent: event?.title,
       };
 
       res.status(200).json(result);

@@ -42,13 +42,14 @@ export default async function EventDetails({ params }) {
     <div className="flex justify-center bg-contain pt-5">
       <div className="grid grid-cols-1 md:grid-cols-2 2xl:max-w-7xl">
         <Image
-          // src={event.image} //url gambar
-          src="/assets/images/banner.jpg"
+          src={event.image} //url gambar
+          // src="/assets/images/banner.jpg"
           alt="eventimg"
           width={1000}
           height={1000}
-          className="h-full min-h-[300px]  object-center"
+          className="h-full min-h-[300px] bg-contain  object-center"
         />
+
         <div className="flex w-full flex-col gap-8 p-5 md:p-10">
           <div className="flex flex-col gap-6 ">
             <h2 className="h2-bold">{event.title}</h2>
@@ -74,7 +75,7 @@ export default async function EventDetails({ params }) {
               <p className="p-medium-20 ml-2 pt-0 md:pt-3">
                 by{':'}
                 {/* <span className="text-primary-500">{event.organizer.firstName} {event.organizer.lastName}</span> */}
-                <span className="text-primary-500">Yuk Bisnis</span>
+                <span className="text-primary-500">{event.organizer}</span>
               </p>
             </div>
           </div>
@@ -101,13 +102,17 @@ export default async function EventDetails({ params }) {
                 width={32}
                 height={32}
               />
-              <p className="p-medium-16 lg:p-regular-20">{event.location}</p>
+              <p className="p-medium-16 lg:p-regular-20">
+                {event.is_online ? 'ONLINE' : `${event.location}`}
+              </p>
             </div>
           </div>
 
           <div className="flex flex-col gap-2">
             <p className="p-bold-20 text-grey-600">What Youll Learn:</p>
-            <p className="p-medium-16 lg:p-regular-18">{event.description}</p>
+            <div className="max-w-[600px] break-words">
+              <p className="p-medium-16 lg:p-regular-18">{event.description}</p>
+            </div>
           </div>
         </div>
       </div>

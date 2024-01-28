@@ -1,4 +1,5 @@
-'use client';
+// FilterModal.js
+
 import React, { useState } from 'react';
 
 const FilterModal = ({ isOpen, onClose, applyFilters }) => {
@@ -19,18 +20,18 @@ const FilterModal = ({ isOpen, onClose, applyFilters }) => {
   };
 
   const handleDateChange = (filter) => {
-    setDateFilters({
-      today: filter === 'today',
-      tomorrow: filter === 'tomorrow',
-      thisWeekend: filter === 'thisWeekend',
-    });
+    setDateFilters((prevFilters) => ({
+      today: filter === 'today' && !prevFilters.today,
+      tomorrow: filter === 'tomorrow' && !prevFilters.tomorrow,
+      thisWeekend: filter === 'thisWeekend' && !prevFilters.thisWeekend,
+    }));
   };
 
   const handlePriceChange = (filter) => {
-    setPriceFilters({
-      paid: filter === 'paid',
-      free: filter === 'free',
-    });
+    setPriceFilters((prevFilters) => ({
+      paid: filter === 'paid' && !prevFilters.paid,
+      free: filter === 'free' && !prevFilters.free,
+    }));
   };
 
   const handleCategoryChange = (category) => {
@@ -50,113 +51,81 @@ const FilterModal = ({ isOpen, onClose, applyFilters }) => {
   };
 
   return (
-    <div className={`modal ${isOpen ? 'open' : ''}`}>
-      <div className="mb-4">
-        <h2 className="text-xl font-semibold mb-2">Filters</h2>
-        {/* Online filter */}
-        <label className="block mb-2 text-base">
-          <input
-            type="checkbox"
-            className="mr-2"
-            checked={onlineEventFilter}
-            onChange={handleOnlineEventChange}
-          />
-          Online Event
-        </label>
+    <div className={`modal ${isOpen ? 'flex' : 'hidden'}`}>
+      <div className="modal-overlay" onClick={onClose}></div>
+      <div className="modal-container">
+        <div className="modal-header">
+          <h2 className="text-xl font-semibold mb-2">Filters</h2>
+          <button className="close-button" onClick={onClose}>
+            &times;
+          </button>
+        </div>
+        <div className="modal-content">
+          <label className="block mb-2 text-base">
+            <input
+              type="checkbox"
+              className="mr-2"
+              checked={onlineEventFilter}
+              onChange={handleOnlineEventChange}
+            />
+            Online Event
+          </label>
+          {/* Checkbox Date */}
+          <div className="mb-4">
+            <h2 className="text-base font-semibold mb-2">Date</h2>
+            {Object.entries(dateFilters).map(([filter, checked]) => (
+              <label key={filter} className="block mb-2 text-base">
+                <input
+                  type="checkbox"
+                  className="mr-2"
+                  checked={checked}
+                  onChange={() => handleDateChange(filter)}
+                />
+                {filter.charAt(0).toUpperCase() + filter.slice(1)}
+              </label>
+            ))}
+          </div>
+
+          {/* Checkbox Price */}
+          <div className="mb-4">
+            <h2 className="text-base font-semibold mb-2">Price</h2>
+            {Object.entries(priceFilters).map(([filter, checked]) => (
+              <label key={filter} className="block mb-2 text-base">
+                <input
+                  type="checkbox"
+                  className="mr-2"
+                  checked={checked}
+                  onChange={() => handlePriceChange(filter)}
+                />
+                {filter.charAt(0).toUpperCase() + filter.slice(1)}
+              </label>
+            ))}
+          </div>
+
+          {/* Filter Category */}
+          <div className="mb-4">
+            <h2 className="text-base font-semibold mb-2">Category</h2>
+            {['music', 'seminar', 'etc'].map((category) => (
+              <label key={category} className="block mb-2 text-base">
+                <input
+                  type="checkbox"
+                  className="mr-2"
+                  checked={selectedCategory === category}
+                  onChange={() => handleCategoryChange(category)}
+                />
+                {category.charAt(0).toUpperCase() + category.slice(1)}
+              </label>
+            ))}
+          </div>
+
+          <button
+            className="bg-black text-white p-2 rounded"
+            onClick={handleApplyFilters}
+          >
+            Apply Filters
+          </button>
+        </div>
       </div>
-
-      {/* Checkbox Date */}
-      <h2 className="text-base font-semibold mb-2">Date</h2>
-      <label className="block mb-2 text-base">
-        <input
-          type="checkbox"
-          className="mr-2"
-          checked={dateFilters.today}
-          onChange={() => handleDateChange('today')}
-        />
-        Today
-      </label>
-      <label className="block mb-2 text-base">
-        <input
-          type="checkbox"
-          className="mr-2"
-          checked={dateFilters.tomorrow}
-          onChange={() => handleDateChange('tomorrow')}
-        />
-        Tomorrow
-      </label>
-      <label className="block mb-2 text-base">
-        <input
-          type="checkbox"
-          className="mr-2"
-          checked={dateFilters.thisWeekend}
-          onChange={() => handleDateChange('thisWeekend')}
-        />
-        This Weekend
-      </label>
-
-      {/* Checkbox Price */}
-      <h2 className="text-base font-semibold mb-2">Price</h2>
-      <label className="block mb-2 text-base">
-        <input
-          type="checkbox"
-          className="mr-2"
-          checked={priceFilters.paid}
-          onChange={() => handlePriceChange('paid')}
-        />
-        Paid
-      </label>
-      <label className="block mb-2 text-base">
-        <input
-          type="checkbox"
-          className="mr-2"
-          checked={priceFilters.free}
-          onChange={() => handlePriceChange('free')}
-        />
-        Free
-      </label>
-
-      {/* Filter Category */}
-      <div className="mb-4 mt-4">
-        <h2 className="text-base font-semibold mb-2">Category</h2>
-        <label className="block mb-2 text-base">
-          <input
-            type="checkbox"
-            className="mr-2"
-            checked={selectedCategory === 'music'}
-            onChange={() => handleCategoryChange('music')}
-          />
-          Music
-        </label>
-        <label className="block mb-2 text-base">
-          <input
-            type="checkbox"
-            className="mr-2"
-            checked={selectedCategory === 'seminar'}
-            onChange={() => handleCategoryChange('seminar')}
-          />
-          Seminar
-        </label>
-        <label className="block mb-2 text-base">
-          <input
-            type="checkbox"
-            className="mr-2"
-            checked={selectedCategory === 'etc'}
-            onChange={() => handleCategoryChange('etc')}
-          />
-          etc
-        </label>
-      </div>
-      <button
-        className="bg-black text-white p-2 rounded"
-        onClick={handleApplyFilters}
-      >
-        Apply Filters
-      </button>
-
-      <button className="modal-close" onClick={onClose}>
-        &times;
-      </button>
     </div>
   );
 };

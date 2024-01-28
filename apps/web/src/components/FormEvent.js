@@ -62,26 +62,21 @@ const createEventForm = () => {
       input: '',
       select: '',
     },
-    date_time: '',
-    end_time: '',
+    dateTime: '',
+    endTime: '',
     price: 0,
     seats: 0,
   };
 
   const validationSchema = Yup.object({
-    // title: Yup.string().required('Judul wajib diisi'),
-    // organizer: Yup.string().required('Penyelenggara wajib diisi'),
-    // category: Yup.string().required('Kategori harus dipilih'),
-    // description: Yup.string().required('Deskripsi wajib diisi'),
-    // location: Yup.object().shape({
-    //   input: Yup.string().required('Location (Input) is required'),
-    //   select: Yup.string().required('Location (Select) is required'),
-    // }),
-    // date_time: Yup.string().required('Start Date is required'),
-    // end_time: Yup.string().required('End Date is required'),
-    // image: Yup.required('image is required)
-    // price: Yup.required("price is required")
-    // seats: Yup.required("seats is required")
+    title: Yup.string().required('title is required'),
+    organizer: Yup.string().required('organizer is required'),
+    category: Yup.string().required('cateogry is required'),
+    description: Yup.string().required('Description is required'),
+    dateTime: Yup.string().required('Start Date is required'),
+    endTime: Yup.string().required('End Date is required'),
+    price: Yup.string().required('price is required'),
+    seats: Yup.string().required('seats is required'),
   });
 
   const onSubmit = async (values, { setSubmitting }) => {
@@ -96,18 +91,26 @@ const createEventForm = () => {
     Object.entries(values).forEach(([key, value]) => {
       formData.append(key, value);
     });
+
+    //menambah zona lokal
+    const dateTime = new Date(values.dateTime);
+    const formattedDateTime = dateTime.toString();
+    const endTime = new Date(values.endTime);
+    const formattedendTime = endTime.toString();
+
+    //mengolah location
     const locationFromFrontend = values.alamat;
     const formattedLocation = `${locationFromFrontend.input},${locationFromFrontend.select}`;
 
     formData.append('is_online', isOnline);
     formData.append('is_free', isFree);
     formData.append('location', formattedLocation);
+    formData.append('date_time', formattedDateTime);
+    formData.append('end_time', formattedendTime);
 
     formData.append('image', image);
     console.log([...formData]);
     console.log(formattedLocation);
-
-    // route.push('/');
 
     try {
       const response = await axios.post(
@@ -125,6 +128,7 @@ const createEventForm = () => {
     } catch (error) {
       console.error('Error submitting data:', error);
     }
+    route.push('/');
   };
 
   return (
@@ -255,12 +259,12 @@ const createEventForm = () => {
               <label>Start Date:</label>
               <Field
                 type="datetime-local"
-                id="date_time"
-                name="date_time"
+                id="dateTime"
+                name="dateTime"
                 className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-10"
               />
               <ErrorMessage
-                name="date_time"
+                name="dateTime"
                 component="p"
                 className="text-red-500 text-xs italic mt-1"
               />
@@ -270,12 +274,12 @@ const createEventForm = () => {
               <label>End Date:</label>
               <Field
                 type="datetime-local"
-                id="end_time"
-                name="end_time"
+                id="endTime"
+                name="endTime"
                 className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-10"
               />
               <ErrorMessage
-                name="end_time"
+                name="endTime"
                 component="p"
                 className="text-red-500 text-xs italic mt-1"
               />
@@ -286,7 +290,11 @@ const createEventForm = () => {
               <div className=" h-40 border-dashed border-2 border-b-0 border-gray-300 bg-gray-100" />
             )}
             {previewImage && (
-              <img src={previewImage} alt="Preview" className=" max-h-40" />
+              <img
+                src={previewImage}
+                alt="Preview"
+                className=" max-h-80 max-w-80 "
+              />
             )}
             <label>Image:</label>
             <input

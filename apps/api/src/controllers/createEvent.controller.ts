@@ -12,15 +12,10 @@ export class CreateEventController {
       {
         /*mengolah date time dan end time*/
       }
-      const endTimeFromFrontend = req.body.end_time;
-      const dateTimeFromFrontend = req.body.date_time;
-      const endTimeDate = new Date(endTimeFromFrontend);
-      const dateTimeDate = new Date(dateTimeFromFrontend);
-      endTimeDate.setSeconds(0);
-      dateTimeDate.setSeconds(0);
-      const formattedEndTime = endTimeDate.toISOString();
-      const formattedDateTime = dateTimeDate.toISOString();
-
+      const dateTime = new Date(req.body.date_time);
+      const formattedDateTime = dateTime.toISOString();
+      const endTime = new Date(req.body.end_time);
+      const formattedEndTime = endTime.toISOString();
       {
         /*mengolah location*/
       }

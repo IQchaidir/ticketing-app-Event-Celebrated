@@ -1,26 +1,24 @@
+import { TicketController } from '../controllers/ticket.controller';
 import { ExtractUserIdFromTokenMiddleware } from '../middleware/jwt';
-import { CreateEventController } from '../controllers/createEvent.controller';
 import { Router } from 'express';
-import { uploader } from '../middleware/uploader';
 
-export class CreateEventRouter {
+export class TicketRouter {
   private router: Router;
-  private createEventController: CreateEventController;
+  private ticketController: TicketController;
   private extractUserIdMiddleware: ExtractUserIdFromTokenMiddleware;
 
   constructor() {
-    this.createEventController = new CreateEventController();
+    this.ticketController = new TicketController();
     this.extractUserIdMiddleware = new ExtractUserIdFromTokenMiddleware();
     this.router = Router();
     this.initializeRoutes();
   }
 
   private initializeRoutes(): void {
-    this.router.post(
+    this.router.get(
       '/',
-      uploader('IMG', '/image').single('image'),
       this.extractUserIdMiddleware.extractUserIdFromToken,
-      this.createEventController.createEvent,
+      this.ticketController.ticketFilter,
     );
   }
 

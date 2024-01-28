@@ -32,11 +32,9 @@ const CreateEventForm = () => {
   }, []);
 
   return (
-    <section className="md:flex md:flex-col items-center ">
-      <h3 className="wrapper h3-bold justify-center text-center">
-        CREATE EVENT
-      </h3>
-      <div className="md:w-2/3 items-center justify-center">
+    <section className="wrapper flex flex-col items-center gap-4">
+      <h3 className=" h3-bold justify-center text-center">CREATE EVENT</h3>
+      <div className="w-full  items-center justify-center">
         <FormEvent />
       </div>
     </section>

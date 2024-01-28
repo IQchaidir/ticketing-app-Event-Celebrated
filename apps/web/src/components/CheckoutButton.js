@@ -5,12 +5,10 @@ import axios from 'axios';
 
 const CheckoutButton = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [eventPrice, setEventPrice] = useState(null);
-  const [coupon, setCoupons] = useState([]);
-  const [points, setPoints] = useState(0);
-  const [isPointsUsed, setIsPointsUsed] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
   const [checkoutClicked, setCheckoutClicked] = useState(false);
+  const [totalTicket, setTotalTicket] = useState(0);
+  const [data, setData] = useState(null);
   const params = useParams();
   const router = useRouter();
 
@@ -32,13 +30,9 @@ const CheckoutButton = () => {
           throw new Error(`HTTP error! Status: ${res.status}`);
         }
 
-        const data = await res.json();
-
-        // Update state dengan informasi dari backend
-        setEventPrice(data.eventPrice);
-        setCoupons(data.eventCoupons);
-        setPoints(data.userPoints);
-        setTotalPrice(data.eventPrice);
+        const fetchedData = await res.json();
+        setData(fetchedData); // Store the fetched data in state
+        setTotalPrice(fetchedData.price);
       } catch (error) {
         console.error('Error fetching checkout information:', error.message);
       }
@@ -48,6 +42,23 @@ const CheckoutButton = () => {
       fetchCheckoutInfo();
     }
   }, [checkoutClicked, eventId]);
+
+  const handleIncrement = () => {
+    setTotalTicket(totalTicket + 1);
+    updateTotalPrice(totalTicket + 1);
+  };
+
+  const handleDecrement = () => {
+    if (totalTicket > 1) {
+      setTotalTicket(totalTicket - 1);
+      updateTotalPrice(totalTicket - 1);
+    }
+  };
+
+  const updateTotalPrice = (newTotalTicket) => {
+    const newTotalPrice = data ? data.eventPrice * newTotalTicket : 0;
+    setTotalPrice(newTotalPrice);
+  };
 
   const handleCheckout = () => {
     const token = localStorage.getItem('token');
@@ -60,113 +71,21 @@ const CheckoutButton = () => {
     }
   };
 
-  const getCouponId = () => {
-    const selectedCoupon = coupon.find((coupon) => coupon.isChecked);
-    return selectedCoupon ? selectedCoupon.id : null;
-  };
-
-  // Perubahan untuk menangani perubahan status poin
-  const handlePointChange = () => {
-    setIsPointsUsed((prevIsPointsUsed) => !prevIsPointsUsed);
-
-    if (setIsPointsUsed.isChecked) {
-      // Jika dicentang, kurangi totalPrice dengan discountAmount
-      setTotalPrice((prevTotalPrice) => parseFloat(prevTotalPrice) + points);
-    } else {
-      // Jika tidak dicentang, tambahkan totalPrice dengan discountAmount
-      setTotalPrice((prevTotalPrice) => parseFloat(prevTotalPrice) - points);
-    }
-    setIsPointsUsed.isChecked = !setIsPointsUsed.isChecked;
-  };
-
   const handleConfirm = async () => {
     const token = localStorage.getItem('token');
 
     if (!token) {
       router.push('/auth/login');
-      return;
-    }
-
-    try {
-      // Menggunakan axios untuk mengirim data transaksi ke backend
-      const response = await axios.post(
-        `http://localhost:8000/checkout/${eventId}`,
-        {
-          couponId: getCouponId(),
-          pointUsed: isPointsUsed ? points : 0,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
+    } else {
+      // Redirect ke halaman checkout dengan membawa nilai totalPrice dan eventId
+      router.push(
+        `/events/checkout?totalPrice=${totalPrice}&eventId=${params.id}&totalTicket=${totalTicket}`,
       );
-
-      // Jika transaksi berhasil, kembali ke halaman utama
-      router.push('/');
-    } catch (error) {
-      console.error('Error during transaction:', error.message);
     }
   };
 
   const handleClose = () => {
     setIsModalOpen(false);
-  };
-
-  const handlecouponChange = (couponId) => {
-    // Cari kupon berdasarkan couponId
-    const selectedCoupon = coupon.find((coupon) => coupon.id === couponId);
-
-    if (selectedCoupon) {
-      const discountAmount = parseFloat(selectedCoupon.discount_amount);
-
-      // Periksa apakah checkbox dicentang atau tidak
-      if (selectedCoupon.isChecked) {
-        // Jika dicentang, kurangi totalPrice dengan discountAmount
-        setTotalPrice(
-          (prevTotalPrice) => parseFloat(prevTotalPrice) + discountAmount,
-        );
-      } else {
-        // Jika tidak dicentang, tambahkan totalPrice dengan discountAmount
-        setTotalPrice(
-          (prevTotalPrice) => parseFloat(prevTotalPrice) - discountAmount,
-        );
-      }
-
-      // Perbarui isChecked pada kupon yang bersangkutan
-      selectedCoupon.isChecked = !selectedCoupon.isChecked;
-    }
-  };
-
-  const modalOverlayStyle = {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    background: 'rgba(0, 0, 0, 0.5)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  };
-
-  const modalContentStyle = {
-    background: '#fff',
-    padding: '20px',
-    borderRadius: '5px',
-    maxWidth: '400px',
-    width: '100%',
-    position: 'relative', // Menambahkan properti ini
-  };
-
-  const closeButtonStyle = {
-    position: 'absolute',
-    top: 8,
-    right: 5,
-
-    color: '#000',
-    padding: '8px',
-    borderRadius: '4px',
   };
 
   return (
@@ -181,63 +100,56 @@ const CheckoutButton = () => {
 
       {/* Modal Checkout */}
       {isModalOpen && (
-        <div style={modalOverlayStyle}>
-          <div style={modalContentStyle}>
-            {/* Tombol Close */}
-            <button
-              style={closeButtonStyle}
-              type="button"
-              onClick={handleClose}
-            >
-              X
-            </button>
-            <h2>Checkout</h2>
-            <form>
-              <label>
-                Nama:
-                <input type="text" />
-              </label>
-              <br />
-              <label>
-                Email:
-                <input type="email" />
-              </label>
-              <br />
-              {/* Harga */}
-              <p>Price: {eventPrice ? `${eventPrice}` : 'Memuat...'}</p>
-
-              {/* Daftar coupon */}
-              <div>
-                <p>Coupon:</p>
-                {coupon.map((coupon) => (
-                  <label key={coupon.id}>
-                    <div className="flex gap-1">
-                      <input
-                        type="checkbox"
-                        onChange={() => handlecouponChange(coupon.id)}
-                      />
-                      <p>{coupon.name}</p>
-                    </div>
-                  </label>
-                ))}
-              </div>
-
-              {/* Poin */}
-              <div className="gap-1 flex">
-                <input type="checkbox" onChange={handlePointChange} />
-                <p>{points} Points</p>
-              </div>
-
-              {/* Total Harga */}
-              <p>Total price: {totalPrice}</p>
-
-              <button
-                className="bg-red-500 text-white p-2 rounded-md"
-                type="button"
-                onClick={handleConfirm}
-              >
-                Confirm
+        <div className={'modal flex '}>
+          <div className="modal-overlay" onClick={handleClose}></div>
+          <div className="modal-container">
+            <div className="modal-header">
+              <h3 className="text-xl font-semibold">Checkout</h3>
+              <button className="close-button" onClick={handleClose}>
+                &times;
               </button>
+            </div>
+            <form>
+              <div className="modal-content">
+                <div className="flex flex-col space-y-4">
+                  <div className="flex items-center gap-1">
+                    <h3 className="text-xl">Total Ticket:</h3>
+                    <button
+                      type="button"
+                      onClick={handleDecrement}
+                      className="px-2 py-1 border bg-gray-200 rounded"
+                    >
+                      -
+                    </button>
+                    <input
+                      type="text"
+                      value={totalTicket}
+                      readOnly
+                      className="shadow appearance-none border rounded w-10 text-gray-700 focus:outline-none focus:shadow-outline h-10 text-center"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleIncrement}
+                      className="px-2 py-1 border bg-gray-200 rounded"
+                    >
+                      +
+                    </button>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <h3 className="text-xl">Total Price:</h3>
+                    <h3 className="text-xl">{totalPrice}</h3>
+                  </div>
+                </div>
+                <div className="pt-5">
+                  <button
+                    className="bg-red-500 text-white p-2 rounded-md"
+                    type="button"
+                    onClick={handleConfirm}
+                  >
+                    Confirm
+                  </button>
+                </div>
+              </div>
             </form>
           </div>
         </div>

@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 import { useState } from 'react';
 
 const UserDropdown = ({ userEmail, onLogout }) => {
@@ -6,6 +7,11 @@ const UserDropdown = ({ userEmail, onLogout }) => {
 
   const handleDropdownToggle = () => {
     setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleMenuItemClick = () => {
+    // Menutup dropdown saat item di dalamnya diklik
+    setIsDropdownOpen(false);
   };
 
   return (
@@ -19,18 +25,34 @@ const UserDropdown = ({ userEmail, onLogout }) => {
 
       {isDropdownOpen && (
         <div className="absolute top-11 right-0 bg-white border  shadow-md w-full">
-          <button className="block px-4 py-2 text-black hover:bg-gray-200 w-full text-left">
-            Manage My Event
-          </button>
-          <button className="block px-4 py-2 text-black hover:bg-gray-200 w-full text-left">
-            Ticket
-          </button>
-          <button className="block px-4 py-2 text-black hover:bg-gray-200 w-full text-left">
+          <Link href="/organizer">
+            <button
+              className="block px-4 py-2 text-black hover:bg-gray-200 w-full text-left"
+              onClick={handleMenuItemClick}
+            >
+              Manage My Event
+            </button>
+          </Link>
+          <Link href="/user/tickets">
+            <button
+              className="block px-4 py-2 text-black hover:bg-gray-200 w-full text-left"
+              onClick={handleMenuItemClick}
+            >
+              Ticket
+            </button>
+          </Link>
+          <button
+            className="block px-4 py-2 text-black hover:bg-gray-200 w-full text-left"
+            onClick={handleMenuItemClick}
+          >
             Credit
           </button>
           <button
             className="block px-4 py-2 text-black hover:bg-gray-200 w-full text-left"
-            onClick={onLogout}
+            onClick={() => {
+              onLogout();
+              handleMenuItemClick();
+            }}
           >
             Logout
           </button>
