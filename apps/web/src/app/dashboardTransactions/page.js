@@ -1,4 +1,4 @@
-export default function dashboardEvents() {
+export default function dashboardTransactions() {
   return (
     <aside
       id="sidebar"

@@ -1,4 +1,4 @@
-export default function dashboardEvents() {
+export default function dashboardStatistics() {
   return (
     <aside
       id="sidebar"
@@ -35,9 +35,10 @@ export default function dashboardEvents() {
                   </div>
                 </form>
               </li>
+              {/* Dashboard Statistics */}
               <li>
                 <a
-                  href="#"
+                  href="/dashboardStatistics"
                   class="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group"
                 >
                   <svg
@@ -51,6 +52,7 @@ export default function dashboardEvents() {
                   </svg>
                   <span class="ml-3">Dashboard</span>
                 </a>
+                <h1>Dashboard Statistics</h1>
               </li>
               <li>
                 <a
