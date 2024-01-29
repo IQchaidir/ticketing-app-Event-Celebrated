@@ -130,7 +130,7 @@ export default function dashboardEvents() {
                       clip-rule="evenodd"
                     ></path>
                   </svg>
-                  <span class="ml-3 flex-1 whitespace-nowrap">Products</span>
+                  <span class="ml-3 flex-1 whitespace-nowrap">Events</span>
                 </a>
               </li>
               <li>
