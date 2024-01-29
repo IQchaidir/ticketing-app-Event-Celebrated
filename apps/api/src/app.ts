@@ -21,6 +21,7 @@ import { TicketRouter } from './routers/ticket.router';
 import { OrganizerRouter } from './routers/organizer.router';
 import { AuthRouter } from './routers/auth.router';
 import { EventRouter } from './routers/event.router';
+import { CouponRouter } from './routers/coupon.router';
 
 export default class App {
   readonly app: Express;
@@ -79,6 +80,7 @@ export default class App {
     const imageRouter = new ImageRouter();
     const authRouter = new AuthRouter();
     const eventRouter = new EventRouter();
+    const couponRouter = new CouponRouter();
 
     this.app.use('/event', eventRouter.getRouter());
     this.app.use('/auth', authRouter.getRouter());
@@ -90,6 +92,7 @@ export default class App {
     this.app.use('/ticket', ticketRouter.getRouter());
     this.app.use('/organizer', organizerRouter.getRouter());
     this.app.use('/user', getUserRouter.getRouter());
+    this.app.use('/coupon', couponRouter.getRouter());
     this.app.use(
       '/image',
       express.static(path.join(__dirname, '../../public/image')),

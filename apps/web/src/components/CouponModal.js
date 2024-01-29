@@ -1,23 +1,34 @@
+import axios from 'axios';
 import { useState } from 'react';
 
-const CouponModal = ({ isOpen, onClose, onSubmit }) => {
+const CouponModal = ({ isOpen, onClose, onSubmit, eventId, endTime }) => {
   const [name, setName] = useState('');
   const [total, setTotal] = useState('');
   const [amount, setAmount] = useState('');
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const couponData = {
       name,
       total,
       amount,
+      eventId,
+      endTime,
     };
-
-    onSubmit(couponData);
-    setTotal('');
-    setName('');
-    setAmount('');
+    try {
+      const response = await axios.post(
+        'http://localhost:8000/coupon/create',
+        couponData,
+      );
+      alert('kupon berhasil dibuat');
+      setName('');
+      setTotal('');
+      setAmount('');
+      onClose();
+    } catch (error) {
+      console.error('Error:', error);
+      onClose();
+    }
   };
-
   return (
     <div className={`modal ${isOpen ? 'flex' : 'hidden'}`}>
       <div className="modal-overlay" onClick={onClose}></div>
@@ -55,7 +66,7 @@ const CouponModal = ({ isOpen, onClose, onSubmit }) => {
                 id="amount"
                 name="amount"
                 className="shadow appearance-none border rounded w-full text-gray-700 focus:outline-none focus:shadow-outline h-10 "
-                placeholder="Amount Coupon%"
+                placeholder="Amount Coupon in%"
                 onChange={(e) => setAmount(e.target.value)}
               />
               <button
