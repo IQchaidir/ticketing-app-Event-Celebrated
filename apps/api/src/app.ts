@@ -80,7 +80,7 @@ export default class App {
     const authRouter = new AuthRouter();
     const eventRouter = new EventRouter();
 
-    //this.app.use('/event', eventRouter.getRouter());
+    this.app.use('/event', eventRouter.getRouter());
     this.app.use('/auth', authRouter.getRouter());
     this.app.use('/event/discovery', discoveryRouter.getRouter());
     this.app.use('/event/createEvent', createEventRouter.getRouter());

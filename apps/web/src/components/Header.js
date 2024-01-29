@@ -45,7 +45,7 @@ const Header = () => {
     localStorage.removeItem('token');
     setIsLoggedIn(false);
     setUserData(null);
-    router.push('/auth/login');
+    router.push('/login');
   };
 
   return (

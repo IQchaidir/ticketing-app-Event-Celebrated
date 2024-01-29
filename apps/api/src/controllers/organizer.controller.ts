@@ -6,9 +6,9 @@ export class OrganizerController {
     try {
       let events;
       const userIdFromToken = req.dataUser;
-      if (userIdFromToken) {
+      if (userIdFromToken.id) {
         events = await prisma.event.findMany({
-          where: { organizer_id: userIdFromToken },
+          where: { organizer_id: userIdFromToken.id },
         });
         return res.json(events);
       }

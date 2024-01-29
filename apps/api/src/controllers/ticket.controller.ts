@@ -27,7 +27,7 @@ export class TicketController {
             },
             transactions: {
               some: {
-                user_id: userIdFromToken, // Filter transaksi berdasarkan ID pengguna
+                user_id: userIdFromToken.id, // Filter transaksi berdasarkan ID pengguna
               },
             },
           },
@@ -42,7 +42,7 @@ export class TicketController {
             },
             transactions: {
               some: {
-                user_id: userIdFromToken, // Filter transaksi berdasarkan ID pengguna
+                user_id: userIdFromToken.id, // Filter transaksi berdasarkan ID pengguna
               },
             },
           },
@@ -54,7 +54,7 @@ export class TicketController {
           where: {
             transactions: {
               some: {
-                user_id: userIdFromToken, // Filter transaksi berdasarkan ID pengguna
+                user_id: userIdFromToken.id, // Filter transaksi berdasarkan ID pengguna
               },
             },
           },

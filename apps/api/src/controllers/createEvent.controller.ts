@@ -6,7 +6,7 @@ export class CreateEventController {
     try {
       const userIdFromToken = req.dataUser;
       const organizerId = await prisma.user.findUnique({
-        where: { id: userIdFromToken },
+        where: { id: userIdFromToken.id },
         select: { id: true },
       });
       {

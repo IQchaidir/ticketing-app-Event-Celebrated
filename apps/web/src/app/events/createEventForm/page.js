@@ -11,7 +11,7 @@ const CreateEventForm = () => {
     const token = localStorage.getItem('token');
 
     if (!token) {
-      router.push('/auth/login');
+      router.push('/login');
     } else {
       axios
         .get('http://localhost:8000/user/role', {

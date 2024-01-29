@@ -128,7 +128,7 @@ const createEventForm = () => {
     } catch (error) {
       console.error('Error submitting data:', error);
     }
-    route.push('/');
+    route.push('/organizer');
   };
 
   return (

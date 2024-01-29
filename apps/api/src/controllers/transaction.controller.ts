@@ -22,7 +22,7 @@ export class TransactionController {
 
       // Lakukan validasi user
       const user = await prisma.user.findUnique({
-        where: { id: req.dataUser },
+        where: { id: userId.id },
       });
 
       if (!user) {
@@ -57,7 +57,7 @@ export class TransactionController {
       if (pointUsed) {
         try {
           const totalPoints = await prisma.referralPoint.aggregate({
-            where: { referrer_id: userId },
+            where: { referrer_id: userId.id },
             _sum: { points: true },
           });
 
@@ -73,7 +73,7 @@ export class TransactionController {
             // Lakukan pengurangan poin dari referralPoint
             const referralPointsToUpdate = await prisma.referralPoint.findMany({
               where: {
-                referrer_id: userId,
+                referrer_id: userId.id,
                 claim_points: false,
               },
               orderBy: {
@@ -124,7 +124,7 @@ export class TransactionController {
 
       const transaction = await prisma.transaction.create({
         data: {
-          user_id: userId,
+          user_id: userId.id,
           event_id: parseInt(eventId),
           coupon_event_id: couponId ? parseInt(couponId) : null,
           points_used: pointUsed ? parseInt(pointUsed) : 0,
@@ -165,7 +165,7 @@ export class TransactionController {
 
       const totalPointsResult = await prisma.referralPoint.aggregate({
         where: {
-          referrer_id: userIdFromToken,
+          referrer_id: userIdFromToken.id,
         },
         _sum: { points: true },
       });

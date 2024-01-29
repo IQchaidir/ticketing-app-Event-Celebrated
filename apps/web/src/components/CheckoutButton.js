@@ -67,7 +67,7 @@ const CheckoutButton = () => {
       setIsModalOpen(true);
       setCheckoutClicked(true);
     } else {
-      router.push('/auth/login');
+      router.push('/login');
     }
   };
 

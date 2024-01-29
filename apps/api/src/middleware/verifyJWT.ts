@@ -28,7 +28,7 @@ export const verifyToken = async (
     // if (token === checkToken) {
     const verifiedToken: any = verify(token, 'Event123');
 
-    req.dataUser = verifiedToken.id;
+    req.dataUser = verifiedToken;
     next();
   } catch (error) {
     return res.status(400).send('Token error');

@@ -7,7 +7,7 @@ export class GetUserController {
     try {
       const userIdFromToken = req.dataUser;
       const getEmail = await prisma.user.findUnique({
-        where: { id: userIdFromToken },
+        where: { id: userIdFromToken.id },
         select: { email: true },
       });
 
@@ -22,7 +22,7 @@ export class GetUserController {
     try {
       const userIdFromToken = req.dataUser;
       const role = await prisma.user.findUnique({
-        where: { id: userIdFromToken },
+        where: { id: userIdFromToken.id },
         select: { role: true },
       });
 
