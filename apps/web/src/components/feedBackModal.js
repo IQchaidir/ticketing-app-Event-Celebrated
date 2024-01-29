@@ -1,6 +1,7 @@
+import axios from 'axios';
 import { useState } from 'react';
 
-const FeedbackModal = ({ isOpen, onClose, onSubmit }) => {
+const FeedbackModal = ({ isOpen, onClose, onSubmit, eventId }) => {
   const [rating, setRating] = useState(0);
   const [feedback, setFeedback] = useState('');
 
@@ -12,13 +13,25 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit }) => {
     setFeedback(event.target.value);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const feedbackData = {
       rating,
       feedback,
+      eventId,
     };
+    console.log(feedbackData);
+    try {
+      const review = await axios.post(
+        'http://localhost:8000/review/create',
+        feedbackData,
+      );
+      alert('review telah dibuat');
+      console.log(review);
+    } catch (error) {
+      console.error('Error:', error);
+    }
 
-    onSubmit(feedbackData);
+    // onSubmit(feedbackData);
   };
 
   return (

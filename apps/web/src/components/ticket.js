@@ -3,11 +3,12 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import FeedbackModal from './feedBackModal';
 import Image from 'next/image';
+import { number } from 'yup';
 
 const Ticket = ({ event }) => {
   const [showReviewButton, setShowReviewButton] = useState(false);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
-  const [eventId, setEventId] = useState(null);
+  const [eventId, setEventId] = useState(0);
 
   useEffect(() => {
     const isEventEnded = new Date(event.end_time) < new Date();
@@ -46,17 +47,6 @@ const Ticket = ({ event }) => {
     <div className="flex min-h-[380px] w-full  flex-col overflow-hidden rounded-xl bg-white shadow-md transition-all hover:shadow-lg ">
       <Link href={`/events/${event.id}`}>
         <Image src={event.image} alt="img" height={1000} width={1000}></Image>
-        {/* <div
-          style={{
-            backgroundImage: `url${event.image}`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            width: '100%',
-          }}
-          className="flex flex-grow h-[300px] md:h-[200px]"
-          alt="img"
-        /> */}
       </Link>
       <div
         href={`/events/${event.id}`}
@@ -86,6 +76,7 @@ const Ticket = ({ event }) => {
           isOpen={isFeedbackModalOpen}
           onClose={handleCloseFeedbackModal}
           onSubmit={handleFeedbackSubmit}
+          eventId={eventId}
         />
       </div>
     </div>
