@@ -21,18 +21,15 @@ export const verifyToken = async (
       return res.status(400).send('Token not found');
     }
 
-    // Mengambil data token dari redis dan dicocokan dengan token dari header
-    const checkToken = await redisClient.get(`check${req.body.email}`);
-    console.log(token, checkToken);
+    // // Mengambil data token dari redis dan dicocokan dengan token dari header
+    // const checkToken = await redisClient.get(`check${req.body.email}`);
+    // console.log(token, checkToken);
 
-    if (token === checkToken) {
-      const verifiedToken = verify(token, 'Event123');
+    // if (token === checkToken) {
+    const verifiedToken: any = verify(token, 'Event123');
 
-      req.dataUser = verifiedToken;
-      next();
-    } else {
-      return res.status(401).send('Token is not valid');
-    }
+    req.dataUser = verifiedToken.id;
+    next();
   } catch (error) {
     return res.status(400).send('Token error');
   }

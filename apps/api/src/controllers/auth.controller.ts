@@ -95,6 +95,7 @@ export class AuthController {
               usage_limit: 1,
               expiration_date: expirationDate,
               discount_amount: 10,
+              is_used: false,
             },
           });
         }
@@ -120,18 +121,8 @@ export class AuthController {
         'Event123',
       );
 
-      //func compare () from bcrypt
-      const isValidPassword = await compare(req.body.password, user.password);
-      // if (isvalidpassword == false, throw error)
-      if (!isValidPassword) {
-        throw new Error('Invalid password');
-      }
-
-      // set token ketika login ke redis
-      await redisClient.set(`check:${user.email}`, `${jwtToken}`);
       return res.status(200).send({
-        id: user.id,
-        user_name: user.user_name,
+        username: user.user_name,
         email: user.email,
         token: jwtToken,
       });
@@ -144,20 +135,20 @@ export class AuthController {
     }
   }
 
-  async logoutUser(req: Request, res: Response, next: NextFunction) {
-    try {
-      await redisClient.del(`check:${req.body.email}`);
-      return res.status(200).send({
-        status: true,
-        message: 'logout Success',
-      });
-    } catch (error: any) {
-      res.status(500).send({
-        status: false,
-        message: error.message,
-      });
-    }
-  }
+  // async logoutUser(req: Request, res: Response, next: NextFunction) {
+  //   try {
+  //     await redisClient.del(`check:${req.body.email}`);
+  //     return res.status(200).send({
+  //       status: true,
+  //       message: 'logout Success',
+  //     });
+  //   } catch (error: any) {
+  //     res.status(500).send({
+  //       status: false,
+  //       message: error.message,
+  //     });
+  //   }
+  // }
 
   async resetPassword(req: Request, res: Response, next: NextFunction) {
     try {

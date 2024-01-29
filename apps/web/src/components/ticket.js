@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import FeedbackModal from './feedBackModal';
+import Image from 'next/image';
 
 const Ticket = ({ event }) => {
   const [showReviewButton, setShowReviewButton] = useState(false);
@@ -44,7 +45,8 @@ const Ticket = ({ event }) => {
   return (
     <div className="flex min-h-[380px] w-full  flex-col overflow-hidden rounded-xl bg-white shadow-md transition-all hover:shadow-lg ">
       <Link href={`/events/${event.id}`}>
-        <div
+        <Image src={event.image} alt="img" height={1000} width={1000}></Image>
+        {/* <div
           style={{
             backgroundImage: `url${event.image}`,
             backgroundSize: 'cover',
@@ -54,7 +56,7 @@ const Ticket = ({ event }) => {
           }}
           className="flex flex-grow h-[300px] md:h-[200px]"
           alt="img"
-        />
+        /> */}
       </Link>
       <div
         href={`/events/${event.id}`}

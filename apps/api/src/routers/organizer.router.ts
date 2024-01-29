@@ -1,3 +1,4 @@
+import { verifyToken } from '@/middleware/verifyJWT';
 import { OrganizerController } from '../controllers/organizer.controller';
 import { ExtractUserIdFromTokenMiddleware } from '../middleware/jwt';
 import { Router } from 'express';
@@ -17,7 +18,7 @@ export class OrganizerRouter {
   private initializeRoutes(): void {
     this.router.get(
       '/event',
-      this.extractUserIdMiddleware.extractUserIdFromToken,
+      verifyToken,
       this.organizerController.organizerEvent,
     );
   }

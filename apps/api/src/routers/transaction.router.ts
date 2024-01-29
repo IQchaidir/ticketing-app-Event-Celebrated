@@ -1,3 +1,4 @@
+import { verifyToken } from '@/middleware/verifyJWT';
 import { TransactionController } from '../controllers/transaction.controller';
 import { ExtractUserIdFromTokenMiddleware } from '../middleware/jwt';
 import { Router } from 'express';
@@ -17,12 +18,12 @@ export class TransactionRouter {
   private initializeRoutes(): void {
     this.router.post(
       '/:eventId',
-      this.extractUserIdMiddleware.extractUserIdFromToken,
+      verifyToken,
       this.transactionController.checkout,
     );
     this.router.get(
       '/:eventId',
-      this.extractUserIdMiddleware.extractUserIdFromToken,
+      verifyToken,
       this.transactionController.dataCheckout,
     );
   }

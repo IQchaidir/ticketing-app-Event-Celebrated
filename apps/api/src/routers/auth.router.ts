@@ -6,7 +6,6 @@ export class AuthRouter {
   private router: Router;
   private authController: AuthController;
 
-
   constructor() {
     this.authController = new AuthController();
     this.router = Router();
@@ -14,8 +13,6 @@ export class AuthRouter {
   }
 
   private initializeRoutes(): void {
-
-
     this.router.post(
       '/register',
       registerValidation,
@@ -23,8 +20,7 @@ export class AuthRouter {
     );
     this.router.post('/login', this.authController.loginUser);
     this.router.post('/reset', verifyToken, this.authController.resetPassword);
-    this.router.post('/logout', verifyToken, this.authController.logoutUser);
-
+    // this.router.post('/logout', verifyToken, this.authController.logoutUser);
   }
 
   getRouter(): Router {

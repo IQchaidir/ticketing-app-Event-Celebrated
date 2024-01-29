@@ -1,16 +1,15 @@
-import { ExtractUserIdFromTokenMiddleware } from '../middleware/jwt';
 import { CreateEventController } from '../controllers/createEvent.controller';
 import { Router } from 'express';
 import { uploader } from '../middleware/uploader';
+import { verifyToken } from '@/middleware/verifyJWT';
 
 export class CreateEventRouter {
   private router: Router;
   private createEventController: CreateEventController;
-  private extractUserIdMiddleware: ExtractUserIdFromTokenMiddleware;
 
   constructor() {
     this.createEventController = new CreateEventController();
-    this.extractUserIdMiddleware = new ExtractUserIdFromTokenMiddleware();
+
     this.router = Router();
     this.initializeRoutes();
   }
@@ -19,7 +18,7 @@ export class CreateEventRouter {
     this.router.post(
       '/',
       uploader('IMG', '/image').single('image'),
-      this.extractUserIdMiddleware.extractUserIdFromToken,
+      verifyToken,
       this.createEventController.createEvent,
     );
   }

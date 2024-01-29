@@ -19,10 +19,8 @@ import path from 'path';
 import { ImageRouter } from './routers/getImage.router';
 import { TicketRouter } from './routers/ticket.router';
 import { OrganizerRouter } from './routers/organizer.router';
-import { redisClient } from 'helpers/redis';
 import { AuthRouter } from './routers/auth.router';
 import { EventRouter } from './routers/event.router';
-
 
 export default class App {
   readonly app: Express;
@@ -65,7 +63,6 @@ export default class App {
   }
 
   private routes(): void {
-
     this.app.get('/', (req: Request, res: Response) => {
       return res.status(200).send(`<h1>Hello, Purwadhika Student !</h1>`);
     });
@@ -80,7 +77,11 @@ export default class App {
     const ticketRouter = new TicketRouter();
     const organizerRouter = new OrganizerRouter();
     const imageRouter = new ImageRouter();
+    const authRouter = new AuthRouter();
+    const eventRouter = new EventRouter();
 
+    //this.app.use('/event', eventRouter.getRouter());
+    this.app.use('/auth', authRouter.getRouter());
     this.app.use('/event/discovery', discoveryRouter.getRouter());
     this.app.use('/event/createEvent', createEventRouter.getRouter());
     this.app.use('/categories', categoryRouter.getRouter());
@@ -95,22 +96,8 @@ export default class App {
       imageRouter.getRouter(),
     );
   }
-  //IQBAL CLOSED TASK//
 
-
-    const authRouter = new AuthRouter();
-    const eventRouter = new EventRouter();
-
-    // Abil Code Open
-    //this.app.use('/event', eventRouter.getRouter());
-    this.app.use('/auth', authRouter.getRouter());
-  }
-  // Abil code Close
-      
-//   public async start(): Promise<void> {
-//     await redisClient.connect();
-
-public start(): void {
+  public start(): void {
     this.app.listen(PORT, () => {
       console.log(`  ➜  [API] Local:   http://localhost:${PORT}/`);
     });

@@ -1,3 +1,4 @@
+import { verifyToken } from '@/middleware/verifyJWT';
 import { TicketController } from '../controllers/ticket.controller';
 import { ExtractUserIdFromTokenMiddleware } from '../middleware/jwt';
 import { Router } from 'express';
@@ -15,11 +16,7 @@ export class TicketRouter {
   }
 
   private initializeRoutes(): void {
-    this.router.get(
-      '/',
-      this.extractUserIdMiddleware.extractUserIdFromToken,
-      this.ticketController.ticketFilter,
-    );
+    this.router.get('/', verifyToken, this.ticketController.ticketFilter);
   }
 
   getRouter(): Router {

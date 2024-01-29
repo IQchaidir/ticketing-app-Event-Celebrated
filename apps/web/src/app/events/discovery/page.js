@@ -45,12 +45,13 @@ const SearchPage = () => {
 
   // Fungsi untuk menangani online
   const handleOnlineEventChange = () => {
+    setCurrentPage(1);
     setOnlineEventFilter((prevFilter) => !prevFilter);
   };
 
   //apply filtermodal
   const applyFilters = (filters) => {
-    console.log('Applied filters:', filters);
+    setCurrentPage(1);
     setOnlineEventFilter(filters.onlineEventFilter);
     setDateFilters(filters.dateFilters);
     setPriceFilters(filters.priceFilters);
@@ -59,6 +60,7 @@ const SearchPage = () => {
 
   // Fungsi untuk menangani perubahan status checkbox Date
   const handleDateChange = (filter) => {
+    setCurrentPage(1);
     setDateFilters((prevFilters) => ({
       today: filter === 'today' && !prevFilters.today,
       tomorrow: filter === 'tomorrow' && !prevFilters.tomorrow,
@@ -68,6 +70,7 @@ const SearchPage = () => {
 
   // Fungsi untuk menangani perubahan status checkbox Price
   const handlePriceChange = (filter) => {
+    setCurrentPage(1);
     setPriceFilters((prevFilters) => ({
       paid: filter === 'paid' && !prevFilters.paid,
       free: filter === 'free' && !prevFilters.free,
@@ -76,6 +79,7 @@ const SearchPage = () => {
 
   // Fungsi untuk menangani perubahan status checkbox Category
   const handleCategoryChange = (category) => {
+    setCurrentPage(1);
     setSelectedCategory((prevCategory) =>
       prevCategory === category ? '' : category,
     );
@@ -176,7 +180,10 @@ const SearchPage = () => {
             type="text"
             placeholder="Search..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              setCurrentPage(1);
+              setSearch(e.target.value);
+            }}
             className="p-2 border border-gray-300 rounded-l  w-full md:mb-0 md:flex-1"
           />
         </form>

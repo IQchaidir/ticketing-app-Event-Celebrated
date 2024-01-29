@@ -1,3 +1,4 @@
+import { verifyToken } from '@/middleware/verifyJWT';
 import { GetUserController } from '../controllers/getUser.controller';
 import { ExtractUserIdFromTokenMiddleware } from '../middleware/jwt';
 import { Router } from 'express';
@@ -15,16 +16,8 @@ export class GetUserRouter {
   }
 
   private initializeRoutes(): void {
-    this.router.get(
-      '/email',
-      this.extractUserIdMiddleware.extractUserIdFromToken,
-      this.getUserController.getUserEmail,
-    );
-    this.router.get(
-      '/role',
-      this.extractUserIdMiddleware.extractUserIdFromToken,
-      this.getUserController.getUserRole,
-    );
+    this.router.get('/email', verifyToken, this.getUserController.getUserEmail);
+    this.router.get('/role', verifyToken, this.getUserController.getUserRole);
   }
 
   getRouter(): Router {

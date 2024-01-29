@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 declare global {
   namespace Express {
     interface Request {
-      dataUser?: any; // Tambahkan deklarasi properti di sini
+      userData?: any; // Tambahkan deklarasi properti di sini
     }
   }
 }
@@ -20,7 +20,7 @@ export class ExtractUserIdFromTokenMiddleware {
     if (token) {
       try {
         const decodedToken: any = jwt.verify(token, 'andi123'); // Gantilah 'your-secret-key' dengan kunci rahasia Anda
-        req.dataUser = decodedToken.id; // Tambahkan ID pengguna ke objek permintaan (request)
+        req.userData = decodedToken.id; // Tambahkan ID pengguna ke objek permintaan (request)
 
         next();
       } catch (error) {
