@@ -32,4 +32,31 @@ export class GetUserController {
       return res.status(500).json({ error: 'Internal Server Error' });
     }
   }
+
+  async getUserPointReferral(req: Request, res: Response) {
+    const totalPointsResult = await prisma.referralPoint.aggregate({
+      where: {
+        referrer_id: req.dataUser.id,
+      },
+      _sum: { points: true },
+    });
+
+    const totalPoints = totalPointsResult?._sum?.points || 0;
+
+    const referralCode = await prisma.user.findFirst({
+      where: { id: req.dataUser.id },
+      select: { referral_code: true },
+    });
+
+    const result = {
+      totalPoint: totalPoints,
+      referralCode: referralCode?.referral_code,
+    };
+
+    res.status(200).json(result);
+  }
+  catch(error: any) {
+    console.error('Error fetching checkout information:', error.message);
+    throw error;
+  }
 }
