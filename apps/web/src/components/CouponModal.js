@@ -14,6 +14,7 @@ const CouponModal = ({ isOpen, onClose, onSubmit, eventId, endTime }) => {
       eventId,
       endTime,
     };
+    console.log(couponData);
     try {
       const response = await axios.post(
         'http://localhost:8000/coupon/create',

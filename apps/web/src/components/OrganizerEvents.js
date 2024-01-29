@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import CouponModal from './CouponModal';
+import axios from 'axios';
 
 const OrganizerEvents = ({ event }) => {
   const [couponModal, setCouponModal] = useState(false);
@@ -21,8 +22,7 @@ const OrganizerEvents = ({ event }) => {
     return date.toLocaleDateString('en-US', options);
   };
 
-  const handleCouponSubmit = (couponData) => {
-    console.log('Coupon submitted:', couponData, eventId);
+  const handleCouponSubmit = async (couponData) => {
     handleCloseCouponModal();
   };
 
@@ -44,24 +44,24 @@ const OrganizerEvents = ({ event }) => {
       />
       <div
         href={`/events/${event.id}`}
-        className="flex min-h-[230px] flex-col gap-2 p-5 md:gap-2"
+        className="flex min-h-[230px] flex-col gap-2 p-2 md:gap-2"
       >
-        <div className="flex gap-2">
+        <div className="flex gap-1">
           <span
-            className={`p-semibold-14 w-min rounded-full ${
+            className={`text-sm font-semibold w-auto p-0 rounded-full ${
               event.is_free ? 'bg-green-100' : 'bg-red-100'
             } px-4 py-1 text-black`}
           >
-            {event.is_free ? 'FREE' : `Rp.${event.price}`}
+            {event.is_free ? 'FREE' : `PAID`}
           </span>
           <span
-            className={`p-semibold-14 w-min rounded-full ${
+            className={`text-sm font-semibold w-auto rounded-full ${
               event.is_online ? 'bg-green-100' : 'bg-red-100'
             } px-4 py-1 text-black`}
           >
             {event.is_online ? 'ONLINE' : 'OFFLINE'}
           </span>
-          <p className="p-semibold-14 w-min rounded-full bg-gray-500/10 px-4 py-1 text-black">
+          <p className="text-sm font-semibold w-auto rounded-full bg-gray-500/10 px-4 py-1 text-black">
             {event.category}
           </p>
         </div>
@@ -78,7 +78,7 @@ const OrganizerEvents = ({ event }) => {
           </p>
           <button
             className="bg-black text-white px-4 py-2 rounded-md"
-            onClick={() => handleOpenCouponModal(event.id)}
+            onClick={() => handleOpenCouponModal(event.id, event.end_time)}
           >
             Coupon
           </button>
@@ -86,6 +86,8 @@ const OrganizerEvents = ({ event }) => {
             isOpen={couponModal}
             onClose={handleCloseCouponModal}
             onSubmit={handleCouponSubmit}
+            eventId={event.id}
+            endTime={event.end_time}
           />
         </div>
       </div>
