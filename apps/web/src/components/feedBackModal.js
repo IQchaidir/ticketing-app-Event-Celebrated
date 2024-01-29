@@ -21,9 +21,14 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, eventId }) => {
     };
     console.log(feedbackData);
     try {
-      const review = await axios.post(
+      const response = await axios.post(
         'http://localhost:8000/review/create',
         feedbackData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        },
       );
       alert('review telah dibuat');
       console.log(review);
@@ -31,7 +36,7 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, eventId }) => {
       console.error('Error:', error);
     }
 
-    // onSubmit(feedbackData);
+    onSubmit(feedbackData);
   };
 
   return (
