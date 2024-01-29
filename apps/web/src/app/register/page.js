@@ -116,6 +116,7 @@ export default function RegisterPage() {
             class="w-full py-4 px-8 bg-slate-200 placeholder:font-semibold rounded outline-red-500"
             readOnly
             placeholder="PARTICIPANT"
+
           />
         </div>
         {/* <!-- remember input --> */}
