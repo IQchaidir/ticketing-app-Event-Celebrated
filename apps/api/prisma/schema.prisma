@@ -23,7 +23,6 @@ model User {
   updated_at     DateTime?
   events         Event[]
   referrerPoints ReferralPoint[] @relation("ReferrerToReferralPoint")
-  referredPoints ReferralPoint[] @relation("ReferredToReferralPoint")
   couponsEvent   Coupons[]
   transactions   Transaction[]
   reviews        Review[]
@@ -55,13 +54,11 @@ model Event {
 model ReferralPoint {
   id              Int       @id @default(autoincrement())
   referrer_id     Int
-  referred_id     Int
   points          Int       @default(10000)
   claim_points    Boolean   @default(false)
   created_at      DateTime  @default(now())
   expiration_date DateTime?
   referrer        User      @relation("ReferrerToReferralPoint", fields: [referrer_id], references: [id])
-  referred        User      @relation("ReferredToReferralPoint", fields: [referred_id], references: [id])
 }
 
 model Coupons {

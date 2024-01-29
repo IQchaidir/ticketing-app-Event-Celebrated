@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { Formik, Form, ErrorMessage, Field, useFormik } from 'formik';
 import * as Yup from 'yup';
 
-export default function RegisterPage() {
+export default function RegisterEoPage() {
   const [user_name, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -14,14 +14,14 @@ export default function RegisterPage() {
   const [role, setRole] = useState('');
 
   const router = useRouter();
-  const handleRegister = async () => {
-    setRole('PARTICIPANT');
+  const handleRegisterEo = async () => {
+    setRole('ORGANIZER');
     const data = {
       user_name: user_name,
       email: email,
       password: password,
       referral_code: referral_code,
-      role: role,
+      role: 'ORGANIZER',
     };
     try {
       const response = await axios.post(
@@ -56,7 +56,7 @@ export default function RegisterPage() {
       <div class="w-full md:w-1/2 flex flex-col items-center ">
         {/* <!-- text register --> */}
         <h1 class="text-center text-2xl font-bold text-gray-600 mb-6">
-          Register
+          Register Event Organizer
         </h1>
         {/* <!-- username input --> */}
         <div class="w-3/4 mb-6">
@@ -115,8 +115,7 @@ export default function RegisterPage() {
             id="role"
             class="w-full py-4 px-8 bg-slate-200 placeholder:font-semibold rounded outline-red-500"
             readOnly
-            placeholder="PARTICIPANT"
-
+            placeholder="ORGANIZER"
           />
         </div>
         {/* <!-- remember input --> */}
@@ -136,7 +135,7 @@ export default function RegisterPage() {
         {/* <!-- button --> */}
         <div class="w-3/4 mt-4">
           <button
-            onClick={handleRegister}
+            onClick={handleRegisterEo}
             type="button"
             class="py-4 bg-blue-400 w-full rounded text-blue-50 font-bold hover:bg-blue-700"
           >
@@ -144,20 +143,18 @@ export default function RegisterPage() {
             Register
           </button>
         </div>
-        <div className="flex flex-col items-center mx-auto">
-          <p className="block text-lg font-semibold leading-6 text-gray-600 mt-2 mb-1">
-            Do you want to create your own event?
-          </p>
-          <p className="block text-lg leading-6 text-gray-500">
-            Register as{' '}
-            <a
-              href="/registerEO"
-              className="font-bold text-red-500 hover:text-red-800"
-            >
-              organizer
-            </a>
-          </p>
-        </div>
+        <p className="block text-lg font-semibold leading-6 text-gray-600 mt-2 mb-1">
+          Would you like to participate?
+        </p>
+        <p className="block text-lg leading-6 text-gray-500">
+          Register as{' '}
+          <a
+            href="/register"
+            className="font-bold text-red-500 hover:text-red-800"
+          >
+            Participant
+          </a>
+        </p>
       </div>
     </div>
   );
