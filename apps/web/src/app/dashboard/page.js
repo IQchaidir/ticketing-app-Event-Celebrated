@@ -1,5 +1,7 @@
-// import React from "react";
-// import { TEChart } from "tw-elements-react";
+'use client';
+
+import React from 'react';
+// import { TEChart } from 'tw-elements-react';
 
 // export default function ChartLine(): JSX.Element {
 //   return (
@@ -25,7 +27,7 @@
 //     />
 //   );
 // }
-export default function dashboardPage() {
+export default function DashboardPage() {
   return (
     <div>
       <nav class="bg-white border-b border-gray-200 fixed z-30 w-full">
@@ -703,10 +705,10 @@ export default function dashboardPage() {
                         <div class="flex items-center space-x-4">
                           <div class="flex-shrink-0">
                             {/* <img
-                              class="h-8 w-8 rounded-full"
-                              src="https://demo.themesberg.com/windster/images/users/neil-sims.png"
-                              alt="Neil image"
-                            /> */}
+                                class="h-8 w-8 rounded-full"
+                                src="https://demo.themesberg.com/windster/images/users/neil-sims.png"
+                                alt="Neil image"
+                              /> */}
                           </div>
                           <div class="flex-1 min-w-0">
                             <p class="text-sm font-medium text-gray-900 truncate">
@@ -731,10 +733,10 @@ export default function dashboardPage() {
                         <div class="flex items-center space-x-4">
                           <div class="flex-shrink-0">
                             {/* <img
-                              class="h-8 w-8 rounded-full"
-                              src="https://demo.themesberg.com/windster/images/users/bonnie-green.png"
-                              alt="Neil image"
-                            /> */}
+                                class="h-8 w-8 rounded-full"
+                                src="https://demo.themesberg.com/windster/images/users/bonnie-green.png"
+                                alt="Neil image"
+                              /> */}
                           </div>
                           <div class="flex-1 min-w-0">
                             <p class="text-sm font-medium text-gray-900 truncate">
@@ -759,10 +761,10 @@ export default function dashboardPage() {
                         <div class="flex items-center space-x-4">
                           <div class="flex-shrink-0">
                             {/* <img
-                              class="h-8 w-8 rounded-full"
-                              src="https://demo.themesberg.com/windster/images/users/michael-gough.png"
-                              alt="Neil image"
-                            /> */}
+                                class="h-8 w-8 rounded-full"
+                                src="https://demo.themesberg.com/windster/images/users/michael-gough.png"
+                                alt="Neil image"
+                              /> */}
                           </div>
                           <div class="flex-1 min-w-0">
                             <p class="text-sm font-medium text-gray-900 truncate">
@@ -787,10 +789,10 @@ export default function dashboardPage() {
                         <div class="flex items-center space-x-4">
                           <div class="flex-shrink-0">
                             {/* <img
-                              class="h-8 w-8 rounded-full"
-                              src="https://demo.themesberg.com/windster/images/users/thomas-lean.png"
-                              alt="Neil image"
-                            /> */}
+                                class="h-8 w-8 rounded-full"
+                                src="https://demo.themesberg.com/windster/images/users/thomas-lean.png"
+                                alt="Neil image"
+                              /> */}
                           </div>
                           <div class="flex-1 min-w-0">
                             <p class="text-sm font-medium text-gray-900 truncate">
@@ -815,10 +817,10 @@ export default function dashboardPage() {
                         <div class="flex items-center space-x-4">
                           <div class="flex-shrink-0">
                             {/* <img
-                              class="h-8 w-8 rounded-full"
-                              src="https://demo.themesberg.com/windster/images/users/lana-byrd.png"
-                              alt="Neil image"
-                            /> */}
+                                class="h-8 w-8 rounded-full"
+                                src="https://demo.themesberg.com/windster/images/users/lana-byrd.png"
+                                alt="Neil image"
+                              /> */}
                           </div>
                           <div class="flex-1 min-w-0">
                             <p class="text-sm font-medium text-gray-900 truncate">
@@ -874,7 +876,7 @@ export default function dashboardPage() {
                                 <div class="w-full bg-gray-200 rounded-sm h-2">
                                   <div
                                     class="bg-cyan-600 h-2 rounded-sm"
-                                    style="width: 30%"
+                                    // style="width: 30%"
                                   ></div>
                                 </div>
                               </div>
@@ -895,7 +897,7 @@ export default function dashboardPage() {
                                 <div class="w-full bg-gray-200 rounded-sm h-2">
                                   <div
                                     class="bg-orange-300 h-2 rounded-sm"
-                                    style="width: 24%"
+                                    // style="width: 24%"
                                   ></div>
                                 </div>
                               </div>
@@ -916,7 +918,7 @@ export default function dashboardPage() {
                                 <div class="w-full bg-gray-200 rounded-sm h-2">
                                   <div
                                     class="bg-teal-400 h-2 rounded-sm"
-                                    style="width: 18%"
+                                    // style="width: 18%"
                                   ></div>
                                 </div>
                               </div>
@@ -937,7 +939,7 @@ export default function dashboardPage() {
                                 <div class="w-full bg-gray-200 rounded-sm h-2">
                                   <div
                                     class="bg-pink-600 h-2 rounded-sm"
-                                    style="width: 12%"
+                                    // style="width:12%"
                                   ></div>
                                 </div>
                               </div>
@@ -958,7 +960,7 @@ export default function dashboardPage() {
                                 <div class="w-full bg-gray-200 rounded-sm h-2">
                                   <div
                                     class="bg-indigo-600 h-2 rounded-sm"
-                                    style="width: 9%"
+                                    // style="width: 9%"
                                   ></div>
                                 </div>
                               </div>
@@ -979,7 +981,7 @@ export default function dashboardPage() {
                                 <div class="w-full bg-gray-200 rounded-sm h-2">
                                   <div
                                     class="bg-purple-500 h-2 rounded-sm"
-                                    style="width: 7%"
+                                    // style="width: 7%"
                                   ></div>
                                 </div>
                               </div>
@@ -1115,7 +1117,7 @@ export default function dashboardPage() {
         </div>
       </div>
       {/* <script async defer src="https://buttons.github.io/buttons.js"></script>
-   <script src=""></script> */}
+     <script src=""></script> */}
     </div>
   );
 }
