@@ -4,16 +4,25 @@ import { Category } from '@prisma/client';
 
 export class DiscoveryController {
   async discoverEvents(req: Request, res: Response) {
-    const { category, is_free, is_online, search, start_date, end_date, page } =
-      req.query as {
-        category?: Category;
-        is_free?: string;
-        is_online?: string;
-        search?: string;
-        start_date?: string;
-        end_date?: string;
-        page?: string;
-      };
+    const {
+      category,
+      is_free,
+      is_online,
+      search,
+      start_date,
+      end_date,
+      location,
+      page,
+    } = req.query as {
+      category?: Category;
+      is_free?: string;
+      is_online?: string;
+      search?: string;
+      start_date?: string;
+      end_date?: string;
+      location?: string;
+      page?: string;
+    };
 
     const pageSize = 6; // Jumlah item per halaman
 
@@ -24,6 +33,11 @@ export class DiscoveryController {
 
       const events = await prisma.event.findMany({
         where: {
+          location: location
+            ? {
+                contains: `, ${location}`,
+              }
+            : undefined,
           category: category ? { equals: category } : undefined,
           is_free: is_free ? { equals: is_free === 'true' } : undefined,
           is_online: is_online ? { equals: is_online === 'true' } : undefined,

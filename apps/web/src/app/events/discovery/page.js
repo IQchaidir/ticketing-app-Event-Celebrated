@@ -9,10 +9,12 @@ import { useDebounce } from 'use-debounce';
 const SearchPage = () => {
   const pageSize = 6;
   // State untuk melacak search
-  const [search, setSearch] = useState('');
+  const [searchTitle, setSearchTitle] = useState('');
+  const [searchLocation, setSearchLocation] = useState('');
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   // use debounce
-  const [debounceValue] = useDebounce(search, 500);
+  const [debounceTitle] = useDebounce(searchTitle, 500);
+  const [debounceLocation] = useDebounce(searchLocation, 500);
   // State untuk resp fething
   const [data, setData] = useState([]);
   // State array kategori
@@ -106,7 +108,8 @@ const SearchPage = () => {
         is_free:
           priceFilters.free || (priceFilters.paid ? { is_free: false } : null),
         category: selectedCategory.toString(),
-        search: debounceValue,
+        search: debounceTitle,
+        location: debounceLocation,
         page: currentPage.toString(),
       };
 
@@ -162,7 +165,8 @@ const SearchPage = () => {
 
     fetchData();
   }, [
-    debounceValue,
+    debounceTitle,
+    debounceLocation,
     onlineEventFilter,
     dateFilters,
     priceFilters,
@@ -175,16 +179,26 @@ const SearchPage = () => {
       <main className="w-full md:w-full lg:w-5/6 px-6 pb-6">
         <h1 className="text-3xl font-semibold mb-4">Find Event</h1>
 
-        <form className=" mb-1 lg:mb-4 md:flex md:items-center w-full sm:w-full lg:w-1/2">
+        <form className="mb-1 lg:mb-4 md:flex md:items-center w-full sm:w-full lg:w-1/2">
           <input
             type="text"
-            placeholder="Search..."
-            value={search}
+            placeholder="Search by title"
+            value={searchTitle}
             onChange={(e) => {
               setCurrentPage(1);
-              setSearch(e.target.value);
+              setSearchTitle(e.target.value);
             }}
-            className="p-2 border border-gray-300 rounded-l  w-full md:mb-0 md:flex-1"
+            className="p-2 border border-gray-300 rounded-l w-full md:mb-0 md:flex-1"
+          />
+          <input
+            type="text"
+            placeholder="Search by distric"
+            value={searchLocation}
+            onChange={(e) => {
+              setCurrentPage(1);
+              setSearchLocation(e.target.value);
+            }}
+            className="p-2 border border-gray-300 rounded-r w-full md:mb-0 md:flex-1"
           />
         </form>
         <button

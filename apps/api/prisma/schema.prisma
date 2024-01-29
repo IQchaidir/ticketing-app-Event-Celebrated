@@ -134,3 +134,8 @@ enum Category {
   Lifestyle
   Other
 }
+
+model Location {
+  id       Int    @id @default(autoincrement())
+  district String
+}
