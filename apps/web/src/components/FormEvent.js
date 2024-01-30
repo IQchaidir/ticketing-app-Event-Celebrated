@@ -4,6 +4,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import { useRouter } from 'next/navigation';
+import locations from '@/app/lib/location';
 
 const createEventForm = () => {
   const [category, setCategory] = useState([]);
@@ -65,7 +66,7 @@ const createEventForm = () => {
     dateTime: '',
     endTime: '',
     price: 0,
-    seats: 0,
+    seats: '',
   };
 
   const validationSchema = Yup.object({
@@ -100,7 +101,7 @@ const createEventForm = () => {
 
     //mengolah location
     const locationFromFrontend = values.alamat;
-    const formattedLocation = `${locationFromFrontend.input},${locationFromFrontend.select}`;
+    const formattedLocation = `${locationFromFrontend.input}, ${locationFromFrontend.select}`;
 
     formData.append('is_online', isOnline);
     formData.append('is_free', isFree);
@@ -243,8 +244,11 @@ const createEventForm = () => {
                   className="shadow appearance-none border rounded  py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-10"
                 >
                   <option value="">Select location</option>
-                  <option value="option1">Option 1</option>
-                  <option value="option2">Option 2</option>
+                  {locations.map((location) => (
+                    <option key={location} value={location}>
+                      {location}
+                    </option>
+                  ))}
                 </Field>
                 <ErrorMessage
                   name="alamat.select"
@@ -286,9 +290,6 @@ const createEventForm = () => {
             </div>
           </div>
           <div className="flex flex-col w-full">
-            {!previewImage && (
-              <div className=" h-40 border-dashed border-2 border-b-0 border-gray-300 bg-gray-100" />
-            )}
             {previewImage && (
               <img
                 src={previewImage}
@@ -350,7 +351,7 @@ const createEventForm = () => {
             </div>
           )}
           <div className="flex flex-col w-full">
-            <label>Seats:</label>
+            <label>Total Seats:</label>
             <Field
               type="number"
               id="seats"

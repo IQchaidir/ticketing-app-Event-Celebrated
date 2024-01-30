@@ -32,7 +32,7 @@ const Card = ({ event }) => {
               event.is_free ? 'bg-green-100' : 'bg-red-100'
             } px-4 py-1 text-black`}
           >
-            {event.is_free ? 'FREE' : `Rp.${event.price}`}
+            {event.is_free ? 'FREE' : `PAID`}
           </span>
           <span
             className={`p-semibold-14 w-min rounded-full ${

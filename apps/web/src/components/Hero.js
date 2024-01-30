@@ -12,9 +12,11 @@ export const Hero = () => {
           Ignite Learning, Gain Insights: Connect with a Global Community of
           Mentors for Expert Tips and Wisdom!
         </p>
-        <button className="bg-black text-white rounded-xl p-2 w-full sm:w-fit">
-          <Link href="/events/discovery">Explore Now</Link>
-        </button>
+        <Link href="/events/discovery">
+          <button className="bg-black text-white rounded-xl p-2 w-full sm:w-fit">
+            Explore Now
+          </button>
+        </Link>
       </div>
       <Image
         src="/assets/images/hero.jpg"

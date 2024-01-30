@@ -9,10 +9,12 @@ const CheckoutForm = () => {
   const [eventPrice, setEventPrice] = useState(null);
   const [title, setTitle] = useState('');
   const [coupon, setCoupons] = useState([]);
+  const [refCoupons, setRefCoupons] = useState([]);
   const [points, setPoints] = useState(0);
   const [isPointsUsed, setIsPointsUsed] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
   const [checkoutClicked, setCheckoutClicked] = useState(false);
+  const [originalPrice, setOriginaPrice] = useState(0);
 
   const router = useRouter();
 
@@ -51,12 +53,13 @@ const CheckoutForm = () => {
 
         const data = await res.json();
 
-        // Update state dengan informasi dari backend
         setEventPrice(data.eventPrice);
         setTitle(data.titleEvent);
         setCoupons(data.eventCoupons);
+        setRefCoupons(data.refCoupons);
         setPoints(data.userPoints);
-        setTotalPrice(total);
+        setTotalPrice(parseInt(total));
+        setOriginaPrice(parseInt(total));
       } catch (error) {
         console.error('Error fetching checkout information:', error.message);
       }
@@ -85,12 +88,12 @@ const CheckoutForm = () => {
   const handleConfirm = async () => {
     try {
       const token = localStorage.getItem('token');
-
+      const pointsToUse = isPointsUsed ? points : 0;
       const response = await axios.post(
         `http://localhost:8000/checkout/${eventId}`,
         {
           couponId: getCouponId(),
-          pointUsed: isPointsUsed ? points : 0,
+          pointUsed: pointsToUse,
         },
         {
           headers: {
@@ -111,37 +114,33 @@ const CheckoutForm = () => {
   const handlePointChange = () => {
     setIsPointsUsed((prevIsPointsUsed) => !prevIsPointsUsed);
 
-    if (setIsPointsUsed.isChecked) {
-      // Jika dicentang, kurangi totalPrice dengan discountAmount
-      setTotalPrice((prevTotalPrice) => parseFloat(prevTotalPrice) + points);
+    if (!isPointsUsed) {
+      // Jika sedang dicentang (akan menggunakan poin)
+      if (points >= totalPrice) {
+        // Jika jumlah poin mencukupi untuk membayar seluruh totalPrice
+        setTotalPrice(0);
+      } else {
+        // Jika jumlah poin kurang dari totalPrice
+        setTotalPrice((prevTotalPrice) => prevTotalPrice - points);
+      }
     } else {
-      // Jika tidak dicentang, tambahkan totalPrice dengan discountAmount
-      setTotalPrice((prevTotalPrice) => parseFloat(prevTotalPrice) - points);
+      // Jika sedang tidak dicentang (tidak menggunakan poin)
+      setTotalPrice((prevTotalPrice) => prevTotalPrice + points);
     }
-    setIsPointsUsed.isChecked = !setIsPointsUsed.isChecked;
   };
 
   const handlecouponChange = (couponId) => {
-    // Cari kupon berdasarkan couponId
     const selectedCoupon = coupon.find((coupon) => coupon.id === couponId);
 
     if (selectedCoupon) {
-      const discountAmount = parseFloat(selectedCoupon.discount_amount);
+      const discountPercentage = parseFloat(selectedCoupon.discount_amount);
+      const discountAmount = (discountPercentage / 100) * originalPrice;
 
-      // Periksa apakah checkbox dicentang atau tidak
       if (selectedCoupon.isChecked) {
-        // Jika dicentang, kurangi totalPrice dengan discountAmount
-        setTotalPrice(
-          (prevTotalPrice) => parseFloat(prevTotalPrice) + discountAmount,
-        );
+        setTotalPrice((prevTotalPrice) => prevTotalPrice + discountAmount);
       } else {
-        // Jika tidak dicentang, tambahkan totalPrice dengan discountAmount
-        setTotalPrice(
-          (prevTotalPrice) => parseFloat(prevTotalPrice) - discountAmount,
-        );
+        setTotalPrice((prevTotalPrice) => prevTotalPrice - discountAmount);
       }
-
-      // Perbarui isChecked pada kupon yang bersangkutan
       selectedCoupon.isChecked = !selectedCoupon.isChecked;
     }
   };

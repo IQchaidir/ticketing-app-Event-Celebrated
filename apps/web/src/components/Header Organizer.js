@@ -7,8 +7,9 @@ import { Navmobile } from './Navmobile';
 import axios from 'axios';
 import UserDropdown from './userDropDown';
 import { useRouter } from 'next/navigation';
+import OrganizerDropdown from './organizerDropDown';
 
-const Header = () => {
+const HeaderOrganizer = () => {
   const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState(null);
@@ -50,7 +51,7 @@ const Header = () => {
 
   return (
     <header className="w-full border-b sticky top-0 bg-white z-50">
-      <div className="wrapper flex items-center justify-between">
+      <div className="flex items-center justify-between">
         <Link href="/" className="w-auto h-auto">
           <Image
             src="/assets/images/company.png"
@@ -68,21 +69,10 @@ const Header = () => {
 
           <div className="flex w-auto justify-end gap-3">
             {isLoggedIn && (
-              <UserDropdown
+              <OrganizerDropdown
                 userEmail={userData?.email}
                 onLogout={handleLogout}
               />
-            )}
-
-            {!isLoggedIn && (
-              <>
-                <button className="p-2 hover:bg-black hover:text-white rounded-md">
-                  <Link href="/auth/login">Log In</Link>
-                </button>
-                <button className="p-2 hover:bg-black hover:text-white rounded-md">
-                  <Link href="/sign-in">Sign Up</Link>
-                </button>
-              </>
             )}
             {/* 
             <Navmobile></Navmobile> */}

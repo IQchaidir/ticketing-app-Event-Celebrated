@@ -31,7 +31,6 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, eventId }) => {
         },
       );
       alert('review telah dibuat');
-      console.log(review);
     } catch (error) {
       console.error('Error:', error);
     }
