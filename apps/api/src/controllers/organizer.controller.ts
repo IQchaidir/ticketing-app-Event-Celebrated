@@ -19,4 +19,35 @@ export class OrganizerController {
         .json({ error: error.message || 'Internal Server Error' });
     }
   }
+  async attendee(req: Request, res: Response) {
+    try {
+      let attendee;
+      const userIdFromToken = req.dataUser;
+
+      if (userIdFromToken.id) {
+        const attendee = await prisma.user.findMany({
+          where: {
+            transactions: {
+              some: {
+                user_id: userIdFromToken.id,
+              },
+            },
+          },
+          include: {
+            transactions: {
+              include: {
+                event: true,
+              },
+            },
+          },
+        });
+        return res.json(attendee);
+      }
+    } catch (error: any) {
+      console.error(error);
+      return res
+        .status(500)
+        .json({ error: error.message || 'Internal Server Error' });
+    }
+  }
 }

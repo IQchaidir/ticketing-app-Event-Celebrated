@@ -75,6 +75,16 @@ const HeaderOrganizer = () => {
                 onLogout={handleLogout}
               />
             )}
+            {!isLoggedIn && (
+              <>
+                <button className="p-2 hover:bg-black hover:text-white rounded-md">
+                  <Link href="/login">Log In</Link>
+                </button>
+                <button className="p-2 hover:bg-black hover:text-white rounded-md">
+                  <Link href="/registerEO">Sign Up</Link>
+                </button>
+              </>
+            )}
             {/* 
             <Navmobile></Navmobile> */}
           </div>
