@@ -88,12 +88,12 @@ const CheckoutForm = () => {
   const handleConfirm = async () => {
     try {
       const token = localStorage.getItem('token');
-
+      const pointsToUse = isPointsUsed ? points : 0;
       const response = await axios.post(
         `http://localhost:8000/checkout/${eventId}`,
         {
           couponId: getCouponId(),
-          pointUsed: isPointsUsed ? points : 0,
+          pointUsed: pointsToUse,
         },
         {
           headers: {
@@ -114,14 +114,19 @@ const CheckoutForm = () => {
   const handlePointChange = () => {
     setIsPointsUsed((prevIsPointsUsed) => !prevIsPointsUsed);
 
-    if (setIsPointsUsed.isChecked) {
-      // Jika dicentang, kurangi totalPrice dengan discountAmount
-      setTotalPrice((prevTotalPrice) => parseFloat(prevTotalPrice) + points);
+    if (!isPointsUsed) {
+      // Jika sedang dicentang (akan menggunakan poin)
+      if (points >= totalPrice) {
+        // Jika jumlah poin mencukupi untuk membayar seluruh totalPrice
+        setTotalPrice(0);
+      } else {
+        // Jika jumlah poin kurang dari totalPrice
+        setTotalPrice((prevTotalPrice) => prevTotalPrice - points);
+      }
     } else {
-      // Jika tidak dicentang, tambahkan totalPrice dengan discountAmount
-      setTotalPrice((prevTotalPrice) => parseFloat(prevTotalPrice) - points);
+      // Jika sedang tidak dicentang (tidak menggunakan poin)
+      setTotalPrice((prevTotalPrice) => prevTotalPrice + points);
     }
-    setIsPointsUsed.isChecked = !setIsPointsUsed.isChecked;
   };
 
   const handlecouponChange = (couponId) => {

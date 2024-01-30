@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 
-const UserDropdown = ({ userEmail, onLogout }) => {
+const OrganizerDropDown = ({ userEmail, onLogout }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const handleDropdownToggle = () => {
@@ -10,7 +10,6 @@ const UserDropdown = ({ userEmail, onLogout }) => {
   };
 
   const handleMenuItemClick = () => {
-    // Menutup dropdown saat item di dalamnya diklik
     setIsDropdownOpen(false);
   };
 
@@ -25,28 +24,12 @@ const UserDropdown = ({ userEmail, onLogout }) => {
 
       {isDropdownOpen && (
         <div className="absolute top-11 right-0 bg-white border  shadow-md w-full">
-          <Link href="/organizer">
+          <Link href="/dashboard">
             <button
               className="block px-4 py-2 text-black hover:bg-gray-200 w-full text-left"
               onClick={handleMenuItemClick}
             >
-              Manage My Event
-            </button>
-          </Link>
-          <Link href="/user/tickets">
-            <button
-              className="block px-4 py-2 text-black hover:bg-gray-200 w-full text-left"
-              onClick={handleMenuItemClick}
-            >
-              Ticket
-            </button>
-          </Link>
-          <Link href="/user/credit">
-            <button
-              className="block px-4 py-2 text-black hover:bg-gray-200 w-full text-left"
-              onClick={handleMenuItemClick}
-            >
-              Credit
+              DashBoard
             </button>
           </Link>
           <button
@@ -64,4 +47,4 @@ const UserDropdown = ({ userEmail, onLogout }) => {
   );
 };
 
-export default UserDropdown;
+export default OrganizerDropDown;
