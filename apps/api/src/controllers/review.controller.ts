@@ -10,6 +10,20 @@ export class ReviewController {
         select: { id: true },
       });
 
+      const existingReview = await prisma.review.findFirst({
+        where: {
+          user_id: userId!.id,
+          event_id: parseInt(req.body.eventId),
+        },
+      });
+
+      if (existingReview) {
+        return res.status(400).json({
+          success: false,
+          message: 'Review for this event already exists',
+        });
+      }
+
       const createReview = await prisma.review.create({
         data: {
           user_id: userId!.id,

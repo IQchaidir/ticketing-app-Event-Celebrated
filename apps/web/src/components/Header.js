@@ -80,7 +80,7 @@ const Header = () => {
                   <Link href="/auth/login">Log In</Link>
                 </button>
                 <button className="p-2 hover:bg-black hover:text-white rounded-md">
-                  <Link href="/sign-in">Sign Up</Link>
+                  <Link href="/register">Sign Up</Link>
                 </button>
               </>
             )}

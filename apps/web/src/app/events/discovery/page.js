@@ -5,6 +5,8 @@ import axios from 'axios';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
+import { Footer } from '@/components/Footer';
+import Header from '@/components/Header';
 
 const SearchPage = () => {
   const pageSize = 6;
@@ -162,166 +164,170 @@ const SearchPage = () => {
   ]);
 
   return (
-    <div className="wrapper flex flex-col md:flex-row-reverse min-h-screen">
-      <main className="w-full md:w-full lg:w-5/6 px-6 pb-6">
-        <h1 className="text-3xl font-semibold mb-4">Find Event</h1>
+    <>
+      <Header />
+      <div className="wrapper flex flex-col md:flex-row-reverse min-h-screen">
+        <main className="w-full md:w-full lg:w-5/6 px-6 pb-6">
+          <h1 className="text-3xl font-semibold mb-4">Find Event</h1>
 
-        <form className="mb-1 lg:mb-4 md:flex md:items-center w-full sm:w-full lg:w-1/2">
-          <input
-            type="text"
-            placeholder="Search by title"
-            value={searchTitle}
-            onChange={(e) => {
-              setCurrentPage(1);
-              setSearchTitle(e.target.value);
-            }}
-            className="p-2 border border-gray-300 rounded-l w-full md:mb-0 md:flex-1"
+          <form className="mb-1 lg:mb-4 md:flex md:items-center w-full sm:w-full lg:w-1/2">
+            <input
+              type="text"
+              placeholder="Search by title"
+              value={searchTitle}
+              onChange={(e) => {
+                setCurrentPage(1);
+                setSearchTitle(e.target.value);
+              }}
+              className="p-2 border border-gray-300 rounded-l w-full md:mb-0 md:flex-1"
+            />
+            <input
+              type="text"
+              placeholder="Search by distric"
+              value={searchLocation}
+              onChange={(e) => {
+                setCurrentPage(1);
+                setSearchLocation(e.target.value);
+              }}
+              className="p-2 border border-gray-300 rounded-r w-full md:mb-0 md:flex-1"
+            />
+          </form>
+          <button
+            className="bg-black text-white p-2 rounded block mb-2 lg:hidden"
+            onClick={() => setIsFilterModalOpen(true)}
+          >
+            Open Filters
+          </button>
+          <FilterModal
+            isOpen={isFilterModalOpen}
+            onClose={() => setIsFilterModalOpen(false)}
+            applyFilters={applyFilters}
           />
-          <input
-            type="text"
-            placeholder="Search by distric"
-            value={searchLocation}
-            onChange={(e) => {
-              setCurrentPage(1);
-              setSearchLocation(e.target.value);
-            }}
-            className="p-2 border border-gray-300 rounded-r w-full md:mb-0 md:flex-1"
-          />
-        </form>
-        <button
-          className="bg-black text-white p-2 rounded block mb-2 lg:hidden"
-          onClick={() => setIsFilterModalOpen(true)}
-        >
-          Open Filters
-        </button>
-        <FilterModal
-          isOpen={isFilterModalOpen}
-          onClose={() => setIsFilterModalOpen(false)}
-          applyFilters={applyFilters}
-        />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
-          {Array.isArray(data) && data.length > 0 ? (
-            data.map((event) => (
-              <div className="flex justify-center" key={event.id}>
-                <Card event={event} />
-              </div>
-            ))
-          ) : (
-            <>
-              <Image
-                src="/assets/images/notfound.jpg"
-                alt="notfound"
-                height={1000}
-                width={1000}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
+            {Array.isArray(data) && data.length > 0 ? (
+              data.map((event) => (
+                <div className="flex justify-center" key={event.id}>
+                  <Card event={event} />
+                </div>
+              ))
+            ) : (
+              <>
+                <Image
+                  src="/assets/images/notfound.jpg"
+                  alt="notfound"
+                  height={1000}
+                  width={1000}
+                />
+              </>
+            )}
+          </div>
+
+          <div className="mt-4 flex justify-center items-center">
+            {data.length >= pageSize && (
+              <>
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="px-3 py-1 mx-2 border rounded"
+                >
+                  Previous
+                </button>
+                <span className="mx-2">{currentPage}</span>
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={data.length < pageSize}
+                  className="px-3 py-1 mx-2 border rounded"
+                >
+                  Next
+                </button>
+              </>
+            )}
+          </div>
+        </main>
+
+        <aside className="hidden lg:block w-1/6 p-6 pl-0 pt-0">
+          <div className="mb-4">
+            <h2 className="text-xl font-semibold mb-2">Filters</h2>
+            <label className="block mb-2 text-base">
+              <input
+                type="checkbox"
+                className="mr-2"
+                checked={onlineEventFilter}
+                onChange={handleOnlineEventChange}
               />
-            </>
-          )}
-        </div>
+              Online Event
+            </label>
+          </div>
 
-        <div className="mt-4 flex justify-center items-center">
-          {data.length >= pageSize && (
-            <>
-              <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-                className="px-3 py-1 mx-2 border rounded"
-              >
-                Previous
-              </button>
-              <span className="mx-2">{currentPage}</span>
-              <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={data.length < pageSize}
-                className="px-3 py-1 mx-2 border rounded"
-              >
-                Next
-              </button>
-            </>
-          )}
-        </div>
-      </main>
-
-      <aside className="hidden lg:block w-1/6 p-6 pl-0 pt-0">
-        <div className="mb-4">
-          <h2 className="text-xl font-semibold mb-2">Filters</h2>
+          <h2 className="text-base font-semibold mb-2">Date</h2>
           <label className="block mb-2 text-base">
             <input
               type="checkbox"
               className="mr-2"
-              checked={onlineEventFilter}
-              onChange={handleOnlineEventChange}
+              checked={dateFilters.today}
+              onChange={() => handleDateChange('today')}
             />
-            Online Event
+            Today
           </label>
-        </div>
+          <label className="block mb-2 text-base">
+            <input
+              type="checkbox"
+              className="mr-2"
+              checked={dateFilters.tomorrow}
+              onChange={() => handleDateChange('tomorrow')}
+            />
+            Tomorrow
+          </label>
 
-        <h2 className="text-base font-semibold mb-2">Date</h2>
-        <label className="block mb-2 text-base">
-          <input
-            type="checkbox"
-            className="mr-2"
-            checked={dateFilters.today}
-            onChange={() => handleDateChange('today')}
-          />
-          Today
-        </label>
-        <label className="block mb-2 text-base">
-          <input
-            type="checkbox"
-            className="mr-2"
-            checked={dateFilters.tomorrow}
-            onChange={() => handleDateChange('tomorrow')}
-          />
-          Tomorrow
-        </label>
+          <h2 className="text-base font-semibold mb-2">Price</h2>
+          <label className="block mb-2 text-base">
+            <input
+              type="checkbox"
+              className="mr-2"
+              checked={priceFilters.paid}
+              onChange={() => handlePriceChange('paid')}
+            />
+            Paid
+          </label>
+          <label className="block mb-2 text-base">
+            <input
+              type="checkbox"
+              className="mr-2"
+              checked={priceFilters.free}
+              onChange={() => handlePriceChange('free')}
+            />
+            Free
+          </label>
 
-        <h2 className="text-base font-semibold mb-2">Price</h2>
-        <label className="block mb-2 text-base">
-          <input
-            type="checkbox"
-            className="mr-2"
-            checked={priceFilters.paid}
-            onChange={() => handlePriceChange('paid')}
-          />
-          Paid
-        </label>
-        <label className="block mb-2 text-base">
-          <input
-            type="checkbox"
-            className="mr-2"
-            checked={priceFilters.free}
-            onChange={() => handlePriceChange('free')}
-          />
-          Free
-        </label>
-
-        <div className="mb-4 mt-4">
-          <h2 className="text-base font-semibold mb-2">Category</h2>
-          {categories
-            .slice(0, isViewMore ? categories.length : MAX_DISPLAY_CATEGORIES)
-            .map((category) => (
-              <label key={category} className="block mb-2 text-base">
-                <input
-                  type="checkbox"
-                  className="mr-2"
-                  checked={selectedCategory === category}
-                  onChange={() => handleCategoryChange(category)}
-                />
-                {category}
-              </label>
-            ))}
-          {categories.length > MAX_DISPLAY_CATEGORIES && (
-            <button
-              className="text-blue-500 underline mt-2"
-              onClick={() => setIsViewMore((prev) => !prev)}
-            >
-              {isViewMore ? 'View Less' : 'View More'}
-            </button>
-          )}
-        </div>
-      </aside>
-    </div>
+          <div className="mb-4 mt-4">
+            <h2 className="text-base font-semibold mb-2">Category</h2>
+            {categories
+              .slice(0, isViewMore ? categories.length : MAX_DISPLAY_CATEGORIES)
+              .map((category) => (
+                <label key={category} className="block mb-2 text-base">
+                  <input
+                    type="checkbox"
+                    className="mr-2"
+                    checked={selectedCategory === category}
+                    onChange={() => handleCategoryChange(category)}
+                  />
+                  {category}
+                </label>
+              ))}
+            {categories.length > MAX_DISPLAY_CATEGORIES && (
+              <button
+                className="text-blue-500 underline mt-2"
+                onClick={() => setIsViewMore((prev) => !prev)}
+              >
+                {isViewMore ? 'View Less' : 'View More'}
+              </button>
+            )}
+          </div>
+        </aside>
+      </div>
+      <Footer />
+    </>
   );
 };
 

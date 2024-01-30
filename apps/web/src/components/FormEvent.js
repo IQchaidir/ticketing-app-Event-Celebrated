@@ -124,12 +124,12 @@ const createEventForm = () => {
           },
         },
       );
-      console.log('Response from server:', response.data);
+      const newEventId = response.data.id;
+      route.push(`/organizer/event/${newEventId}`);
       alert('Data berhasil disubmit!');
     } catch (error) {
       console.error('Error submitting data:', error);
     }
-    route.push('/organizer');
   };
 
   return (

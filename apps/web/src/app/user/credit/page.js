@@ -1,6 +1,8 @@
 'use client';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { Footer } from '@/components/Footer';
+import Header from '@/components/Header';
 
 export default function Credit() {
   const [data, setData] = useState([]);
@@ -29,6 +31,7 @@ export default function Credit() {
 
   return (
     <>
+      <Header />
       <div className="wrapper">
         <div className="flex flex-col gap-10 mt-10">
           <h1 className="h1-bold">CREDIT</h1>
@@ -37,6 +40,7 @@ export default function Credit() {
           <div className="flex flex-col md:flex-row"></div>
         </div>
       </div>
+      <Footer />
     </>
   );
 }

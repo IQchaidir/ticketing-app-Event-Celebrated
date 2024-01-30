@@ -81,6 +81,7 @@ model Transaction {
   user_id         Int
   event_id        Int
   coupon_event_id Int?
+  coupon_referral Int?
   points_used     Int    @default(0)
   totalamount     Int    @default(0) // Tambahkan kolom totalamount
   status          Status @default(waitingForPayment) // Tambahkan kolom status
@@ -133,9 +134,4 @@ enum Category {
   Holiday
   Lifestyle
   Other
-}
-
-model Location {
-  id       Int    @id @default(autoincrement())
-  district String
 }
