@@ -53,7 +53,7 @@ const HeaderOrganizer = () => {
   return (
     <header className="w-full border-b sticky top-0 bg-white z-50">
       <div className="flex items-center justify-between pr-10 pl-10">
-        <Link href="/" className="w-auto h-auto">
+        <Link href="/dashboard" className="w-auto h-auto">
           <Image
             src="/assets/images/company.png"
             alt="logo"

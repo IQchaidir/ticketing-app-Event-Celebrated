@@ -8,11 +8,11 @@ export const Navitem = () => {
           Find Event
         </button>
       </Link>
-      <Link href="/events/createEventForm">
+      {/* <Link href="/events/createEventForm">
         <button className="p-2 hover:bg-black hover:text-white rounded-md">
           Create Event
         </button>
-      </Link>
+      </Link> */}
     </div>
   );
 };
