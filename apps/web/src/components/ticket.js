@@ -45,7 +45,13 @@ const Ticket = ({ event }) => {
   return (
     <div className="flex min-h-[380px] w-full  flex-col overflow-hidden rounded-xl bg-white shadow-md transition-all hover:shadow-lg ">
       <Link href={`/events/${event.id}`}>
-        <Image src={event.image} alt="img" height={1000} width={1000}></Image>
+        <Image
+          src={event.image}
+          alt="img"
+          height={1000}
+          width={1000}
+          className="h-auto w-auto"
+        ></Image>
       </Link>
       <div
         href={`/events/${event.id}`}
