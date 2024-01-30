@@ -1,171 +1,570 @@
+import React from 'react';
+import SidebarDashboard from '@/components/sidebarDashboard';
+
 export default function dashboardEvents() {
   return (
-    <aside
-      id="sidebar"
-      className="fixed z-20 h-full top-0 left-0 pt-16 flex lg:flex flex-shrink-0 flex-col w-64 transition-width duration-75"
-      aria-label="Sidebar"
-    >
-      <div class="relative flex-1 flex flex-col min-h-0 border-r border-gray-200 bg-white pt-0">
-        <div class="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
-          <div class="flex-1 px-3 bg-white divide-y space-y-1">
-            <ul class="space-y-2 pb-2">
-              <li>
-                <form action="#" method="GET" class="lg:hidden">
-                  <label for="mobile-search" class="sr-only">
-                    Search
-                  </label>
-                  <div class="relative">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <svg
-                        class="w-5 h-5 text-gray-500"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
-                      </svg>
+    <>
+      <SidebarDashboard />
+      <div
+        id="main-content"
+        class="h-full bg-gray-50 relative overflow-y-auto lg:ml-64"
+      >
+        <main>
+          <div class="pt-6 px-4">
+            <div class="">
+              <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8  2xl:col-span-2">
+                <div class="">
+                  <div class="flex-shrink-0">
+                    <span class="text-2xl sm:text-3xl leading-none font-bold text-gray-900">
+                      Events
+                    </span>
+
+                    {/* for line open */}
+                    <div class="space-y-2 pt-2" />
+                    {/* for line close */}
+
+                    {/*content event list open */}
+                    <div class="bg-white p-8 rounded-md w-full">
+                      <div class=" flex items-center justify-between pb-6">
+                        <div class="flex items-center justify-between">
+                          <div class="flex bg-gray-50 items-center p-2 rounded-md">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              class="h-5 w-5 text-gray-400"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                            >
+                              <path
+                                fill-rule="evenodd"
+                                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                clip-rule="evenodd"
+                              />
+                            </svg>
+                            <input
+                              class="bg-gray-50 outline-none ml-1 block "
+                              type="text"
+                              name=""
+                              id=""
+                              placeholder="search..."
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      {/* Upcoming Events Open */}
+                      <div>
+                        <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+                          <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+                            <table class="min-w-full leading-normal">
+                              <thead>
+                                <tr>
+                                  <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Events
+                                  </th>
+                                  <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Title
+                                  </th>
+                                  <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Price
+                                  </th>
+                                  <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Location
+                                  </th>
+                                  <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Date Time
+                                  </th>
+                                  <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    End Time
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <div class="flex items-center">
+                                      <div class="flex-shrink-0 w-10 h-10">
+                                        {/* <img
+                                              class="w-full h-full rounded-full"
+                                              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.2&w=160&h=160&q=80"
+                                              alt=""
+                                            /> */}
+                                      </div>
+                                      <div class="ml-3">
+                                        <p class="text-gray-900 whitespace-no-wrap">
+                                          Vera Carpenter
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                      Admin
+                                    </p>
+                                  </td>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                      Jan 21, 2020
+                                    </p>
+                                  </td>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                      43
+                                    </p>
+                                  </td>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                                      <span
+                                        aria-hidden
+                                        class="absolute inset-0 bg-green-200 opacity-50 rounded-full"
+                                      ></span>
+                                      <span class="relative">Activo</span>
+                                    </span>
+                                  </td>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                                      <span
+                                        aria-hidden
+                                        class="absolute inset-0 bg-green-200 opacity-50 rounded-full"
+                                      ></span>
+                                      <span class="relative">Activo</span>
+                                    </span>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <div class="flex items-center">
+                                      <div class="flex-shrink-0 w-10 h-10">
+                                        {/* <img
+                                              class="w-full h-full rounded-full"
+                                              src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.2&w=160&h=160&q=80"
+                                              alt=""
+                                            /> */}
+                                      </div>
+                                      <div class="ml-3">
+                                        <p class="text-gray-900 whitespace-no-wrap">
+                                          Blake Bowman
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                      Editor
+                                    </p>
+                                  </td>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                      Jan 01, 2020
+                                    </p>
+                                  </td>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                      77
+                                    </p>
+                                  </td>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                                      <span
+                                        aria-hidden
+                                        class="absolute inset-0 bg-green-200 opacity-50 rounded-full"
+                                      ></span>
+                                      <span class="relative">Activo</span>
+                                    </span>
+                                  </td>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                                      <span
+                                        aria-hidden
+                                        class="absolute inset-0 bg-green-200 opacity-50 rounded-full"
+                                      ></span>
+                                      <span class="relative">Activo</span>
+                                    </span>
+                                  </td>
+                                </tr>
+
+                                <tr>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <div class="flex items-center">
+                                      <div class="flex-shrink-0 w-10 h-10">
+                                        {/* <img
+                                              class="w-full h-full rounded-full"
+                                              src="https://images.unsplash.com/photo-1540845511934-7721dd7adec3?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.2&w=160&h=160&q=80"
+                                              alt=""
+                                            /> */}
+                                      </div>
+                                      <div class="ml-3">
+                                        <p class="text-gray-900 whitespace-no-wrap">
+                                          Dana Moore
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                      Editor
+                                    </p>
+                                  </td>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                      Jan 10, 2020
+                                    </p>
+                                  </td>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                      64
+                                    </p>
+                                  </td>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <span class="relative inline-block px-3 py-1 font-semibold text-orange-900 leading-tight">
+                                      <span
+                                        aria-hidden
+                                        class="absolute inset-0 bg-orange-200 opacity-50 rounded-full"
+                                      ></span>
+                                      <span class="relative">Suspended</span>
+                                    </span>
+                                  </td>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                                      <span
+                                        aria-hidden
+                                        class="absolute inset-0 bg-green-200 opacity-50 rounded-full"
+                                      ></span>
+                                      <span class="relative">Activo</span>
+                                    </span>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td class="px-5 py-5 bg-white text-sm">
+                                    <div class="flex items-center">
+                                      <div class="flex-shrink-0 w-10 h-10">
+                                        {/* <img
+                                              class="w-full h-full rounded-full"
+                                              src="https://images.unsplash.com/photo-1522609925277-66fea332c575?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.2&h=160&w=160&q=80"
+                                              alt=""
+                                            /> */}
+                                      </div>
+                                      <div class="ml-3">
+                                        <p class="text-gray-900 whitespace-no-wrap">
+                                          Alonzo Cox
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td class="px-5 py-5 bg-white text-sm">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                      Admin
+                                    </p>
+                                  </td>
+                                  <td class="px-5 py-5 bg-white text-sm">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                      Jan 18, 2020
+                                    </p>
+                                  </td>
+                                  <td class="px-5 py-5 bg-white text-sm">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                      70
+                                    </p>
+                                  </td>
+                                  <td class="px-5 py-5 bg-white text-sm">
+                                    <span class="relative inline-block px-3 py-1 font-semibold text-red-900 leading-tight">
+                                      <span
+                                        aria-hidden
+                                        class="absolute inset-0 bg-red-200 opacity-50 rounded-full"
+                                      ></span>
+                                      <span class="relative">Inactive</span>
+                                    </span>
+                                  </td>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                                      <span
+                                        aria-hidden
+                                        class="absolute inset-0 bg-green-200 opacity-50 rounded-full"
+                                      ></span>
+                                      <span class="relative">Activo</span>
+                                    </span>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            <div class="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between          ">
+                              <span class="text-xs xs:text-sm text-gray-900">
+                                Showing 1 to 4 of 50 Entries
+                              </span>
+                              <div class="inline-flex mt-2 xs:mt-0">
+                                <button class="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-l">
+                                  Prev
+                                </button>
+                                &nbsp; &nbsp;
+                                <button class="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-r">
+                                  Next
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      {/* Upcoming Events Close */}
+                      {/* History Events Open */}
+                      <div>
+                        <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+                          <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+                            <table class="min-w-full leading-normal">
+                              <thead>
+                                <tr>
+                                  <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Events
+                                  </th>
+                                  <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Title
+                                  </th>
+                                  <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Price
+                                  </th>
+                                  <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Location
+                                  </th>
+                                  <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Date Time
+                                  </th>
+                                  <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    End Time
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <div class="flex items-center">
+                                      <div class="flex-shrink-0 w-10 h-10">
+                                        {/* <img
+                                              class="w-full h-full rounded-full"
+                                              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.2&w=160&h=160&q=80"
+                                              alt=""
+                                            /> */}
+                                      </div>
+                                      <div class="ml-3">
+                                        <p class="text-gray-900 whitespace-no-wrap">
+                                          Vera Carpenter
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                      Admin
+                                    </p>
+                                  </td>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                      Jan 21, 2020
+                                    </p>
+                                  </td>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                      43
+                                    </p>
+                                  </td>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                                      <span
+                                        aria-hidden
+                                        class="absolute inset-0 bg-green-200 opacity-50 rounded-full"
+                                      ></span>
+                                      <span class="relative">Activo</span>
+                                    </span>
+                                  </td>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                                      <span
+                                        aria-hidden
+                                        class="absolute inset-0 bg-green-200 opacity-50 rounded-full"
+                                      ></span>
+                                      <span class="relative">Activo</span>
+                                    </span>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <div class="flex items-center">
+                                      <div class="flex-shrink-0 w-10 h-10">
+                                        {/* <img
+                                              class="w-full h-full rounded-full"
+                                              src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.2&w=160&h=160&q=80"
+                                              alt=""
+                                            /> */}
+                                      </div>
+                                      <div class="ml-3">
+                                        <p class="text-gray-900 whitespace-no-wrap">
+                                          Blake Bowman
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                      Editor
+                                    </p>
+                                  </td>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                      Jan 01, 2020
+                                    </p>
+                                  </td>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                      77
+                                    </p>
+                                  </td>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                                      <span
+                                        aria-hidden
+                                        class="absolute inset-0 bg-green-200 opacity-50 rounded-full"
+                                      ></span>
+                                      <span class="relative">Activo</span>
+                                    </span>
+                                  </td>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                                      <span
+                                        aria-hidden
+                                        class="absolute inset-0 bg-green-200 opacity-50 rounded-full"
+                                      ></span>
+                                      <span class="relative">Activo</span>
+                                    </span>
+                                  </td>
+                                </tr>
+
+                                <tr>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <div class="flex items-center">
+                                      <div class="flex-shrink-0 w-10 h-10">
+                                        {/* <img
+                                              class="w-full h-full rounded-full"
+                                              src="https://images.unsplash.com/photo-1540845511934-7721dd7adec3?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.2&w=160&h=160&q=80"
+                                              alt=""
+                                            /> */}
+                                      </div>
+                                      <div class="ml-3">
+                                        <p class="text-gray-900 whitespace-no-wrap">
+                                          Dana Moore
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                      Editor
+                                    </p>
+                                  </td>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                      Jan 10, 2020
+                                    </p>
+                                  </td>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                      64
+                                    </p>
+                                  </td>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <span class="relative inline-block px-3 py-1 font-semibold text-orange-900 leading-tight">
+                                      <span
+                                        aria-hidden
+                                        class="absolute inset-0 bg-orange-200 opacity-50 rounded-full"
+                                      ></span>
+                                      <span class="relative">Suspended</span>
+                                    </span>
+                                  </td>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                                      <span
+                                        aria-hidden
+                                        class="absolute inset-0 bg-green-200 opacity-50 rounded-full"
+                                      ></span>
+                                      <span class="relative">Activo</span>
+                                    </span>
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td class="px-5 py-5 bg-white text-sm">
+                                    <div class="flex items-center">
+                                      <div class="flex-shrink-0 w-10 h-10">
+                                        {/* <img
+                                              class="w-full h-full rounded-full"
+                                              src="https://images.unsplash.com/photo-1522609925277-66fea332c575?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.2&h=160&w=160&q=80"
+                                              alt=""
+                                            /> */}
+                                      </div>
+                                      <div class="ml-3">
+                                        <p class="text-gray-900 whitespace-no-wrap">
+                                          Alonzo Cox
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td class="px-5 py-5 bg-white text-sm">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                      Admin
+                                    </p>
+                                  </td>
+                                  <td class="px-5 py-5 bg-white text-sm">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                      Jan 18, 2020
+                                    </p>
+                                  </td>
+                                  <td class="px-5 py-5 bg-white text-sm">
+                                    <p class="text-gray-900 whitespace-no-wrap">
+                                      70
+                                    </p>
+                                  </td>
+                                  <td class="px-5 py-5 bg-white text-sm">
+                                    <span class="relative inline-block px-3 py-1 font-semibold text-red-900 leading-tight">
+                                      <span
+                                        aria-hidden
+                                        class="absolute inset-0 bg-red-200 opacity-50 rounded-full"
+                                      ></span>
+                                      <span class="relative">Inactive</span>
+                                    </span>
+                                  </td>
+                                  <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <span class="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                                      <span
+                                        aria-hidden
+                                        class="absolute inset-0 bg-green-200 opacity-50 rounded-full"
+                                      ></span>
+                                      <span class="relative">Activo</span>
+                                    </span>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            <div class="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between          ">
+                              <span class="text-xs xs:text-sm text-gray-900">
+                                Showing 1 to 4 of 50 Entries
+                              </span>
+                              <div class="inline-flex mt-2 xs:mt-0">
+                                <button class="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-l">
+                                  Prev
+                                </button>
+                                &nbsp; &nbsp;
+                                <button class="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-r">
+                                  Next
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      {/* History Events Close */}
                     </div>
-                    <input
-                      type="text"
-                      name="email"
-                      id="mobile-search"
-                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full pl-10 p-2.5"
-                      placeholder="Search"
-                    />
+                    {/*content event list close */}
                   </div>
-                </form>
-              </li>
-              {/* Dashboard User */}
-              <li>
-                <a
-                  href="#"
-                  class="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group "
-                >
-                  <svg
-                    class="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                      clip-rule="evenodd"
-                    ></path>
-                  </svg>
-                  <span class="ml-3 flex-1 whitespace-nowrap">
-                    Organizer Profile
-                  </span>
-                </a>
-              </li>
-              {/* Dashboard Create Event  */}
-              <li>
-                <a
-                  href="#"
-                  class="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group "
-                >
-                  <svg
-                    class="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"
-                      clip-rule="evenodd"
-                    ></path>
-                  </svg>
-                  <span class="ml-3 flex-1 whitespace-nowrap">
-                    Create Event
-                  </span>
-                </a>
-              </li>
-              {/* Dashboard Events */}
-              <li>
-                <a
-                  href="#"
-                  class="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group "
-                >
-                  <svg
-                    class="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
-                  </svg>
-                  <span class="ml-3 flex-1 whitespace-nowrap">Events</span>
-                </a>
-              </li>
-              {/* Dashboard Statistic */}
-              <li>
-                <a
-                  href="/dashboardStatistics"
-                  class="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group"
-                >
-                  <svg
-                    class="w-6 h-6 text-gray-500 group-hover:text-gray-900 transition duration-75"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
-                    <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
-                  </svg>
-                  <span class="ml-3">Statistic</span>
-                </a>
-              </li>
-              {/* Dashboard Transations */}
-              <li>
-                <a
-                  href="#"
-                  class="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group "
-                >
-                  <svg
-                    class="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M5 4a3 3 0 00-3 3v6a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3H5zm-1 9v-1h5v2H5a1 1 0 01-1-1zm7 1h4a1 1 0 001-1v-1h-5v2zm0-4h5V8h-5v2zM9 8H4v2h5V8z"
-                      clip-rule="evenodd"
-                    ></path>
-                  </svg>
-                  <span class="ml-3 flex-1 whitespace-nowrap">
-                    Transactions
-                  </span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group "
-                >
-                  <svg
-                    class="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M5 4a3 3 0 00-3 3v6a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3H5zm-1 9v-1h5v2H5a1 1 0 01-1-1zm7 1h4a1 1 0 001-1v-1h-5v2zm0-4h5V8h-5v2zM9 8H4v2h5V8z"
-                      clip-rule="evenodd"
-                    ></path>
-                  </svg>
-                  <span class="ml-3 flex-1 whitespace-nowrap">
-                    Attendee Register
-                  </span>
-                </a>
-              </li>
-            </ul>
-            <div class="space-y-2 pt-2" />
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
+        </main>
       </div>
-    </aside>
+    </>
   );
 }

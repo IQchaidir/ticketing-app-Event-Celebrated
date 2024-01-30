@@ -164,6 +164,7 @@ export default function DashboardPage() {
         </div>
       </nav>
       <div class="flex overflow-hidden bg-white pt-16">
+        {/* Menu SideBar Open */}
         <aside
           id="sidebar"
           className="fixed z-20 h-full top-0 left-0 pt-16 flex lg:flex flex-shrink-0 flex-col w-64 transition-width duration-75"
@@ -421,6 +422,7 @@ export default function DashboardPage() {
             </div>
           </div>
         </aside>
+        {/* Menu SideBar Close */}
         <div
           class="bg-gray-900 opacity-50 hidden fixed inset-0 z-10"
           id="sidebarBackdrop"
@@ -460,6 +462,7 @@ export default function DashboardPage() {
                   </div>
                   <div id="main-chart"></div>
                 </div>
+                {/* main content right open */}
                 <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
                   <div class="mb-4 flex items-center justify-between">
                     <div>
@@ -602,6 +605,7 @@ export default function DashboardPage() {
                     </div>
                   </div>
                 </div>
+                {/* main content right close */}
               </div>
               <div class="mt-4 w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                 <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
