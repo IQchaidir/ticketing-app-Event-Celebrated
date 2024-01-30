@@ -24,9 +24,8 @@ export class DiscoveryController {
       page?: string;
     };
 
-    const pageSize = 6; // Jumlah item per halaman
-
     try {
+      const pageSize = 6;
       const localTime = new Date().toLocaleString('en-US', { timeZone: 'UTC' });
       const localTimeISO = new Date(localTime).toISOString();
       const pageNumber = parseInt(page || '1');

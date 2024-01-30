@@ -1,7 +1,8 @@
+'use client';
 import axios from 'axios';
 import { useState } from 'react';
 
-const CouponModal = ({ isOpen, onClose, onSubmit, eventId, endTime }) => {
+const CouponModal = ({ isOpen, onClose, eventId, endTime }) => {
   const [name, setName] = useState('');
   const [total, setTotal] = useState('');
   const [amount, setAmount] = useState('');

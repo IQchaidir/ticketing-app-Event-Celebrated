@@ -27,7 +27,6 @@ const SearchPage = () => {
   const [dateFilters, setDateFilters] = useState({
     today: false,
     tomorrow: false,
-    thisWeekend: false,
   });
   // State untuk viewmore kategori
   const [isViewMore, setIsViewMore] = useState(false);
@@ -66,7 +65,6 @@ const SearchPage = () => {
     setDateFilters((prevFilters) => ({
       today: filter === 'today' && !prevFilters.today,
       tomorrow: filter === 'tomorrow' && !prevFilters.tomorrow,
-      thisWeekend: filter === 'thisWeekend' && !prevFilters.thisWeekend,
     }));
   };
 
@@ -117,7 +115,7 @@ const SearchPage = () => {
         filters.start_date = new Date().toISOString().split('T')[0];
         filters.end_date = new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
           .toISOString()
-          .split('T')[0]; // Next day
+          .split('T')[0];
       } else if (dateFilters.tomorrow) {
         filters.start_date = new Date(
           new Date().getTime() + 24 * 60 * 60 * 1000,
@@ -129,17 +127,6 @@ const SearchPage = () => {
         )
           .toISOString()
           .split('T')[0]; // Next day
-      } else if (dateFilters.thisWeekend) {
-        const today = new Date();
-        const daysUntilWeekend = 5 - today.getDay(); // 5 is Saturday
-        const todayForWeekend = new Date(today);
-        todayForWeekend.setDate(todayForWeekend.getDate() + daysUntilWeekend);
-        todayForWeekend.setHours(0, 0, 0, 0);
-        const nextMonday = new Date(todayForWeekend);
-        nextMonday.setDate(todayForWeekend.getDate() + 2); // 2 days for the weekend
-
-        filters.start_date = todayForWeekend.toISOString().split('T')[0];
-        filters.end_date = nextMonday.toISOString().split('T')[0];
       }
 
       const activeFilters = Object.keys(filters).reduce((acc, key) => {
@@ -287,15 +274,6 @@ const SearchPage = () => {
             onChange={() => handleDateChange('tomorrow')}
           />
           Tomorrow
-        </label>
-        <label className="block mb-2 text-base">
-          <input
-            type="checkbox"
-            className="mr-2"
-            checked={dateFilters.thisWeekend}
-            onChange={() => handleDateChange('thisWeekend')}
-          />
-          This Weekend
         </label>
 
         <h2 className="text-base font-semibold mb-2">Price</h2>

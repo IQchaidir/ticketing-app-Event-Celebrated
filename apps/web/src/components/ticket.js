@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import FeedbackModal from './feedBackModal';
 import Image from 'next/image';
-import { number } from 'yup';
 
 const Ticket = ({ event }) => {
   const [showReviewButton, setShowReviewButton] = useState(false);

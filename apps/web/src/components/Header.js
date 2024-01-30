@@ -84,8 +84,8 @@ const Header = () => {
                 </button>
               </>
             )}
-
-            <Navmobile></Navmobile>
+            {/* 
+            <Navmobile></Navmobile> */}
           </div>
         </div>
       </div>

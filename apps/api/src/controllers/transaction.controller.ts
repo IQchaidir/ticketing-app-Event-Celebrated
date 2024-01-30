@@ -75,6 +75,9 @@ export class TransactionController {
               where: {
                 referrer_id: userId.id,
                 claim_points: false,
+                expiration_date: {
+                  gt: new Date(),
+                },
               },
               orderBy: {
                 id: 'asc',
@@ -83,7 +86,7 @@ export class TransactionController {
 
             for (const point of referralPointsToUpdate) {
               if (remainingPoints >= point.points) {
-                // Jika sisa poin cukup untuk mengurangi point ini, update dan lanjut ke point berikutnya
+                // Jika sisa poin cukup untuk mengurangi point transaksi, update dan lanjut ke point berikutnya
                 await prisma.referralPoint.update({
                   where: { id: point.id },
                   data: { claim_points: true, points: 0 },
@@ -161,6 +164,11 @@ export class TransactionController {
         where: { event_id: eventId },
       });
 
+      //Mengambil kupon terkait user dari table Coupon
+      const refCoupons = await prisma.coupons.findFirst({
+        where: { id: userIdFromToken.id },
+      });
+
       // Mengambil poin terkait dari tabel ReferralPoint
 
       const totalPointsResult = await prisma.referralPoint.aggregate({
@@ -175,6 +183,7 @@ export class TransactionController {
       const result = {
         eventPrice: event?.price || 0,
         eventCoupons: coupons,
+        refCoupons: refCoupons,
         userPoints: totalPoints || 0,
         titleEvent: event?.title,
       };
