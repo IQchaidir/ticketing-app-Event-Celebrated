@@ -21,6 +21,11 @@ export class OrganizerRouter {
       verifyToken,
       this.organizerController.organizerEvent,
     );
+    this.router.get(
+      '/attendee',
+      verifyToken,
+      this.organizerController.attendee,
+    );
   }
 
   getRouter(): Router {
