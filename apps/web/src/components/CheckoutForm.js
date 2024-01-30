@@ -60,6 +60,7 @@ const CheckoutForm = () => {
         setPoints(data.userPoints);
         setTotalPrice(parseInt(total));
         setOriginaPrice(parseInt(total));
+        console.log(`refcoupon`, data.refCoupons);
       } catch (error) {
         console.error('Error fetching checkout information:', error.message);
       }
@@ -84,6 +85,10 @@ const CheckoutForm = () => {
     return selectedCoupon ? selectedCoupon.id : null;
   };
 
+  const refCouponId = () => {
+    const selectedCoupon = refCoupons.find((coupon) => coupon.isChecked);
+    return selectedCoupon ? selectedCoupon.id : null;
+  };
   //mengirim data transaksi ke backend
   const handleConfirm = async () => {
     try {
@@ -93,6 +98,7 @@ const CheckoutForm = () => {
         `http://localhost:8000/checkout/${eventId}`,
         {
           couponId: getCouponId(),
+          refCoupon: getCouponId(),
           pointUsed: pointsToUse,
         },
         {
@@ -142,6 +148,24 @@ const CheckoutForm = () => {
         setTotalPrice((prevTotalPrice) => prevTotalPrice - discountAmount);
       }
       selectedCoupon.isChecked = !selectedCoupon.isChecked;
+    }
+  };
+
+  const handleRefCouponChange = (couponId) => {
+    const selectedRefCoupon = refCoupons.find(
+      (coupon) => coupon.id === couponId,
+    );
+
+    if (selectedRefCoupon) {
+      const discountPercentage = parseFloat(selectedRefCoupon.discount_amount);
+      const discountAmount = (discountPercentage / 100) * originalPrice;
+
+      if (selectedRefCoupon.isChecked) {
+        setTotalPrice((prevTotalPrice) => prevTotalPrice + discountAmount);
+      } else {
+        setTotalPrice((prevTotalPrice) => prevTotalPrice - discountAmount);
+      }
+      selectedRefCoupon.isChecked = !selectedRefCoupon.isChecked;
     }
   };
 
@@ -206,6 +230,17 @@ const CheckoutForm = () => {
                 </div>
               </label>
             ))}
+            {refCoupons.map((coupon) => (
+              <label key={coupon.id}>
+                <div className="flex gap-1">
+                  <input
+                    type="checkbox"
+                    onChange={() => handleRefCouponChange(coupon.id)}
+                  />
+                  <p>{coupon.name}</p>
+                </div>
+              </label>
+            ))}
           </div>
           <div className="gap-1 flex text-lg">
             <input type="checkbox" onChange={handlePointChange} />
@@ -225,11 +260,22 @@ const CheckoutForm = () => {
                 </div>
                 <div className="flex flex-row text-lg justify-between">
                   <p>Use Coupon</p>
-                  {coupon
-                    .filter((coupon) => coupon.isChecked)
-                    .map((selectedCoupon) => (
-                      <p key={selectedCoupon.id}>{`${selectedCoupon.name}`}</p>
-                    ))}
+                  <div className="flex flex-col">
+                    {coupon
+                      .filter((coupon) => coupon.isChecked)
+                      .map((selectedCoupon) => (
+                        <p
+                          key={selectedCoupon.id}
+                        >{`${selectedCoupon.name}`}</p>
+                      ))}
+                    {refCoupons
+                      .filter((coupon) => coupon.isChecked)
+                      .map((selectedCoupon) => (
+                        <p
+                          key={selectedCoupon.id}
+                        >{`${selectedCoupon.name}`}</p>
+                      ))}
+                  </div>
                 </div>
                 <div className="flex flex-row text-lg justify-between">
                   <p>Use Points</p>

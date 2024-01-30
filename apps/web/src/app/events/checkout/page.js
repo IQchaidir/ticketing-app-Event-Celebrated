@@ -1,5 +1,7 @@
 'use client';
 import CheckoutForm from '@/components/CheckoutForm';
+import { Footer } from '@/components/Footer';
+import Header from '@/components/Header';
 import { useSearchParams } from 'next/navigation';
 
 const formatRupiah = (number) => {
@@ -24,13 +26,17 @@ const CheckoutPage = () => {
   const formattedEventId = eventId ? eventId : '';
 
   return (
-    <div className="flex flex-col items-center gap-5">
-      <h3 className="h3-bold">Checkout Form</h3>
-      <CheckoutForm
-        totalPrice={formattedTotalPrice}
-        eventId={formattedEventId}
-      />
-    </div>
+    <>
+      <Header />
+      <div className="flex flex-col items-center gap-5">
+        <h3 className="h3-bold">Checkout Form</h3>
+        <CheckoutForm
+          totalPrice={formattedTotalPrice}
+          eventId={formattedEventId}
+        />
+      </div>
+      <Footer />
+    </>
   );
 };
 

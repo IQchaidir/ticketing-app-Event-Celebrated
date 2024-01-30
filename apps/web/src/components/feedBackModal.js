@@ -4,6 +4,7 @@ import { useState } from 'react';
 const FeedbackModal = ({ isOpen, onClose, onSubmit, eventId }) => {
   const [rating, setRating] = useState(0);
   const [feedback, setFeedback] = useState('');
+  const [reviewExists, setReviewExists] = useState(false);
 
   const handleRatingChange = (newRating) => {
     setRating(newRating);
@@ -19,7 +20,6 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, eventId }) => {
       feedback,
       eventId,
     };
-    console.log(feedbackData);
     try {
       const response = await axios.post(
         'http://localhost:8000/review/create',
@@ -30,6 +30,9 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, eventId }) => {
           },
         },
       );
+      if (response.data && response.data.reviewExists) {
+        setReviewExists(true);
+      }
       alert('review telah dibuat');
     } catch (error) {
       console.error('Error:', error);
@@ -51,7 +54,6 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, eventId }) => {
         <div className="modal-content">
           <div className="flex items-center mb-4">
             <p className="mr-4">Rating:</p>
-            {/* Tampilan bintang */}
             {[1, 2, 3, 4, 5].map((star) => (
               <button
                 key={star}
@@ -64,7 +66,6 @@ const FeedbackModal = ({ isOpen, onClose, onSubmit, eventId }) => {
           </div>
           <div className="mb-4">
             <p>Feedback:</p>
-            {/* Input untuk feedback */}
             <textarea
               className="textarea"
               value={feedback}

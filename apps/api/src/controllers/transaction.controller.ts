@@ -20,7 +20,6 @@ export class TransactionController {
         return res.status(400).json({ error: 'Event sudah habis kursinya' });
       }
 
-      // Lakukan validasi user
       const user = await prisma.user.findUnique({
         where: { id: userId.id },
       });
@@ -32,6 +31,7 @@ export class TransactionController {
       // Ambil harga event
       let totalPrice: number = event.price.toNumber();
 
+      //ambil kupon
       if (couponId) {
         const coupon = await prisma.coupons.findUnique({
           where: {
@@ -48,7 +48,7 @@ export class TransactionController {
             where: { id: parseInt(couponId) },
             data: {
               usage_limit: coupon.usage_limit - 1,
-              is_used: coupon.usage_limit - 1 === 0, // Set is_used menjadi true jika usage_limit mencapai 0
+              is_used: coupon.usage_limit - 1 === 0,
             },
           });
         }
@@ -76,7 +76,7 @@ export class TransactionController {
                 referrer_id: userId.id,
                 claim_points: false,
                 expiration_date: {
-                  gt: new Date(),
+                  gte: new Date(),
                 },
               },
               orderBy: {
@@ -107,7 +107,7 @@ export class TransactionController {
             // Lakukan pengurangan poin dari referralPoint
             const referralPointsToUpdate = await prisma.referralPoint.findMany({
               where: {
-                referrer_id: userId,
+                referrer_id: userId.id,
                 claim_points: false,
               },
             });
@@ -161,12 +161,20 @@ export class TransactionController {
 
       // Mengambil daftar kupon terkait dari tabel Coupon
       const coupons = await prisma.coupons.findMany({
-        where: { event_id: eventId },
+        where: {
+          event_id: eventId,
+          usage_limit: { gt: 0 },
+          expiration_date: { gte: new Date() },
+        },
       });
 
       //Mengambil kupon terkait user dari table Coupon
-      const refCoupons = await prisma.coupons.findFirst({
-        where: { id: userIdFromToken.id },
+      const refCoupons = await prisma.coupons.findMany({
+        where: {
+          user_id: userIdFromToken.id,
+          usage_limit: { gt: 0 },
+          expiration_date: { gte: new Date() },
+        },
       });
 
       // Mengambil poin terkait dari tabel ReferralPoint
@@ -174,6 +182,7 @@ export class TransactionController {
       const totalPointsResult = await prisma.referralPoint.aggregate({
         where: {
           referrer_id: userIdFromToken.id,
+          expiration_date: { gte: new Date() },
         },
         _sum: { points: true },
       });

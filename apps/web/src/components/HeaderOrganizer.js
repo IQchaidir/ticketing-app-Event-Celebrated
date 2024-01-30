@@ -8,6 +8,7 @@ import axios from 'axios';
 import UserDropdown from './userDropDown';
 import { useRouter } from 'next/navigation';
 import OrganizerDropdown from './organizerDropDown';
+import { HeaderNavItem } from './HeaderNavItem';
 
 const HeaderOrganizer = () => {
   const router = useRouter();
@@ -51,7 +52,7 @@ const HeaderOrganizer = () => {
 
   return (
     <header className="w-full border-b sticky top-0 bg-white z-50">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between pr-10 pl-10">
         <Link href="/" className="w-auto h-auto">
           <Image
             src="/assets/images/company.png"
@@ -64,7 +65,7 @@ const HeaderOrganizer = () => {
 
         <div className="flex gap-2">
           <nav className="hidden md:flex-between w-auto">
-            <Navitem></Navitem>
+            <HeaderNavItem></HeaderNavItem>
           </nav>
 
           <div className="flex w-auto justify-end gap-3">
@@ -83,4 +84,4 @@ const HeaderOrganizer = () => {
   );
 };
 
-export default Header;
+export default HeaderOrganizer;

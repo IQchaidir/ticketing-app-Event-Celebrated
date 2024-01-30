@@ -3,6 +3,8 @@ import FormEvent from '@/components/FormEvent';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { Footer } from '@/components/Footer';
+import Header from '@/components/Header';
 
 const CreateEventForm = () => {
   const router = useRouter();
@@ -32,12 +34,16 @@ const CreateEventForm = () => {
   }, []);
 
   return (
-    <section className="wrapper flex flex-col items-center gap-4">
-      <h3 className=" h3-bold justify-center text-center">CREATE EVENT</h3>
-      <div className="w-full  items-center justify-center">
-        <FormEvent />
-      </div>
-    </section>
+    <>
+      <Header />
+      <section className="wrapper flex flex-col items-center gap-4">
+        <h3 className=" h3-bold justify-center text-center">CREATE EVENT</h3>
+        <div className="w-full  items-center justify-center">
+          <FormEvent />
+        </div>
+      </section>
+      <Footer />
+    </>
   );
 };
 
