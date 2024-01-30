@@ -24,7 +24,7 @@ const OrganizerDropDown = ({ userEmail, onLogout }) => {
 
       {isDropdownOpen && (
         <div className="absolute top-11 right-0 bg-white border  shadow-md w-full">
-          <Link href="/dashboard">
+          <Link href="/dashboardEvents">
             <button
               className="block px-4 py-2 text-black hover:bg-gray-200 w-full text-left"
               onClick={handleMenuItemClick}

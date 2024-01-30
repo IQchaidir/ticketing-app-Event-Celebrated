@@ -18,7 +18,7 @@ export default function LoginPage() {
       const { token } = response.data;
       localStorage.setItem('token', token);
 
-      router.push('/');
+      router.push('/dashboardEvents');
       if (response.status === 200) {
         console.log('login Success');
       }
