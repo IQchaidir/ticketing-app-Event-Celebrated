@@ -29,7 +29,7 @@ export default function RegisterEoPage() {
         data,
       );
 
-      router.push('/login');
+      router.push('/loginEO');
       if (response.status === 200) {
         console.log('register Success');
       }
