@@ -116,7 +116,7 @@ export default function sidebarDashboard() {
                     </a>
                   </li>
                   {/* Dashboard Transations */}
-                  <li>
+                  {/* <li>
                     <a
                       href="/dashboardTransactions"
                       class="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group "
@@ -137,7 +137,7 @@ export default function sidebarDashboard() {
                         Transactions
                       </span>
                     </a>
-                  </li>
+                  </li> */}
                   {/* Attendee Registrations */}
                   <li>
                     <a
