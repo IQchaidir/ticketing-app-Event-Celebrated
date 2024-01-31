@@ -75,6 +75,20 @@ export default function LoginPage() {
             LOGIN
           </button>
         </div>
+        <div className="flex flex-col items-center mx-auto">
+          <p className="block text-lg font-semibold leading-6 text-gray-600 mt-2 mb-1">
+            Do you want to login as organizer?
+          </p>
+          <p className="block text-lg leading-6 text-gray-500">
+            Register as{' '}
+            <a
+              href="/login"
+              className="font-bold text-red-500 hover:text-red-800"
+            >
+              Organizer
+            </a>
+          </p>
+        </div>
       </div>
     </div>
   );

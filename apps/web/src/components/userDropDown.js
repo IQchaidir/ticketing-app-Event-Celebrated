@@ -25,14 +25,6 @@ const UserDropdown = ({ userEmail, onLogout }) => {
 
       {isDropdownOpen && (
         <div className="absolute top-11 right-0 bg-white border  shadow-md w-full">
-          <Link href="/organizer">
-            <button
-              className="block px-4 py-2 text-black hover:bg-gray-200 w-full text-left"
-              onClick={handleMenuItemClick}
-            >
-              Manage My Event
-            </button>
-          </Link>
           <Link href="/user/tickets">
             <button
               className="block px-4 py-2 text-black hover:bg-gray-200 w-full text-left"
